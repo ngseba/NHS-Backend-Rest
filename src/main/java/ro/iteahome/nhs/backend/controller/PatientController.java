@@ -1,0 +1,76 @@
+package ro.iteahome.nhs.backend.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+import ro.iteahome.nhs.backend.model.entity.person.Patient;
+import ro.iteahome.nhs.backend.service.PatientService;
+
+import javax.validation.Valid;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/patients")
+public class PatientController {
+
+// DEPENDENCIES: -------------------------------------------------------------------------------------------------------
+
+    @Autowired
+    PatientService patientService;
+
+// METHODS: ------------------------------------------------------------------------------------------------------------
+
+    @PostMapping
+    public EntityModel<Patient> add(@RequestBody @Valid Patient patient) {
+        return patientService.add(patient);
+    }
+
+    @GetMapping("/by-id/{id}")
+    public EntityModel<Patient> findById(@PathVariable int id) {
+        return patientService.findById(id);
+    }
+
+    @GetMapping("/by-cnp/{cnp}")
+    public EntityModel<Patient> findByCnp(@PathVariable String cnp) {
+        return patientService.findByCnp(cnp);
+    }
+
+    @PutMapping
+    public EntityModel<Patient> update(@RequestBody @Valid Patient patient) {
+        return patientService.update(patient);
+    }
+
+    @DeleteMapping("/by-id/{id}")
+    public EntityModel<Patient> deleteById(@PathVariable int id) {
+        return patientService.deleteById(id);
+    }
+
+    @DeleteMapping("/by-cnp/{cnp}")
+    public EntityModel<Patient> deleteByCnp(@PathVariable String cnp) {
+        return patientService.deleteByCnp(cnp);
+    }
+
+    // OTHER METHODS: --------------------------------------------------------------------------------------------------
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new LinkedHashMap<>();
+        errors.put("errorCode", "PAC-00");
+        errors.put("errorMessage", "PATIENT FIELDS HAVE VALIDATION ERRORS.");
+        errors.putAll(ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .collect(Collectors.toMap(
+                        FieldError::getField,
+                        FieldError::getDefaultMessage)));
+        return new ResponseEntity<>(
+                errors,
+                HttpStatus.BAD_REQUEST);
+    }
+}
