@@ -1,36 +1,34 @@
 # SERVER CONFIGURATION:
 
 server:
+
   port: 8080
-servlet:
-  context-path: /
+  use-forward-headers: true
+  servlet:
+    context-path: /
+    session:
+      timeout: 1d
 
-# PERSISTENCE VERSION 1 - IN-MEMORY H2 DATABASE:
 
-#spring:
-#  jpa:
-#    database-platform: org.hibernate.dialect.H2Dialect
-#    hibernate.ddl-auto: create-drop
-#  datasource:
-#    driverClassName: org.h2.Driver
-#    url: jdbc:h2:mem:nhs-backend-mock-database
-#    username: username
-#    password: password
-
-# PERSISTENCE VERSION 2 - LOCAL MYSQL DATABASE:
+# PERSISTENCE - LOCAL MYSQL DATABASE:
 
 #spring:
 #  jpa:
 #    hibernate.ddl-auto: update
 #  datasource:
 #    driverClassName: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://46.214.32.248/bikesharing_admin
-#    username: Bikesharing
-#    password: @Bikesharing@3spring:
-#  jpa:
-#    hibernate.ddl-auto: update
-#  datasource:
-#    driverClassName: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://46.214.32.248/bikesharing_admin
-#    username: Bikesharing
-#    password: @Bikesharing@3
+#    url: jdbc:mysql://localhost:3306/nhs?createDatabaseIfNotExist=true
+#    username: root
+#    password: P@ssW0rd
+
+spring:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:46.214.32.248}/nhs
+    username: Nhs00
+    password: "@Nhs@3"
