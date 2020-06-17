@@ -1,7 +1,6 @@
 # SERVER CONFIGURATION:
 
 server:
-
   port: 8080
   use-forward-headers: true
   servlet:
@@ -9,26 +8,26 @@ server:
     session:
       timeout: 1d
 
+# PERSISTENCE - REMOTE MYSQL DATABASE:
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:46.214.32.248}/nhs
+    username: "Nhs00"
+    password: "@Nhs@3"
 
 # PERSISTENCE - LOCAL MYSQL DATABASE:
 
 #spring:
 #  jpa:
-#    hibernate.ddl-auto: update
+#    hibernate:
+#      ddl-auto: update
+#    database-platform: org.hibernate.dialect.MySQL5Dialect
 #  datasource:
-#    driverClassName: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://localhost:3306/nhs?createDatabaseIfNotExist=true
 #    username: root
 #    password: P@ssW0rd
-
-spring:
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQL5Dialect
-
-  datasource:
-    url: jdbc:mysql://${MYSQL_HOST:46.214.32.248}/nhs
-    username: Nhs00
-    password: "@Nhs@3"
