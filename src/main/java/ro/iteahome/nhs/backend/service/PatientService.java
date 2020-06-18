@@ -62,7 +62,7 @@ public class PatientService {
             PatientDTO patientDTO = modelMapper.map(patient, PatientDTO.class);
             return new EntityModel<>(
                     patientDTO,
-                    linkTo(methodOn(PatientController.class).findByCnp(cnp)).withSelfRel());
+                    linkTo(methodOn(PatientController.class).findById(patient.getId())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("PATIENT");
         }
