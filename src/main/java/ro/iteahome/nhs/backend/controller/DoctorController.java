@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import ro.iteahome.nhs.backend.model.dto.person.DoctorDTO;
 import ro.iteahome.nhs.backend.model.entity.person.Doctor;
 import ro.iteahome.nhs.backend.service.DoctorService;
 
@@ -27,32 +28,32 @@ public class DoctorController {
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
     @PostMapping
-    public EntityModel<Doctor> add(@RequestBody @Valid Doctor doctor) { // TODO: Integrate a way to ask for at least one medical institution id when registering a new doctor.
+    public EntityModel<DoctorDTO> add(@RequestBody @Valid Doctor doctor) { // TODO: Integrate a way to ask for at least one medical institution id when registering a new doctor.
         return doctorService.add(doctor);
     }
 
     @GetMapping("/by-id/{id}")
-    public EntityModel<Doctor> findById(@PathVariable int id) {
+    public EntityModel<DoctorDTO> findById(@PathVariable int id) {
         return doctorService.findById(id);
     }
 
     @GetMapping("/by-email/{email}")
-    public EntityModel<Doctor> findByEmail(@PathVariable String email) {
+    public EntityModel<DoctorDTO> findByEmail(@PathVariable String email) {
         return doctorService.findByEmail(email);
     }
 
     @PutMapping
-    public EntityModel<Doctor> update(@RequestBody @Valid Doctor doctor) {
+    public EntityModel<DoctorDTO> update(@RequestBody @Valid Doctor doctor) {
         return doctorService.update(doctor);
     }
 
     @DeleteMapping("/by-id/{id}")
-    public EntityModel<Doctor> deleteById(@PathVariable int id) {
+    public EntityModel<DoctorDTO> deleteById(@PathVariable int id) {
         return doctorService.deleteById(id);
     }
 
     @DeleteMapping("/by-email/{email}")
-    public EntityModel<Doctor> deleteByEmail(@PathVariable String email) {
+    public EntityModel<DoctorDTO> deleteByEmail(@PathVariable String email) {
         return doctorService.deleteByEmail(email);
     }
 

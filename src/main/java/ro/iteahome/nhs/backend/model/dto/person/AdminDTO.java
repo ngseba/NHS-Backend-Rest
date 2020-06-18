@@ -1,4 +1,4 @@
-package ro.iteahome.nhs.backend.model.dto;
+package ro.iteahome.nhs.backend.model.dto.person;
 
 public class AdminDTO {
 

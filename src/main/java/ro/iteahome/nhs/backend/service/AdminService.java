@@ -8,7 +8,7 @@ import ro.iteahome.nhs.backend.controller.AdminController;
 import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
 import ro.iteahome.nhs.backend.model.dto.AdminCredentials;
-import ro.iteahome.nhs.backend.model.dto.AdminDTO;
+import ro.iteahome.nhs.backend.model.dto.person.AdminDTO;
 import ro.iteahome.nhs.backend.model.entity.person.Admin;
 import ro.iteahome.nhs.backend.repository.AdminRepository;
 
