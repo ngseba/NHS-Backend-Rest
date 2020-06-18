@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import ro.iteahome.nhs.backend.model.dto.person.AdminCredentials;
 import ro.iteahome.nhs.backend.model.dto.person.AdminDTO;
 import ro.iteahome.nhs.backend.model.entity.person.Admin;
 import ro.iteahome.nhs.backend.service.AdminService;
@@ -45,8 +44,8 @@ public class AdminController {
     }
 
     @GetMapping("/by-credentials")
-    public EntityModel<Admin> findByCredentials(@RequestBody AdminCredentials adminCredentials) {
-        return adminService.findByCredentials(adminCredentials);
+    public EntityModel<Admin> findByCredentials(@RequestParam String email, @RequestParam String password) {
+        return adminService.findByCredentials(email, password);
     }
 
     @GetMapping("/existence")
@@ -67,6 +66,11 @@ public class AdminController {
     @DeleteMapping("/by-email/{email}")
     public EntityModel<AdminDTO> deleteByEmail(@PathVariable String email) {
         return adminService.deleteByEmail(email);
+    }
+
+    @DeleteMapping("/by-credentials")
+    public void deleteByCredentials(@RequestParam String email, @RequestParam String password) {
+        adminService.deleteByCredentials(email, password);
     }
 
     // OTHER METHODS: --------------------------------------------------------------------------------------------------

@@ -69,8 +69,8 @@ public class AdminService {
         }
     }
 
-    public EntityModel<Admin> findByCredentials(AdminCredentials adminCredentials) {
-        Optional<Admin> optionalAdmin = adminRepository.findByEmailAndPassword(adminCredentials.getEmail(), adminCredentials.getPassword());
+    public EntityModel<Admin> findByCredentials(String email, String password) {
+        Optional<Admin> optionalAdmin = adminRepository.findByEmailAndPassword(email, password);
         if (optionalAdmin.isPresent()) {
             Admin admin = optionalAdmin.get();
             return new EntityModel<>(
@@ -96,8 +96,9 @@ public class AdminService {
     public EntityModel<AdminDTO> deleteById(int id) {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         if (optionalAdmin.isPresent()) {
-            adminRepository.delete(optionalAdmin.get());
-            AdminDTO adminDTO = modelMapper.map(optionalAdmin.get(), AdminDTO.class);
+            Admin admin = optionalAdmin.get();
+            AdminDTO adminDTO = modelMapper.map(admin, AdminDTO.class);
+            adminRepository.delete(admin);
             return new EntityModel<>(adminDTO);
         } else {
             throw new GlobalNotFoundException("ADMIN");
@@ -107,9 +108,20 @@ public class AdminService {
     public EntityModel<AdminDTO> deleteByEmail(String email) {
         Optional<Admin> optionalAdmin = adminRepository.findByEmail(email);
         if (optionalAdmin.isPresent()) {
-            adminRepository.delete(optionalAdmin.get());
-            AdminDTO adminDTO = modelMapper.map(optionalAdmin.get(), AdminDTO.class);
+            Admin admin = optionalAdmin.get();
+            AdminDTO adminDTO = modelMapper.map(admin, AdminDTO.class);
+            adminRepository.delete(admin);
             return new EntityModel<>(adminDTO);
+        } else {
+            throw new GlobalNotFoundException("ADMIN");
+        }
+    }
+
+    public void deleteByCredentials(String email, String password) {
+        Optional<Admin> optionalAdmin = adminRepository.findByEmailAndPassword(email, password);
+        if (optionalAdmin.isPresent()) {
+            Admin admin = optionalAdmin.get();
+            adminRepository.delete(admin);
         } else {
             throw new GlobalNotFoundException("ADMIN");
         }
