@@ -8,8 +8,7 @@ import ro.iteahome.nhs.backend.controller.AdminController;
 import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
 import ro.iteahome.nhs.backend.model.dto.person.AdminCredentials;
-import ro.iteahome.nhs.backend.model.dto.person.AdminSafeDTO;
-import ro.iteahome.nhs.backend.model.dto.person.AdminSensitiveDTO;
+import ro.iteahome.nhs.backend.model.dto.person.AdminDTO;
 import ro.iteahome.nhs.backend.model.entity.person.Admin;
 import ro.iteahome.nhs.backend.repository.AdminRepository;
 
@@ -31,52 +30,51 @@ public class AdminService {
 
 // C.R.U.D. METHODS: ---------------------------------------------------------------------------------------------------
 
-    public EntityModel<AdminSafeDTO> add(Admin admin) {
+    public EntityModel<AdminDTO> add(Admin admin) {
         if (!adminRepository.existsByEmail(admin.getEmail())) {
             adminRepository.save(modelMapper.map(admin, Admin.class));
             Admin savedAdmin = adminRepository.getByEmail(admin.getEmail());
-            AdminSafeDTO adminSafeDTO = modelMapper.map(savedAdmin, AdminSafeDTO.class);
+            AdminDTO adminDTO = modelMapper.map(savedAdmin, AdminDTO.class);
             return new EntityModel<>(
-                    adminSafeDTO,
-                    linkTo(methodOn(AdminController.class).findById(adminSafeDTO.getId())).withSelfRel());
+                    adminDTO,
+                    linkTo(methodOn(AdminController.class).findById(adminDTO.getId())).withSelfRel());
         } else {
             throw new GlobalAlreadyExistsException("ADMIN");
         }
     }
 
-    public EntityModel<AdminSafeDTO> findById(int id) {
+    public EntityModel<AdminDTO> findById(int id) {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         if (optionalAdmin.isPresent()) {
             Admin admin = optionalAdmin.get();
-            AdminSafeDTO adminSafeDTO = modelMapper.map(admin, AdminSafeDTO.class);
+            AdminDTO adminDTO = modelMapper.map(admin, AdminDTO.class);
             return new EntityModel<>(
-                    adminSafeDTO,
+                    adminDTO,
                     linkTo(methodOn(AdminController.class).findById(id)).withSelfRel());
         } else {
             throw new GlobalNotFoundException("ADMIN");
         }
     }
 
-    public EntityModel<AdminSafeDTO> findByEmail(String email) {
+    public EntityModel<AdminDTO> findByEmail(String email) {
         Optional<Admin> optionalAdmin = adminRepository.findByEmail(email);
         if (optionalAdmin.isPresent()) {
             Admin admin = optionalAdmin.get();
-            AdminSafeDTO adminSafeDTO = modelMapper.map(admin, AdminSafeDTO.class);
+            AdminDTO adminDTO = modelMapper.map(admin, AdminDTO.class);
             return new EntityModel<>(
-                    adminSafeDTO,
-                    linkTo(methodOn(AdminController.class).findById(adminSafeDTO.getId())).withSelfRel());
+                    adminDTO,
+                    linkTo(methodOn(AdminController.class).findById(adminDTO.getId())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("ADMIN");
         }
     }
 
-    public EntityModel<AdminSensitiveDTO> findByCredentials(AdminCredentials adminCredentials) {
+    public EntityModel<Admin> findByCredentials(AdminCredentials adminCredentials) {
         Optional<Admin> optionalAdmin = adminRepository.findByEmailAndPassword(adminCredentials.getEmail(), adminCredentials.getPassword());
         if (optionalAdmin.isPresent()) {
             Admin admin = optionalAdmin.get();
-            AdminSensitiveDTO adminSensitiveDTO = modelMapper.map(admin, AdminSensitiveDTO.class);
             return new EntityModel<>(
-                    adminSensitiveDTO,
+                    admin,
                     linkTo(methodOn(AdminController.class).findById(admin.getId())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("ADMIN");
@@ -95,23 +93,23 @@ public class AdminService {
         }
     }
 
-    public EntityModel<AdminSafeDTO> deleteById(int id) {
+    public EntityModel<AdminDTO> deleteById(int id) {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         if (optionalAdmin.isPresent()) {
             adminRepository.delete(optionalAdmin.get());
-            AdminSafeDTO adminSafeDTO = modelMapper.map(optionalAdmin.get(), AdminSafeDTO.class);
-            return new EntityModel<>(adminSafeDTO);
+            AdminDTO adminDTO = modelMapper.map(optionalAdmin.get(), AdminDTO.class);
+            return new EntityModel<>(adminDTO);
         } else {
             throw new GlobalNotFoundException("ADMIN");
         }
     }
 
-    public EntityModel<AdminSafeDTO> deleteByEmail(String email) {
+    public EntityModel<AdminDTO> deleteByEmail(String email) {
         Optional<Admin> optionalAdmin = adminRepository.findByEmail(email);
         if (optionalAdmin.isPresent()) {
             adminRepository.delete(optionalAdmin.get());
-            AdminSafeDTO adminSafeDTO = modelMapper.map(optionalAdmin.get(), AdminSafeDTO.class);
-            return new EntityModel<>(adminSafeDTO);
+            AdminDTO adminDTO = modelMapper.map(optionalAdmin.get(), AdminDTO.class);
+            return new EntityModel<>(adminDTO);
         } else {
             throw new GlobalNotFoundException("ADMIN");
         }
