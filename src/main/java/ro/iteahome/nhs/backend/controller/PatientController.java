@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import ro.iteahome.nhs.backend.model.dto.person.PatientDTO;
 import ro.iteahome.nhs.backend.model.entity.person.Patient;
 import ro.iteahome.nhs.backend.service.PatientService;
 
@@ -27,32 +28,32 @@ public class PatientController {
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
     @PostMapping
-    public EntityModel<Patient> add(@RequestBody @Valid Patient patient) {
+    public EntityModel<PatientDTO> add(@RequestBody @Valid Patient patient) {
         return patientService.add(patient);
     }
 
     @GetMapping("/by-id/{id}")
-    public EntityModel<Patient> findById(@PathVariable int id) {
+    public EntityModel<PatientDTO> findById(@PathVariable int id) {
         return patientService.findById(id);
     }
 
     @GetMapping("/by-cnp/{cnp}")
-    public EntityModel<Patient> findByCnp(@PathVariable String cnp) {
+    public EntityModel<PatientDTO> findByCnp(@PathVariable String cnp) {
         return patientService.findByCnp(cnp);
     }
 
     @PutMapping
-    public EntityModel<Patient> update(@RequestBody @Valid Patient patient) {
+    public EntityModel<PatientDTO> update(@RequestBody @Valid Patient patient) {
         return patientService.update(patient);
     }
 
     @DeleteMapping("/by-id/{id}")
-    public EntityModel<Patient> deleteById(@PathVariable int id) {
+    public EntityModel<PatientDTO> deleteById(@PathVariable int id) {
         return patientService.deleteById(id);
     }
 
     @DeleteMapping("/by-cnp/{cnp}")
-    public EntityModel<Patient> deleteByCnp(@PathVariable String cnp) {
+    public EntityModel<PatientDTO> deleteByCnp(@PathVariable String cnp) {
         return patientService.deleteByCnp(cnp);
     }
 

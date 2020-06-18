@@ -45,7 +45,8 @@ public class DoctorService {
     public EntityModel<DoctorDTO> findById(int id) {
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
         if (optionalDoctor.isPresent()) {
-            DoctorDTO doctorDTO = modelMapper.map(optionalDoctor.get(), DoctorDTO.class);
+            Doctor doctor = optionalDoctor.get();
+            DoctorDTO doctorDTO = modelMapper.map(doctor, DoctorDTO.class);
             return new EntityModel<>(
                     doctorDTO,
                     linkTo(methodOn(DoctorController.class).findById(id)).withSelfRel());
@@ -57,7 +58,8 @@ public class DoctorService {
     public EntityModel<DoctorDTO> findByEmail(String email) {
         Optional<Doctor> optionalDoctor = doctorRepository.findByEmail(email);
         if (optionalDoctor.isPresent()) {
-            DoctorDTO doctorDTO = modelMapper.map(optionalDoctor.get(), DoctorDTO.class);
+            Doctor doctor = optionalDoctor.get();
+            DoctorDTO doctorDTO = modelMapper.map(doctor, DoctorDTO.class);
             return new EntityModel<>(
                     doctorDTO,
                     linkTo(methodOn(DoctorController.class).findById(doctorDTO.getId())).withSelfRel());
@@ -95,7 +97,7 @@ public class DoctorService {
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
             DoctorDTO doctorDTO = modelMapper.map(doctor, DoctorDTO.class);
-            doctorRepository.deleteByEmail(email);
+            doctorRepository.deleteById(doctor.getId());
             return new EntityModel<>(doctorDTO);
         } else {
             throw new GlobalNotFoundException("DOCTOR");

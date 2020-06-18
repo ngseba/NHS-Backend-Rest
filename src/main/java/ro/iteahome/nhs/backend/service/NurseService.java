@@ -1,11 +1,13 @@
 package ro.iteahome.nhs.backend.service;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 import ro.iteahome.nhs.backend.controller.NurseController;
 import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
+import ro.iteahome.nhs.backend.model.dto.person.NurseDTO;
 import ro.iteahome.nhs.backend.model.entity.person.Nurse;
 import ro.iteahome.nhs.backend.repository.NurseRepository;
 
@@ -22,73 +24,81 @@ public class NurseService {
     @Autowired
     private NurseRepository nurseRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
 // C.R.U.D. METHODS: ---------------------------------------------------------------------------------------------------
 
-    public EntityModel<Nurse> add(Nurse nurse) {
+    public EntityModel<NurseDTO> add(Nurse nurse) {
         if (!nurseRepository.existsByEmail(nurse.getEmail())) {
             nurseRepository.save(nurse);
             Nurse savedNurse = nurseRepository.getByEmail(nurse.getEmail());
+            NurseDTO savedNurseDTO = modelMapper.map(savedNurse, NurseDTO.class);
             return new EntityModel<>(
-                    savedNurse,
-                    linkTo(methodOn(NurseController.class).findById(savedNurse.getId())).withSelfRel());
+                    savedNurseDTO,
+                    linkTo(methodOn(NurseController.class).findById(savedNurseDTO.getId())).withSelfRel());
         } else {
             throw new GlobalAlreadyExistsException("NURSE");
         }
     }
 
-    public EntityModel<Nurse> findById(int id) {
+    public EntityModel<NurseDTO> findById(int id) {
         Optional<Nurse> optionalNurse = nurseRepository.findById(id);
         if (optionalNurse.isPresent()) {
             Nurse nurse = optionalNurse.get();
+            NurseDTO nurseDTO = modelMapper.map(nurse, NurseDTO.class);
             return new EntityModel<>(
-                    nurse,
+                    nurseDTO,
                     linkTo(methodOn(NurseController.class).findById(id)).withSelfRel());
         } else {
             throw new GlobalNotFoundException("NURSE");
         }
     }
 
-    public EntityModel<Nurse> findByEmail(String email) {
+    public EntityModel<NurseDTO> findByEmail(String email) {
         Optional<Nurse> optionalNurse = nurseRepository.findByEmail(email);
         if (optionalNurse.isPresent()) {
             Nurse nurse = optionalNurse.get();
+            NurseDTO nurseDTO = modelMapper.map(nurse, NurseDTO.class);
             return new EntityModel<>(
-                    nurse,
-                    linkTo(methodOn(NurseController.class).findByEmail(email)).withSelfRel());
+                    nurseDTO,
+                    linkTo(methodOn(NurseController.class).findById(nurseDTO.getId())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("NURSE");
         }
     }
 
-    public EntityModel<Nurse> update(Nurse nurse) {
+    public EntityModel<NurseDTO> update(Nurse nurse) {
         if (nurseRepository.existsById(nurse.getId())) {
-            nurseRepository.save(nurse);
-            Nurse updatedNurse = nurseRepository.getById(nurse.getId());
+            Nurse updatedNurse = nurseRepository.save(nurse);
+            NurseDTO updatedNurseDTO = modelMapper.map(updatedNurse, NurseDTO.class);
             return new EntityModel<>(
-                    updatedNurse,
-                    linkTo(methodOn(NurseController.class).findById(updatedNurse.getId())).withSelfRel());
+                    updatedNurseDTO,
+                    linkTo(methodOn(NurseController.class).findById(updatedNurseDTO.getId())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("NURSE");
         }
     }
 
-    public EntityModel<Nurse> deleteById(int id) {
+    public EntityModel<NurseDTO> deleteById(int id) {
         Optional<Nurse> optionalNurse = nurseRepository.findById(id);
         if (optionalNurse.isPresent()) {
             Nurse nurse = optionalNurse.get();
-            nurseRepository.delete(nurse);
-            return new EntityModel<>(nurse);
+            NurseDTO nurseDTO = modelMapper.map(nurse, NurseDTO.class);
+            nurseRepository.deleteById(id);
+            return new EntityModel<>(nurseDTO);
         } else {
             throw new GlobalNotFoundException("NURSE");
         }
     }
 
-    public EntityModel<Nurse> deleteByEmail(String email) {
+    public EntityModel<NurseDTO> deleteByEmail(String email) {
         Optional<Nurse> optionalNurse = nurseRepository.findByEmail(email);
         if (optionalNurse.isPresent()) {
             Nurse nurse = optionalNurse.get();
-            nurseRepository.delete(nurse);
-            return new EntityModel<>(nurse);
+            NurseDTO nurseDTO = modelMapper.map(nurse, NurseDTO.class);
+            nurseRepository.deleteById(nurse.getId());
+            return new EntityModel<>(nurseDTO);
         } else {
             throw new GlobalNotFoundException("NURSE");
         }

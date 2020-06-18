@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import ro.iteahome.nhs.backend.model.dto.person.NurseDTO;
 import ro.iteahome.nhs.backend.model.entity.person.Nurse;
 import ro.iteahome.nhs.backend.service.NurseService;
 
@@ -27,32 +28,32 @@ public class NurseController {
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
     @PostMapping
-    public EntityModel<Nurse> add(@RequestBody @Valid Nurse nurse) { // TODO: Integrate a way to ask for at least one medical institution id when registering a new doctor.
+    public EntityModel<NurseDTO> add(@RequestBody @Valid Nurse nurse) { // TODO: Integrate a way to ask for at least one medical institution id when registering a new doctor.
         return nurseService.add(nurse);
     }
 
     @GetMapping("/by-id/{id}")
-    public EntityModel<Nurse> findById(@PathVariable int id) {
+    public EntityModel<NurseDTO> findById(@PathVariable int id) {
         return nurseService.findById(id);
     }
 
     @GetMapping("/by-email/{email}")
-    public EntityModel<Nurse> findByEmail(@PathVariable String email) {
+    public EntityModel<NurseDTO> findByEmail(@PathVariable String email) {
         return nurseService.findByEmail(email);
     }
 
     @PutMapping
-    public EntityModel<Nurse> update(@RequestBody @Valid Nurse nurse) {
+    public EntityModel<NurseDTO> update(@RequestBody @Valid Nurse nurse) {
         return nurseService.update(nurse);
     }
 
     @DeleteMapping("/by-id/{id}")
-    public EntityModel<Nurse> deleteById(@PathVariable int id) {
+    public EntityModel<NurseDTO> deleteById(@PathVariable int id) {
         return nurseService.deleteById(id);
     }
 
     @DeleteMapping("/by-email/{email}")
-    public EntityModel<Nurse> deleteByEmail(@PathVariable String email) {
+    public EntityModel<NurseDTO> deleteByEmail(@PathVariable String email) {
         return nurseService.deleteByEmail(email);
     }
 

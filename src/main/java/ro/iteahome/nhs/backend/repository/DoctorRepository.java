@@ -2,15 +2,12 @@ package ro.iteahome.nhs.backend.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ro.iteahome.nhs.backend.model.dto.person.DoctorDTO;
 import ro.iteahome.nhs.backend.model.entity.person.Doctor;
 
 import java.util.Optional;
 
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
-
-    Optional<Doctor> findById(int id);
 
     Optional<Doctor> findByEmail(String email);
 

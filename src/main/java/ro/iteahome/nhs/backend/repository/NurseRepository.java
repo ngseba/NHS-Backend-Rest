@@ -9,11 +9,13 @@ import java.util.Optional;
 @Repository
 public interface NurseRepository extends JpaRepository<Nurse, Integer> {
 
-    Nurse getById(int id);
-
     Optional<Nurse> findByEmail(String email);
 
     Nurse getByEmail(String email);
+
+    void deleteById(int id);
+
+    void deleteByEmail(String email);
 
     boolean existsByEmail(String email);
 }
