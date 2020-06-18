@@ -8,7 +8,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ro.iteahome.nhs.backend.model.dto.person.AdminCredentials;
-import ro.iteahome.nhs.backend.model.dto.person.AdminDTO;
+import ro.iteahome.nhs.backend.model.dto.person.AdminSafeDTO;
+import ro.iteahome.nhs.backend.model.dto.person.AdminSensitiveDTO;
 import ro.iteahome.nhs.backend.model.entity.person.Admin;
 import ro.iteahome.nhs.backend.service.AdminService;
 
@@ -30,22 +31,22 @@ public class AdminController {
     // C.R.U.D. METHODS: -----------------------------------------------------------------------------------------------
 
     @PostMapping
-    public EntityModel<AdminDTO> add(@RequestBody @Valid Admin admin) {
+    public EntityModel<AdminSafeDTO> add(@RequestBody @Valid Admin admin) {
         return adminService.add(admin);
     }
 
     @GetMapping("/by-id/{id}")
-    public EntityModel<AdminDTO> findById(@PathVariable int id) {
+    public EntityModel<AdminSafeDTO> findById(@PathVariable int id) {
         return adminService.findById(id);
     }
 
     @GetMapping("/by-email/{email}")
-    public EntityModel<AdminDTO> findByEmail(@PathVariable String email) {
+    public EntityModel<AdminSafeDTO> findByEmail(@PathVariable String email) {
         return adminService.findByEmail(email);
     }
 
     @GetMapping("/by-credentials")
-    public EntityModel<Admin> findByCredentials(@RequestBody AdminCredentials adminCredentials) {
+    public EntityModel<AdminSensitiveDTO> findByCredentials(@RequestBody AdminCredentials adminCredentials) {
         return adminService.findByCredentials(adminCredentials);
     }
 
@@ -60,12 +61,12 @@ public class AdminController {
     }
 
     @DeleteMapping("/by-id/{id}")
-    public EntityModel<AdminDTO> deleteById(@PathVariable int id) {
+    public EntityModel<AdminSafeDTO> deleteById(@PathVariable int id) {
         return adminService.deleteById(id);
     }
 
     @DeleteMapping("/by-email/{email}")
-    public EntityModel<AdminDTO> deleteByEmail(@PathVariable String email) {
+    public EntityModel<AdminSafeDTO> deleteByEmail(@PathVariable String email) {
         return adminService.deleteByEmail(email);
     }
 

@@ -1,6 +1,6 @@
 package ro.iteahome.nhs.backend.model.dto.person;
 
-public class AdminDTO {
+public class AdminSafeDTO {
 
     private int id;
 
@@ -14,7 +14,7 @@ public class AdminDTO {
 
     private String phoneNoRo;
 
-    public AdminDTO() {
+    public AdminSafeDTO() {
     }
 
     public int getId() {
