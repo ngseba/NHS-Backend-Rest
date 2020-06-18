@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ro.iteahome.nhs.backend.controller.AdminController;
 import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
+import ro.iteahome.nhs.backend.model.dto.AdminCredentials;
 import ro.iteahome.nhs.backend.model.dto.AdminDTO;
 import ro.iteahome.nhs.backend.model.entity.person.Admin;
 import ro.iteahome.nhs.backend.repository.AdminRepository;
@@ -63,6 +64,18 @@ public class AdminService {
             return new EntityModel<>(
                     adminDTO,
                     linkTo(methodOn(AdminController.class).findByEmail(email)).withSelfRel());
+        } else {
+            throw new GlobalNotFoundException("ADMIN");
+        }
+    }
+
+    public EntityModel<Admin> findByCredentials(AdminCredentials adminCredentials) {
+        Optional<Admin> optionalAdmin = adminRepository.findByEmailAndPassword(adminCredentials.getEmail(), adminCredentials.getPassword());
+        if (optionalAdmin.isPresent()) {
+            Admin admin = optionalAdmin.get();
+            return new EntityModel<>(
+                    admin,
+                    linkTo(methodOn(AdminController.class).findByCredentials(adminCredentials)).withSelfRel());
         } else {
             throw new GlobalNotFoundException("ADMIN");
         }
