@@ -30,7 +30,7 @@ public class InstitutionService {
             Institution savedInstitution = institutionRepository.getByCui(institution.getCui());
             return new EntityModel<>(
                     savedInstitution,
-                    linkTo(methodOn(InstitutionController.class).add(savedInstitution)).withSelfRel());
+                    linkTo(methodOn(InstitutionController.class).findById(savedInstitution.getId())).withSelfRel());
         } else {
             throw new GlobalAlreadyExistsException("MEDICAL INSTITUTION");
         }
@@ -54,7 +54,7 @@ public class InstitutionService {
             Institution institution = optionalInstitution.get();
             return new EntityModel<>(
                     institution,
-                    linkTo(methodOn(InstitutionController.class).findByCui(cui)).withSelfRel());
+                    linkTo(methodOn(InstitutionController.class).findById(institution.getId())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("MEDICAL INSTITUTION");
         }
@@ -66,7 +66,7 @@ public class InstitutionService {
             Institution updatedInstitution = institutionRepository.getById(institution.getId());
             return new EntityModel<>(
                     updatedInstitution,
-                    linkTo(methodOn(InstitutionController.class).update(updatedInstitution)).withSelfRel());
+                    linkTo(methodOn(InstitutionController.class).findById(updatedInstitution.getId())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("MEDICAL INSTITUTION");
         }

@@ -30,7 +30,7 @@ public class DoctorService {
             Doctor savedDoctor = doctorRepository.getByEmail(doctor.getEmail());
             return new EntityModel<>(
                     savedDoctor,
-                    linkTo(methodOn(DoctorController.class).add(savedDoctor)).withSelfRel());
+                    linkTo(methodOn(DoctorController.class).findById(savedDoctor.getId())).withSelfRel());
         } else {
             throw new GlobalAlreadyExistsException("DOCTOR");
         }
@@ -54,7 +54,7 @@ public class DoctorService {
             Doctor doctor = optionalDoctor.get();
             return new EntityModel<>(
                     doctor,
-                    linkTo(methodOn(DoctorController.class).findByEmail(email)).withSelfRel());
+                    linkTo(methodOn(DoctorController.class).findById(doctor.getId())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("DOCTOR");
         }
@@ -66,7 +66,7 @@ public class DoctorService {
             Doctor updatedDoctor = doctorRepository.getById(doctor.getId());
             return new EntityModel<>(
                     updatedDoctor,
-                    linkTo(methodOn(DoctorController.class).update(updatedDoctor)).withSelfRel());
+                    linkTo(methodOn(DoctorController.class).findById(updatedDoctor.getId())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("DOCTOR");
         }
@@ -77,7 +77,7 @@ public class DoctorService {
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
             doctorRepository.delete(doctor);
-            return new EntityModel<>(doctor);
+            return new EntityModel<>(doctor); // TODO: Figure out why this returns an html error and not an EntityModel.
         } else {
             throw new GlobalNotFoundException("DOCTOR");
         }
@@ -88,7 +88,7 @@ public class DoctorService {
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
             doctorRepository.delete(doctor);
-            return new EntityModel<>(doctor);
+            return new EntityModel<>(doctor); // TODO: Figure out why this returns an html error and not an EntityModel.
         } else {
             throw new GlobalNotFoundException("DOCTOR");
         }

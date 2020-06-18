@@ -37,7 +37,7 @@ public class AdminService {
             AdminDTO adminDTO = modelMapper.map(savedAdmin, AdminDTO.class);
             return new EntityModel<>(
                     adminDTO,
-                    linkTo(methodOn(AdminController.class).add(admin)).withSelfRel());
+                    linkTo(methodOn(AdminController.class).findById(adminDTO.getId())).withSelfRel());
         } else {
             throw new GlobalAlreadyExistsException("ADMIN");
         }
@@ -63,7 +63,7 @@ public class AdminService {
             AdminDTO adminDTO = modelMapper.map(admin, AdminDTO.class);
             return new EntityModel<>(
                     adminDTO,
-                    linkTo(methodOn(AdminController.class).findByEmail(email)).withSelfRel());
+                    linkTo(methodOn(AdminController.class).findById(adminDTO.getId())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("ADMIN");
         }
@@ -75,7 +75,7 @@ public class AdminService {
             Admin admin = optionalAdmin.get();
             return new EntityModel<>(
                     admin,
-                    linkTo(methodOn(AdminController.class).findByCredentials(adminCredentials)).withSelfRel());
+                    linkTo(methodOn(AdminController.class).findById(admin.getId())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("ADMIN");
         }
@@ -87,7 +87,7 @@ public class AdminService {
             Admin updatedAdmin = adminRepository.getById(admin.getId());
             return new EntityModel<>(
                     updatedAdmin,
-                    linkTo(methodOn(AdminController.class).update(updatedAdmin)).withSelfRel());
+                    linkTo(methodOn(AdminController.class).findById(updatedAdmin.getId())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("ADMIN");
         }
