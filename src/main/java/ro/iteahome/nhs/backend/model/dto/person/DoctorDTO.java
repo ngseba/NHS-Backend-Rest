@@ -20,7 +20,7 @@ public class DoctorDTO {
 
     private String phoneNoRo;
 
-    private String medicalLicenseNo;
+    private String licenseNo;
 
     private String specialties;
 
@@ -85,12 +85,12 @@ public class DoctorDTO {
         this.phoneNoRo = phoneNoRo;
     }
 
-    public String getMedicalLicenseNo() {
-        return medicalLicenseNo;
+    public String getLicenseNo() {
+        return licenseNo;
     }
 
-    public void setMedicalLicenseNo(String medicalLicenseNo) {
-        this.medicalLicenseNo = medicalLicenseNo;
+    public void setLicenseNo(String licenseNo) {
+        this.licenseNo = licenseNo;
     }
 
     public String getSpecialties() {

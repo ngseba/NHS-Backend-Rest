@@ -42,6 +42,11 @@ public class NurseController {
         return nurseService.findByEmail(email);
     }
 
+    @GetMapping("/existence/by-cnp-and-license-number")
+    public boolean existsByCnpAndLicenseNo(@RequestParam String cnp, @RequestParam String licenseNo) {
+        return nurseService.existsByCnpAndLicenseNo(cnp, licenseNo);
+    }
+
     @PutMapping
     public EntityModel<NurseDTO> update(@RequestBody @Valid Nurse nurse) {
         return nurseService.update(nurse);

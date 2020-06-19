@@ -18,4 +18,6 @@ public interface NurseRepository extends JpaRepository<Nurse, Integer> {
     void deleteByEmail(String email);
 
     boolean existsByEmail(String email);
+
+    boolean existsByCnpAndLicenseNo(String cnp, String licenseNo);
 }

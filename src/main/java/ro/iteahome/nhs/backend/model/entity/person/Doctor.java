@@ -45,8 +45,8 @@ public class Doctor {
     private String phoneNoRo;
 
     @NotNull(message = "MEDICAL LICENSE NUMBER CANNOT BE EMPTY.")
-    @Column(name = "medical_license", nullable = false, unique = true, columnDefinition = "VARCHAR(10)")
-    private String medicalLicenseNo;
+    @Column(name = "medical_license", nullable = false, unique = true, columnDefinition = "VARCHAR(50)")
+    private String licenseNo;
 
     @NotNull(message = "SPECIALTIES CANNOT BE EMPTY.")
     @Column(name = "specialties", nullable = false, columnDefinition = "VARCHAR(255)")
@@ -118,12 +118,12 @@ public class Doctor {
         this.phoneNoRo = phoneNoRo;
     }
 
-    public String getMedicalLicenseNo() {
-        return medicalLicenseNo;
+    public String getLicenseNo() {
+        return licenseNo;
     }
 
-    public void setMedicalLicenseNo(String medicalLicenseNo) {
-        this.medicalLicenseNo = medicalLicenseNo;
+    public void setLicenseNo(String licenseNo) {
+        this.licenseNo = licenseNo;
     }
 
     public String getSpecialties() {

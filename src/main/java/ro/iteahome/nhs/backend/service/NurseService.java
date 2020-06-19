@@ -68,6 +68,10 @@ public class NurseService {
         }
     }
 
+    public boolean existsByCnpAndLicenseNo(String cnp, String licenseNo) {
+        return nurseRepository.existsByCnpAndLicenseNo(cnp, licenseNo);
+    }
+
     public EntityModel<NurseDTO> update(Nurse nurse) {
         if (nurseRepository.existsById(nurse.getId())) {
             Nurse updatedNurse = nurseRepository.save(nurse);
