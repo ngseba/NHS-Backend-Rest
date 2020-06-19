@@ -12,19 +12,19 @@ import ro.iteahome.nhs.backend.exception.error.GlobalError;
 @ControllerAdvice
 public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
-    //  ENTITY EXCEPTIONS: ---------------------------------------------------------------------------------------------
+//  ENTITY EXCEPTIONS: -------------------------------------------------------------------------------------------------
 
     @ExceptionHandler(GlobalNotFoundException.class)
-    public ResponseEntity<GlobalError> globalNotFoundException(GlobalNotFoundException ex) {
+    public ResponseEntity<GlobalError> handleGlobalNotFoundException(GlobalNotFoundException ex) {
         return new ResponseEntity<>(new GlobalError(ex.getRestEntity().substring(0, 3) + "-01", ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(GlobalAlreadyExistsException.class)
-    public ResponseEntity<GlobalError> globalAlreadyExistsException(GlobalAlreadyExistsException ex) {
+    public ResponseEntity<GlobalError> handleGlobalAlreadyExistsException(GlobalAlreadyExistsException ex) {
         return new ResponseEntity<>(new GlobalError(ex.getEntityName().substring(0, 3) + "-02", ex.getMessage()), HttpStatus.CONFLICT);
     }
 
-    // VALIDATION EXCEPTIONS: ------------------------------------------------------------------------------------------
+// VALIDATION EXCEPTIONS: ----------------------------------------------------------------------------------------------
 
     // TODO: Find out why this doesn't work here:
 //    @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -39,7 +39,7 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
 //                HttpStatus.BAD_REQUEST);
 //    }
 
-    // DATABASE VALIDATION EXCEPTIONS: ---------------------------------------------------------------------------------
+// DATABASE VALIDATION EXCEPTIONS: -------------------------------------------------------------------------------------
 
     // TODO: Find out how to manage database validation exceptions. I'm guessing the answer is stored procedures.
 

@@ -1,6 +1,6 @@
 package ro.iteahome.nhs.backend.model.entity.institution;
 
-import ro.iteahome.nhs.backend.repository.reference.institution.InstitutionType;
+import ro.iteahome.nhs.backend.model.reference.institution.InstitutionType;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
