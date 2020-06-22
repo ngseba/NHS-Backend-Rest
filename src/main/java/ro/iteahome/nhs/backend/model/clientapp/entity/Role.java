@@ -12,12 +12,17 @@ public class Role {
     private int id;
 
     @NotNull
-    @Column(name = "role", nullable = false, unique = true, columnDefinition = "VARCHAR(10)")
-    private String role;
+    @Column(name = "name", nullable = false, unique = true, columnDefinition = "VARCHAR(50)")
+    private String name;
 
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
     public Role() {
+    }
+
+    public Role(int id, @NotNull String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public int getId() {
@@ -28,16 +33,16 @@ public class Role {
         this.id = id;
     }
 
-    public String getRole() {
-        return role;
+    public String getName() {
+        return name;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
-        return role;
+        return name;
     }
 }

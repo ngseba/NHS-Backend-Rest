@@ -24,7 +24,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 // AUTHENTICATION MANAGEMENT: ------------------------------------------------------------------------------------------
 
 // SECURE VERSION: // TODO: Make this work.
-//
+
 //    @Override
 //    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 //        auth
@@ -38,9 +38,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .inMemoryAuthentication()
-                .withUser("admin")
-                .password("secret")
-                .roles("ADMIN");
+                .passwordEncoder(passwordEncoder)
+
+                .withUser("ADMIN_APP")
+                .password(passwordEncoder.encode("P@ssW0rd!"))
+                .roles("ADMIN")
+                .and()
+
+                .withUser("USER_APP")
+                .password(passwordEncoder.encode("P@ssW0rd!"))
+                .roles("USER");
     }
 
 // AUTHORIZATION MANAGEMENT: -------------------------------------------------------------------------------------------

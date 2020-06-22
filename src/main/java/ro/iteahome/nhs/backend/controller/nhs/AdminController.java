@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -32,49 +33,39 @@ public class AdminController {
 // C.R.U.D. METHODS: ---------------------------------------------------------------------------------------------------
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public EntityModel<AdminDTO> add(@RequestBody @Valid Admin admin) {
         return adminService.add(admin);
     }
 
     @GetMapping("/by-id/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public EntityModel<AdminDTO> findById(@PathVariable int id) {
         return adminService.findById(id);
     }
 
     @GetMapping("/by-email/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
     public EntityModel<AdminDTO> findByEmail(@PathVariable String email) {
-        System.err.println(passwordEncoder.encode("P@ssW0rd!"));
         return adminService.findByEmail(email);
     }
 
-    @GetMapping("/by-credentials")
-    public EntityModel<Admin> findByCredentials(@RequestParam String email, @RequestParam String password) {
-        return adminService.findByCredentials(email, password);
-    }
-
-    @GetMapping("/existence")
-    public boolean existsByCredentials(@RequestParam String email, @RequestParam String password) {
-        return adminService.existsByCredentials(email, password);
-    }
-
     @PutMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public EntityModel<Admin> update(@RequestBody Admin admin) {
         return adminService.update(admin);
     }
 
     @DeleteMapping("/by-id/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public EntityModel<AdminDTO> deleteById(@PathVariable int id) {
         return adminService.deleteById(id);
     }
 
     @DeleteMapping("/by-email/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
     public EntityModel<AdminDTO> deleteByEmail(@PathVariable String email) {
         return adminService.deleteByEmail(email);
-    }
-
-    @DeleteMapping("/by-credentials")
-    public void deleteByCredentials(@RequestParam String email, @RequestParam String password) {
-        adminService.deleteByCredentials(email, password);
     }
 
     // OTHER METHODS: --------------------------------------------------------------------------------------------------

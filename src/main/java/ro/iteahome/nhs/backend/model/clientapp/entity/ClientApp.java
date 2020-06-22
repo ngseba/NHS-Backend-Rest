@@ -27,18 +27,18 @@ public class ClientApp implements UserDetails {
 
     @NotNull(message = "PASSWORD CANNOT BE EMPTY.")
     @Pattern(regexp = "((?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,32})", message = "INVALID PASSWORD")
-    @Column(name = "password", nullable = false, columnDefinition = "VARCHAR(32)")
+    @Column(name = "password", nullable = false, columnDefinition = "VARCHAR(255)")
     private String password;
 
     @NotNull(message = "STATUS CANNOT BE EMPTY.")
     @Column(name = "status", nullable = false, columnDefinition = "INT")
-    private byte status;
+    private int status;
 
-    @ManyToMany(cascade = CascadeType.DETACH)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "client_apps_roles",
-            joinColumns = @JoinColumn(name = "client_app_name", referencedColumnName = "name"),
-            inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "role"))
+            joinColumns = @JoinColumn(name = "client_app_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles;
     // TODO: This join table has no foreign keys. Only existing ClientApp and Role IDs should be accepted as values. Fix it.
 
@@ -65,11 +65,11 @@ public class ClientApp implements UserDetails {
 
     // "getPassword()" IS PART OF THE "UserDetails" OVERRIDDEN METHODS.
 
-    public byte getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(byte status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -81,14 +81,14 @@ public class ClientApp implements UserDetails {
         this.roles = roles;
     }
 
+// OVERRIDDEN METHODS FROM "UserDetails" INTERFACE: --------------------------------------------------------------------
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role.getRole()))
+                .map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role.getName()))
                 .collect(Collectors.toList());
     }
-
-// OVERRIDDEN METHODS FROM "UserDetails" INTERFACE: --------------------------------------------------------------------
 
     @Override
     public String getPassword() {

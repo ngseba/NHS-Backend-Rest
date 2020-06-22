@@ -74,6 +74,10 @@ public class ClientAppService implements UserDetailsService {
 //        }
 //    }
 
+    public boolean existsByName(String name) {
+        return clientAppRepository.existsByName(name);
+    }
+
 //    public EntityModel<ClientApp> update(ClientApp clientApp) {
 //        if (clientAppRepository.existsById(clientApp.getId())) {
 //            clientAppRepository.save(clientApp);

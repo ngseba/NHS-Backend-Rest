@@ -1,0 +1,45 @@
+-- ::::::::::::::::::::::::::::::::::::::::::::::: SECURITY ENTITIES: ::::::::::::::::::::::::::::::::::::::::::::::::::
+
+-- CLIENT APPS TABLE:
+
+CREATE TABLE nhs.client_apps (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    status INT NOT NULL
+);
+INSERT INTO nhs.client_apps (id, name, password, status) VALUES (1, 'NHS Admin UI', '$2a$10$HWH5u3XDwT/KY2uu/Px87.ieezR0NJPBqKxd1WVK/M06kGbKtaW9y', 1);
+
+-- ROLES TABLE:
+
+CREATE TABLE nhs.roles (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(10) NOT NULL UNIQUE
+);
+INSERT INTO nhs.roles (id, name) VALUES (1, 'ADMIN'), (2, 'USER');
+
+-- CLIENT APPS ROLES - JOIN TABLE:
+
+CREATE TABLE nhs.client_apps_roles (
+    client_app_id INT NOT NULL,
+    role_id INT NOT NULL,
+    PRIMARY KEY(client_app_id, role_id),
+    FOREIGN KEY (client_app_id) REFERENCES nhs.client_apps(id),
+    FOREIGN KEY (role_id) REFERENCES nhs.roles(id)
+);
+INSERT INTO nhs.client_apps_roles (client_app_id, role_id) VALUES (1, 1);
+
+-- ::::::::::::::::::::::::::::::::::::::::::::: NHS BACKEND ENTITIES: :::::::::::::::::::::::::::::::::::::::::::::::::
+
+-- ADMINS TABLE:
+
+--CREATE TABLE nhs.admins (
+--    id INT PRIMARY KEY,
+--    email VARCHAR(50) NOT NULL UNIQUE,
+--    first_name VARCHAR(50) NOT NULL,
+--    last_name VARCHAR(50) NOT NULL,
+--    password VARCHAR(255) NOT NULL,
+--    phone_ro VARCHAR(13) NOT NULL
+--);
+--INSERT INTO nhs.admins (id, email, first_name, last_name, password, phone_ro) VALUES
+--    (1, 'admin@nhs.ro', 'Generic', 'Admin', '$2a$10$HWH5u3XDwT/KY2uu/Px87.ieezR0NJPBqKxd1WVK/M06kGbKtaW9y', '0040700100100')

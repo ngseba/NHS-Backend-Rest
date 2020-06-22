@@ -1,8 +1,10 @@
 package ro.iteahome.nhs.backend.model.clientapp.dto;
 
-public class ClientAppDTO {
+import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 
-    private static final String ROLE_PREFIX = "ROLE_";
+import java.util.Set;
+
+public class ClientAppDTO {
 
     private int id;
 
@@ -11,6 +13,8 @@ public class ClientAppDTO {
     // NO PASSWORD.
 
     private byte status;
+
+    private Set<Role> roles;
 
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
@@ -40,5 +44,13 @@ public class ClientAppDTO {
 
     public void setStatus(byte status) {
         this.status = status;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
