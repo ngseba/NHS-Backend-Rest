@@ -5,6 +5,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,9 +22,12 @@ public class ClientApp implements UserDetails {
     @Column(name = "id", updatable = false)
     private int id;
 
+    @NotNull(message = "CLIENT APP NAME CANNOT BE EMPTY.")
     @Column(name = "name", nullable = false, unique = true, columnDefinition = "VARCHAR(50)")
     private String name;
 
+    @NotNull(message = "PASSWORD CANNOT BE EMPTY.")
+    @Pattern(regexp = "((?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,32})", message = "INVALID PASSWORD")
     @Column(name = "password", nullable = false, columnDefinition = "VARCHAR(255)")
     private String password;
 
