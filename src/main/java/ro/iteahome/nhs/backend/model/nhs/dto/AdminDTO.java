@@ -1,5 +1,7 @@
 package ro.iteahome.nhs.backend.model.nhs.dto;
 
+import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
+
 public class AdminDTO {
 
     private int id;
@@ -14,9 +16,14 @@ public class AdminDTO {
 
     private String phoneNoRo;
 
-//    private String status; // TODO: Figure out how and why to incorporate this.
+    private int status;
+
+    private Role role;
 
     public AdminDTO() {
+        this.role = new Role();
+        role.setId(1);
+        role.setName("ROLE_ADMIN");
     }
 
     public int getId() {

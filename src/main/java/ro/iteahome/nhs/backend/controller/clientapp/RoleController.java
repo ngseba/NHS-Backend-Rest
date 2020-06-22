@@ -1,6 +1,5 @@
 package ro.iteahome.nhs.backend.controller.clientapp;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -9,82 +8,68 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
-import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppCredentials;
-import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppDTO;
-import ro.iteahome.nhs.backend.model.clientapp.entity.ClientApp;
+import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
 import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 import ro.iteahome.nhs.backend.repository.clientapp.RoleRepository;
-import ro.iteahome.nhs.backend.service.clientapp.ClientAppService;
+import ro.iteahome.nhs.backend.service.clientapp.RoleService;
 
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/client-apps")
-public class ClientAppController {
+@RequestMapping("/roles")
+public class RoleController {
 
 // DEPENDENCIES: -------------------------------------------------------------------------------------------------------
 
     @Autowired
-    private ClientAppService clientAppService;
+    private RoleService roleService;
 
     @Autowired
     private RoleRepository roleRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
 // C.R.U.D. METHODS: ---------------------------------------------------------------------------------------------------
 
-    @PostMapping("/with-role-id/{roleId}")
+    @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<ClientAppDTO> addWithRoleId(@RequestBody @Valid ClientAppCredentials clientAppCredentials, @PathVariable int roleId) {
-        Optional<Role> optionalRole = roleRepository.findById(roleId);
-        if (optionalRole.isPresent()) {
-            return clientAppService.add(clientAppCredentials, optionalRole.get());
+    public EntityModel<Role> add(@RequestBody @Valid Role role) {
+        if (!roleService.existsByName(role.getName())) {
+            return roleService.add(role);
         } else {
-            throw new GlobalNotFoundException("ROLE");
+            throw new GlobalAlreadyExistsException("ROLE");
         }
     }
 
     @GetMapping("/by-id/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<ClientAppDTO> findById(@PathVariable int id) {
-        return clientAppService.findById(id);
+    public EntityModel<Role> findById(@PathVariable int id) {
+        return roleService.findById(id);
     }
 
     @GetMapping("/by-name/{name}")
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<ClientAppDTO> findByName(@PathVariable String name) {
-        return clientAppService.findByName(name);
+    public EntityModel<Role> findByName(@PathVariable String name) {
+        return roleService.findByName(name);
     }
 
     @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<ClientAppDTO> update(@RequestBody @Valid ClientApp clientApp) {
-        return clientAppService.update(clientApp);
-    }
-
-    @PutMapping("/role")
-    @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<ClientAppDTO> updateRole(@RequestParam int clientAppId, @RequestParam int roleId) {
-        return clientAppService.updateRole(clientAppId, roleId);
+    public EntityModel<Role> update(@RequestBody @Valid Role role) {
+        return roleService.update(role);
     }
 
     @DeleteMapping("/by-id/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<ClientAppDTO> deleteById(@PathVariable int id) {
-        return clientAppService.deleteById(id);
+    public EntityModel<Role> deleteById(@PathVariable int id) {
+        return roleService.deleteById(id);
     }
 
     @DeleteMapping("/by-name/{name}")
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<ClientAppDTO> deleteByName(@PathVariable String name) {
-        return clientAppService.deleteByName(name);
+    public EntityModel<Role> deleteByName(@PathVariable String name) {
+        return roleService.deleteByName(name);
     }
 
 // OTHER METHODS: ------------------------------------------------------------------------------------------------------
@@ -92,8 +77,8 @@ public class ClientAppController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new LinkedHashMap<>();
-        errors.put("errorCode", "CLI-00");
-        errors.put("errorMessage", "CLIENT APP FIELDS HAVE VALIDATION ERRORS.");
+        errors.put("errorCode", "ROL-00");
+        errors.put("errorMessage", "ROLE APP FIELDS HAVE VALIDATION ERRORS.");
         errors.putAll(ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
