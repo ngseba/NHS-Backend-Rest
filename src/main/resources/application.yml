@@ -16,6 +16,7 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQL5Dialect
   datasource:
+    initialization-mode: always
     url: jdbc:mysql://${MYSQL_HOST:46.214.32.248}/nhs
     username: "Nhs00"
     password: "@Nhs@3"
@@ -28,6 +29,7 @@ spring:
 #      ddl-auto: update
 #    database-platform: org.hibernate.dialect.MySQL5Dialect
 #  datasource:
+#    initialization-mode: always
 #    url: jdbc:mysql://localhost:3306/nhs?createDatabaseIfNotExist=true
 #    username: root
 #    password: P@ssW0rd
