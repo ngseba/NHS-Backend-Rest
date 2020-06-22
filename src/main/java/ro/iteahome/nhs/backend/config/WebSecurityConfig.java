@@ -15,63 +15,33 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 // DEPENDENCIES: -------------------------------------------------------------------------------------------------------
 
-//    @Autowired
-//    ClientAppService clientAppService;
+    @Autowired
+    ClientAppService clientAppService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
 // AUTHENTICATION MANAGEMENT: ------------------------------------------------------------------------------------------
 
-// SECURE VERSION:
-
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//                .userDetailsService(clientAppService)
-//                .passwordEncoder(passwordEncoder);
-//    }
-
-// TEMPORARY TESTING VERSION:
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .inMemoryAuthentication()
-                .passwordEncoder(passwordEncoder)
-
-                .withUser("NHS_ADMIN_UI")
-                .password(passwordEncoder.encode("P@ssW0rd!"))
-                .roles("ADMIN")
-                .and()
-
-                .withUser("MEDICOM")
-                .password(passwordEncoder.encode("P@ssW0rd!"))
-                .roles("USER");
+                .userDetailsService(clientAppService)
+                .passwordEncoder(passwordEncoder);
     }
 
 // AUTHORIZATION MANAGEMENT: -------------------------------------------------------------------------------------------
-
-// SECURE VERSION:
-//
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .httpBasic()
-//                .and()
-//                .authorizeRequests()
-//                .anyRequest().authenticated(); // TODO: Add conditions based on client app privileges (Admin UI, Medicom)
-//    }
-
-// TEMPORARY TESTING VERSION:
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .httpBasic()
                 .and()
-                .authorizeRequests().anyRequest().permitAll()
+
+                .authorizeRequests()
+                .anyRequest().authenticated()
                 .and()
+
                 .csrf().disable()
                 .headers().frameOptions().disable();
     }

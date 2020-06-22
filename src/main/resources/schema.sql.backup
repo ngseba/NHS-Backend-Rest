@@ -29,4 +29,4 @@ CREATE TABLE nhs.client_apps_roles (
 );
 INSERT INTO nhs.client_apps_roles (client_app_id, role_id) VALUES (1, 1);
 
--- ::::::::::::::::::::::::::::::::::::::::::::: NHS BACKEND ENTITIES: :::::::::::::::::::::::::::::::::::::::::::::::::
+-- TODO: Rename this to "data.sql" in case of deciding to manually create the database tables and their connections."Spring.jpa.hibernate.ddl-auto" needs to be set to "none".

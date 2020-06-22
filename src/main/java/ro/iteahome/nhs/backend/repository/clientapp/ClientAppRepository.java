@@ -9,7 +9,11 @@ import java.util.Optional;
 @Repository
 public interface ClientAppRepository extends JpaRepository<ClientApp, Integer> {
 
+    ClientApp getById(int id);
+
     Optional<ClientApp> findOneByName(String name);
+
+    Optional<ClientApp> findByName(String name);
 
     boolean existsByName(String name);
 }

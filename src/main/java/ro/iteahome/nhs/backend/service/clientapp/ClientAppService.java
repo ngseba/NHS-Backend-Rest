@@ -11,11 +11,12 @@ import org.springframework.stereotype.Service;
 import ro.iteahome.nhs.backend.controller.clientapp.ClientAppController;
 import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
+import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppCredentials;
 import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppDTO;
-import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppInputDTO;
 import ro.iteahome.nhs.backend.model.clientapp.entity.ClientApp;
 import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 import ro.iteahome.nhs.backend.repository.clientapp.ClientAppRepository;
+import ro.iteahome.nhs.backend.repository.clientapp.RoleRepository;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -33,6 +34,9 @@ public class ClientAppService implements UserDetailsService {
     private ClientAppRepository clientAppRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -40,13 +44,13 @@ public class ClientAppService implements UserDetailsService {
 
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
-    public EntityModel<ClientAppDTO> add(ClientAppInputDTO clientAppInputDTO, Role role) {
-        if (!clientAppRepository.existsByName(clientAppInputDTO.getName())) {
-            ClientApp clientApp = modelMapper.map(clientAppInputDTO, ClientApp.class);
-            clientApp.setPassword(passwordEncoder.encode(clientAppInputDTO.getPassword()));
+    public EntityModel<ClientAppDTO> add(ClientAppCredentials clientAppCredentials, Role initialRole) {
+        if (!clientAppRepository.existsByName(clientAppCredentials.getName())) {
+            ClientApp clientApp = modelMapper.map(clientAppCredentials, ClientApp.class);
+            clientApp.setPassword(passwordEncoder.encode(clientAppCredentials.getPassword()));
             clientApp.setStatus(1);
             Set<Role> roles = new HashSet<>();
-            roles.add(role);
+            roles.add(initialRole);
             clientApp.setRoles(roles);
             ClientApp savedClientApp = clientAppRepository.save(clientApp);
             ClientAppDTO savedClientAppDTO = modelMapper.map(savedClientApp, ClientAppDTO.class);
@@ -71,58 +75,78 @@ public class ClientAppService implements UserDetailsService {
         }
     }
 
-//    public EntityModel<ClientAppDTO> findByName(String name) {
-//        Optional<ClientApp> optionalClientApp = clientAppRepository.findByName(name);
-//        if (optionalClientApp.isPresent()) {
-//            ClientApp clientApp = optionalClientApp.get();
-//            ClientAppDTO clientAppDTO = modelMapper.map(clientApp, ClientAppDTO.class);
-//            return new EntityModel<>(
-//                    clientAppDTO,
-//                    linkTo(methodOn(ClientAppController.class).findById(clientAppDTO.getId())).withSelfRel());
-//        } else {
-//            throw new GlobalNotFoundException("CLIENT APP");
-//        }
-//    }
-
-    public boolean existsByName(String name) {
-        return clientAppRepository.existsByName(name);
+    public EntityModel<ClientAppDTO> findByName(String name) {
+        Optional<ClientApp> optionalClientApp = clientAppRepository.findByName(name);
+        if (optionalClientApp.isPresent()) {
+            ClientApp clientApp = optionalClientApp.get();
+            ClientAppDTO clientAppDTO = modelMapper.map(clientApp, ClientAppDTO.class);
+            return new EntityModel<>(
+                    clientAppDTO,
+                    linkTo(methodOn(ClientAppController.class).findById(clientAppDTO.getId())).withSelfRel());
+        } else {
+            throw new GlobalNotFoundException("CLIENT APP");
+        }
     }
 
-//    public EntityModel<ClientApp> update(ClientApp clientApp) {
-//        if (clientAppRepository.existsById(clientApp.getId())) {
-//            clientAppRepository.save(clientApp);
-//            ClientApp updatedClientApp = clientAppRepository.getById(clientApp.getId());
-//            return new EntityModel<>(
-//                    updatedClientApp,
-//                    linkTo(methodOn(ClientAppController.class).findById(updatedClientApp.getId())).withSelfRel());
-//        } else {
-//            throw new GlobalNotFoundException("CLIENT APP");
-//        }
-//    }
+    public EntityModel<ClientAppDTO> update(ClientApp clientApp) {
+        if (clientAppRepository.existsById(clientApp.getId())) {
+            clientApp.setPassword(passwordEncoder.encode(clientApp.getPassword()));
+            ClientApp updatedClientApp = clientAppRepository.save(clientApp);
+            ClientAppDTO updatedClientAppDTO = modelMapper.map(updatedClientApp, ClientAppDTO.class);
+            return new EntityModel<>(
+                    updatedClientAppDTO,
+                    linkTo(methodOn(ClientAppController.class).findById(updatedClientApp.getId())).withSelfRel());
+        } else {
+            throw new GlobalNotFoundException("CLIENT APP");
+        }
+    }
 
-//    public EntityModel<ClientAppDTO> deleteById(int id) {
-//        Optional<ClientApp> optionalClientApp = clientAppRepository.findById(id);
-//        if (optionalClientApp.isPresent()) {
-//            ClientApp clientApp = optionalClientApp.get();
-//            ClientAppDTO clientAppDTO = modelMapper.map(clientApp, ClientAppDTO.class);
-//            clientAppRepository.delete(clientApp);
-//            return new EntityModel<>(clientAppDTO);
-//        } else {
-//            throw new GlobalNotFoundException("CLIENT APP");
-//        }
-//    }
+    public EntityModel<ClientAppDTO> updateRole(int clientAppId, int roleId) {
+        Optional<ClientApp> optionalClientApp = clientAppRepository.findById(clientAppId);
+        if (optionalClientApp.isPresent()) {
+            Optional<Role> optionalRole = roleRepository.findById(roleId);
+            if (optionalRole.isPresent()) {
+                ClientApp clientApp = optionalClientApp.get();
+                Role role = optionalRole.get();
+                clientApp.getRoles().clear();
+                clientApp.getRoles().add(role); // TODO: This might not work as intended.
+                clientApp.setPassword(passwordEncoder.encode(clientApp.getPassword()));
+                ClientApp updatedClientApp = clientAppRepository.save(clientApp);
+                ClientAppDTO updatedClientAppDTO = modelMapper.map(updatedClientApp, ClientAppDTO.class);
+                return new EntityModel<>(
+                        updatedClientAppDTO,
+                        linkTo(methodOn(ClientAppController.class).findById(clientApp.getId())).withSelfRel());
+            } else {
+                throw new GlobalNotFoundException("ROLE");
+            }
+        } else {
+            throw new GlobalNotFoundException("CLIENT APP");
+        }
+    }
 
-//    public EntityModel<ClientAppDTO> deleteByName(String name) {
-//        Optional<ClientApp> optionalClientApp = clientAppRepository.findByName(name);
-//        if (optionalClientApp.isPresent()) {
-//            ClientApp clientApp = optionalClientApp.get();
-//            ClientAppDTO clientAppDTO = modelMapper.map(clientApp, ClientAppDTO.class);
-//            clientAppRepository.delete(clientApp);
-//            return new EntityModel<>(clientAppDTO);
-//        } else {
-//            throw new GlobalNotFoundException("CLIENT APP");
-//        }
-//    }
+    public EntityModel<ClientAppDTO> deleteById(int id) {
+        Optional<ClientApp> optionalClientApp = clientAppRepository.findById(id);
+        if (optionalClientApp.isPresent()) {
+            ClientApp clientApp = optionalClientApp.get();
+            clientAppRepository.delete(clientApp);
+            ClientAppDTO deletedClientAppDTO = modelMapper.map(clientApp, ClientAppDTO.class);
+            return new EntityModel<>(deletedClientAppDTO);
+        } else {
+            throw new GlobalNotFoundException("CLIENT APP");
+        }
+    }
+
+    public EntityModel<ClientAppDTO> deleteByName(String name) {
+        Optional<ClientApp> optionalClientApp = clientAppRepository.findByName(name);
+        if (optionalClientApp.isPresent()) {
+            ClientApp clientApp = optionalClientApp.get();
+            clientAppRepository.delete(clientApp);
+            ClientAppDTO deletedClientAppDTO = modelMapper.map(clientApp, ClientAppDTO.class);
+            return new EntityModel<>(deletedClientAppDTO);
+        } else {
+            throw new GlobalNotFoundException("CLIENT APP");
+        }
+    }
 
 // OVERRIDDEN "UserDetailsService" METHODS: ----------------------------------------------------------------------------
 

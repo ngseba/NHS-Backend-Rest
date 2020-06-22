@@ -3,7 +3,7 @@ package ro.iteahome.nhs.backend.model.clientapp.dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-public class ClientAppInputDTO {
+public class ClientAppCredentials {
 
     // NO ID.
 
@@ -20,7 +20,7 @@ public class ClientAppInputDTO {
 
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
-    public ClientAppInputDTO() {
+    public ClientAppCredentials() {
     }
 
     public String getName() {
