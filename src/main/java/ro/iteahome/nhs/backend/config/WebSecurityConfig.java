@@ -16,14 +16,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 // DEPENDENCIES: -------------------------------------------------------------------------------------------------------
 
     @Autowired
-    private ClientAppService clientAppService;
+    ClientAppService clientAppService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
 // AUTHENTICATION MANAGEMENT: ------------------------------------------------------------------------------------------
 
-// SECURE VERSION: // TODO: Make this work.
+// SECURE VERSION:
 
 //    @Override
 //    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .passwordEncoder(passwordEncoder);
 //    }
 
-// TESTING VERSION: // TODO: Delete this when the secure version works.
+// TEMPORARY TESTING VERSION:
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -40,19 +40,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .inMemoryAuthentication()
                 .passwordEncoder(passwordEncoder)
 
-                .withUser("ADMIN_APP")
+                .withUser("NHS_ADMIN_UI")
                 .password(passwordEncoder.encode("P@ssW0rd!"))
                 .roles("ADMIN")
                 .and()
 
-                .withUser("USER_APP")
+                .withUser("MEDICOM")
                 .password(passwordEncoder.encode("P@ssW0rd!"))
                 .roles("USER");
     }
 
 // AUTHORIZATION MANAGEMENT: -------------------------------------------------------------------------------------------
 
-// SECURE VERSION: // TODO: Make this work.
+// SECURE VERSION:
 //
 //    @Override
 //    protected void configure(HttpSecurity http) throws Exception {
@@ -63,14 +63,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .anyRequest().authenticated(); // TODO: Add conditions based on client app privileges (Admin UI, Medicom)
 //    }
 
-// TESTING VERSION: // TODO: Delete this when the secure version works.
+// TEMPORARY TESTING VERSION:
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests().anyRequest().permitAll()
-                .and()
-                .csrf().disable()
-                .headers().frameOptions().disable();
+        http.authorizeRequests().anyRequest().permitAll();
+//                .and().csrf().disable()
+//                .headers().frameOptions().disable();
     }
 }

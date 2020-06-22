@@ -4,7 +4,7 @@ import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 
 import java.util.Set;
 
-public class ClientAppDTO {
+public class ClientAppOutputDTO {
 
     private int id;
 
@@ -12,14 +12,13 @@ public class ClientAppDTO {
 
     // NO PASSWORD.
 
-    private byte status;
+    private int status;
 
     private Set<Role> roles;
 
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
-
-    public ClientAppDTO() {
+    public ClientAppOutputDTO() {
     }
 
     public int getId() {
@@ -38,11 +37,11 @@ public class ClientAppDTO {
         this.name = name;
     }
 
-    public byte getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(byte status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

@@ -30,16 +30,3 @@ CREATE TABLE nhs.client_apps_roles (
 INSERT INTO nhs.client_apps_roles (client_app_id, role_id) VALUES (1, 1);
 
 -- ::::::::::::::::::::::::::::::::::::::::::::: NHS BACKEND ENTITIES: :::::::::::::::::::::::::::::::::::::::::::::::::
-
--- ADMINS TABLE:
-
---CREATE TABLE nhs.admins (
---    id INT PRIMARY KEY,
---    email VARCHAR(50) NOT NULL UNIQUE,
---    first_name VARCHAR(50) NOT NULL,
---    last_name VARCHAR(50) NOT NULL,
---    password VARCHAR(255) NOT NULL,
---    phone_ro VARCHAR(13) NOT NULL
---);
---INSERT INTO nhs.admins (id, email, first_name, last_name, password, phone_ro) VALUES
---    (1, 'admin@nhs.ro', 'Generic', 'Admin', '$2a$10$HWH5u3XDwT/KY2uu/Px87.ieezR0NJPBqKxd1WVK/M06kGbKtaW9y', '0040700100100')

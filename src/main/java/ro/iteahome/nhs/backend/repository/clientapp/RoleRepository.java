@@ -6,6 +6,4 @@ import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Integer> {
-
-    Role getById(int Id);
 }
