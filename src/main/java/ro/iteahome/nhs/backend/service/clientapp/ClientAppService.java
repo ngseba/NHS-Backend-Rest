@@ -11,12 +11,15 @@ import org.springframework.stereotype.Service;
 import ro.iteahome.nhs.backend.controller.clientapp.ClientAppController;
 import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
+import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppDTO;
 import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppInputDTO;
-import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppOutputDTO;
 import ro.iteahome.nhs.backend.model.clientapp.entity.ClientApp;
+import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 import ro.iteahome.nhs.backend.repository.clientapp.ClientAppRepository;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -37,39 +40,42 @@ public class ClientAppService implements UserDetailsService {
 
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
-    public EntityModel<ClientAppOutputDTO> add(ClientAppInputDTO clientAppInputDTO) {
+    public EntityModel<ClientAppDTO> add(ClientAppInputDTO clientAppInputDTO, Role role) {
         if (!clientAppRepository.existsByName(clientAppInputDTO.getName())) {
             ClientApp clientApp = modelMapper.map(clientAppInputDTO, ClientApp.class);
             clientApp.setPassword(passwordEncoder.encode(clientAppInputDTO.getPassword()));
             clientApp.setStatus(1);
+            Set<Role> roles = new HashSet<>();
+            roles.add(role);
+            clientApp.setRoles(roles);
             ClientApp savedClientApp = clientAppRepository.save(clientApp);
-            ClientAppOutputDTO clientAppOutputDTO = modelMapper.map(savedClientApp, ClientAppOutputDTO.class);
+            ClientAppDTO savedClientAppDTO = modelMapper.map(savedClientApp, ClientAppDTO.class);
             return new EntityModel<>(
-                    clientAppOutputDTO,
-                    linkTo(methodOn(ClientAppController.class).findById(clientAppOutputDTO.getId())).withSelfRel());
+                    savedClientAppDTO,
+                    linkTo(methodOn(ClientAppController.class).findById(savedClientApp.getId())).withSelfRel());
         } else {
             throw new GlobalAlreadyExistsException("CLIENT APP");
         }
     }
 
-    public EntityModel<ClientAppOutputDTO> findById(int id) {
+    public EntityModel<ClientAppDTO> findById(int id) {
         Optional<ClientApp> optionalClientApp = clientAppRepository.findById(id);
         if (optionalClientApp.isPresent()) {
             ClientApp clientApp = optionalClientApp.get();
-            ClientAppOutputDTO clientAppOutputDTO = modelMapper.map(clientApp, ClientAppOutputDTO.class);
+            ClientAppDTO clientAppDTO = modelMapper.map(clientApp, ClientAppDTO.class);
             return new EntityModel<>(
-                    clientAppOutputDTO,
+                    clientAppDTO,
                     linkTo(methodOn(ClientAppController.class).findById(id)).withSelfRel());
         } else {
             throw new GlobalNotFoundException("CLIENT APP");
         }
     }
 
-//    public EntityModel<ClientAppOutputDTO> findByName(String name) {
+//    public EntityModel<ClientAppDTO> findByName(String name) {
 //        Optional<ClientApp> optionalClientApp = clientAppRepository.findByName(name);
 //        if (optionalClientApp.isPresent()) {
 //            ClientApp clientApp = optionalClientApp.get();
-//            ClientAppOutputDTO clientAppDTO = modelMapper.map(clientApp, ClientAppOutputDTO.class);
+//            ClientAppDTO clientAppDTO = modelMapper.map(clientApp, ClientAppDTO.class);
 //            return new EntityModel<>(
 //                    clientAppDTO,
 //                    linkTo(methodOn(ClientAppController.class).findById(clientAppDTO.getId())).withSelfRel());
@@ -94,11 +100,11 @@ public class ClientAppService implements UserDetailsService {
 //        }
 //    }
 
-//    public EntityModel<ClientAppOutputDTO> deleteById(int id) {
+//    public EntityModel<ClientAppDTO> deleteById(int id) {
 //        Optional<ClientApp> optionalClientApp = clientAppRepository.findById(id);
 //        if (optionalClientApp.isPresent()) {
 //            ClientApp clientApp = optionalClientApp.get();
-//            ClientAppOutputDTO clientAppDTO = modelMapper.map(clientApp, ClientAppOutputDTO.class);
+//            ClientAppDTO clientAppDTO = modelMapper.map(clientApp, ClientAppDTO.class);
 //            clientAppRepository.delete(clientApp);
 //            return new EntityModel<>(clientAppDTO);
 //        } else {
@@ -106,11 +112,11 @@ public class ClientAppService implements UserDetailsService {
 //        }
 //    }
 
-//    public EntityModel<ClientAppOutputDTO> deleteByName(String name) {
+//    public EntityModel<ClientAppDTO> deleteByName(String name) {
 //        Optional<ClientApp> optionalClientApp = clientAppRepository.findByName(name);
 //        if (optionalClientApp.isPresent()) {
 //            ClientApp clientApp = optionalClientApp.get();
-//            ClientAppOutputDTO clientAppDTO = modelMapper.map(clientApp, ClientAppOutputDTO.class);
+//            ClientAppDTO clientAppDTO = modelMapper.map(clientApp, ClientAppDTO.class);
 //            clientAppRepository.delete(clientApp);
 //            return new EntityModel<>(clientAppDTO);
 //        } else {

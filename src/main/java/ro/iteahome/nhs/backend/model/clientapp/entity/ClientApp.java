@@ -75,10 +75,6 @@ public class ClientApp implements UserDetails {
         this.roles = roles;
     }
 
-    public void addRole(Role role) {
-        roles.add(role);
-    }
-
 // OVERRIDDEN METHODS FROM "UserDetails" INTERFACE: --------------------------------------------------------------------
 
     @Override

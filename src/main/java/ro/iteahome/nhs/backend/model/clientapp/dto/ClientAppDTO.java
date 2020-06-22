@@ -4,7 +4,7 @@ import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 
 import java.util.Set;
 
-public class ClientAppOutputDTO {
+public class ClientAppDTO {
 
     private int id;
 
@@ -18,7 +18,7 @@ public class ClientAppOutputDTO {
 
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
-    public ClientAppOutputDTO() {
+    public ClientAppDTO() {
     }
 
     public int getId() {
@@ -51,5 +51,9 @@ public class ClientAppOutputDTO {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
     }
 }

@@ -15,8 +15,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 // DEPENDENCIES: -------------------------------------------------------------------------------------------------------
 
-    @Autowired
-    ClientAppService clientAppService;
+//    @Autowired
+//    ClientAppService clientAppService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -67,8 +67,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().permitAll();
-//                .and().csrf().disable()
-//                .headers().frameOptions().disable();
+        http
+                .httpBasic()
+                .and()
+                .authorizeRequests().anyRequest().permitAll()
+                .and()
+                .csrf().disable()
+                .headers().frameOptions().disable();
     }
 }
