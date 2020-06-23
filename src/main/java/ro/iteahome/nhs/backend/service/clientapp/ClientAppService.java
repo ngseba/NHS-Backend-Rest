@@ -37,9 +37,6 @@ public class ClientAppService implements UserDetailsService {
     private RoleRepository roleRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private ModelMapper modelMapper;
 
 // METHODS: ------------------------------------------------------------------------------------------------------------
@@ -47,7 +44,6 @@ public class ClientAppService implements UserDetailsService {
     public EntityModel<ClientAppDTO> add(ClientAppCredentials clientAppCredentials, Role initialRole) {
         if (!clientAppRepository.existsByName(clientAppCredentials.getName())) {
             ClientApp clientApp = modelMapper.map(clientAppCredentials, ClientApp.class);
-            clientApp.setPassword(passwordEncoder.encode(clientAppCredentials.getPassword()));
             clientApp.setStatus(1);
             Set<Role> roles = new HashSet<>();
             roles.add(initialRole);
@@ -90,7 +86,6 @@ public class ClientAppService implements UserDetailsService {
 
     public EntityModel<ClientAppDTO> update(ClientApp clientApp) {
         if (clientAppRepository.existsById(clientApp.getId())) {
-            clientApp.setPassword(passwordEncoder.encode(clientApp.getPassword()));
             ClientApp updatedClientApp = clientAppRepository.save(clientApp);
             ClientAppDTO updatedClientAppDTO = modelMapper.map(updatedClientApp, ClientAppDTO.class);
             return new EntityModel<>(
@@ -110,7 +105,6 @@ public class ClientAppService implements UserDetailsService {
                 Role role = optionalRole.get();
                 clientApp.getRoles().clear();
                 clientApp.getRoles().add(role); // TODO: This might not work as intended.
-                clientApp.setPassword(passwordEncoder.encode(clientApp.getPassword()));
                 ClientApp updatedClientApp = clientAppRepository.save(clientApp);
                 ClientAppDTO updatedClientAppDTO = modelMapper.map(updatedClientApp, ClientAppDTO.class);
                 return new EntityModel<>(
