@@ -27,7 +27,6 @@ public class ClientApp implements UserDetails {
     private String name;
 
     @NotNull(message = "PASSWORD CANNOT BE EMPTY.")
-//    @Pattern(regexp = "((?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,32})", message = "INVALID PASSWORD")
     @Column(name = "password", nullable = false, columnDefinition = "VARCHAR(255)")
     private String password;
 
