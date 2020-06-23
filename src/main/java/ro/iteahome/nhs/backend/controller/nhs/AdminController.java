@@ -50,6 +50,12 @@ public class AdminController {
         return adminService.findByEmail(email);
     }
 
+    @GetMapping("/for-update/by-email/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public EntityModel<Admin> findSensitiveByEmail(@PathVariable String email) {
+        return adminService.findSensitiveByEmail(email);
+    }
+
     @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
     public EntityModel<Admin> update(@RequestBody Admin admin) {

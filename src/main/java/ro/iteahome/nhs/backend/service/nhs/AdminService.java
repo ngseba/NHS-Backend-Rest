@@ -68,8 +68,8 @@ public class AdminService {
         }
     }
 
-    public EntityModel<Admin> findByCredentials(String email, String password) {
-        Optional<Admin> optionalAdmin = adminRepository.findByEmailAndPassword(email, password);
+    public EntityModel<Admin> findSensitiveByEmail(String email) {
+        Optional<Admin> optionalAdmin = adminRepository.findByEmail(email);
         if (optionalAdmin.isPresent()) {
             Admin admin = optionalAdmin.get();
             return new EntityModel<>(
@@ -111,16 +111,6 @@ public class AdminService {
             AdminDTO adminDTO = modelMapper.map(admin, AdminDTO.class);
             adminRepository.delete(admin);
             return new EntityModel<>(adminDTO);
-        } else {
-            throw new GlobalNotFoundException("ADMIN");
-        }
-    }
-
-    public void deleteByCredentials(String email, String password) {
-        Optional<Admin> optionalAdmin = adminRepository.findByEmailAndPassword(email, password);
-        if (optionalAdmin.isPresent()) {
-            Admin admin = optionalAdmin.get();
-            adminRepository.delete(admin);
         } else {
             throw new GlobalNotFoundException("ADMIN");
         }
