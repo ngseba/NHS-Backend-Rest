@@ -1,13 +1,18 @@
 package ro.iteahome.nhs.backend.model.nhs.entity;
 
+import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.Set;
 
 @Entity
 @Table(name = "admins")
 public class Admin {
+
+// FIELDS: -------------------------------------------------------------------------------------------------------------
 
     @Id
     @Column(name = "id", updatable = false)
@@ -36,6 +41,18 @@ public class Admin {
     @Pattern(regexp = "^0040\\d{9}$", message = "INVALID PHONE NUMBER")
     @Column(name = "phone_ro", nullable = false, unique = true, columnDefinition = "VARCHAR(13)")
     private String phoneNoRo;
+
+    @Column(name = "status", nullable = false, columnDefinition = "INT")
+    private int status;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "admins_roles",
+            joinColumns = @JoinColumn(name = "admin_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles;
+
+// METHODS: ------------------------------------------------------------------------------------------------------------
 
     public Admin() {
     }
@@ -86,5 +103,21 @@ public class Admin {
 
     public void setPhoneNoRo(String phoneNoRo) {
         this.phoneNoRo = phoneNoRo;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

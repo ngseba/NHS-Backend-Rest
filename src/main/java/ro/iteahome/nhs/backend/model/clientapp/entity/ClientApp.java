@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;

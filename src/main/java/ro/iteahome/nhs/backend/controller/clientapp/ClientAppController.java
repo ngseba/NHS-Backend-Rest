@@ -14,13 +14,12 @@ import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppCredentials;
 import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppDTO;
 import ro.iteahome.nhs.backend.model.clientapp.entity.ClientApp;
 import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
-import ro.iteahome.nhs.backend.repository.clientapp.RoleRepository;
 import ro.iteahome.nhs.backend.service.clientapp.ClientAppService;
+import ro.iteahome.nhs.backend.service.clientapp.RoleService;
 
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,7 +32,7 @@ public class ClientAppController {
     private ClientAppService clientAppService;
 
     @Autowired
-    private RoleRepository roleRepository;
+    private RoleService roleService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -43,9 +42,9 @@ public class ClientAppController {
     @PostMapping("/with-role-id/{roleId}")
     @PreAuthorize("hasRole('ADMIN')")
     public EntityModel<ClientAppDTO> addWithRoleId(@RequestBody @Valid ClientAppCredentials clientAppCredentials, @PathVariable int roleId) {
-        Optional<Role> optionalRole = roleRepository.findById(roleId);
-        if (optionalRole.isPresent()) {
-            return clientAppService.add(clientAppCredentials, optionalRole.get());
+        EntityModel<Role> role = roleService.findById(roleId);
+        if (role.getContent() != null) {
+            return clientAppService.add(clientAppCredentials, role.getContent());
         } else {
             throw new GlobalNotFoundException("ROLE");
         }
