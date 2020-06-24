@@ -1,12 +1,9 @@
 package ro.iteahome.nhs.backend.model.nhs.entity;
 
-import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.Set;
 
 @Entity
 @Table(name = "admins")
@@ -51,7 +48,7 @@ public class Admin {
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
     public Admin() {
-//        this.role = "ADMIN";
+        this.role = "ADMIN";
     }
 
     public int getId() {

@@ -1,9 +1,7 @@
 package ro.iteahome.nhs.backend.model.nhs.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Table(name = "consults")
@@ -18,20 +16,24 @@ public class Consult {
     private Date date;
 
     @OneToOne
-    @JoinColumn (name = "patient_cnp", referencedColumnName = "cnp", nullable = false)
+    @JoinColumn(name = "patient_cnp", referencedColumnName = "cnp", nullable = false)
     private Patient patient;
 
     @OneToOne
-    @JoinColumn (name = "doctor_cnp", referencedColumnName = "cnp", nullable = false)
+    @JoinColumn(name = "doctor_cnp", referencedColumnName = "cnp", nullable = false)
     private Doctor doctor;
 
     @OneToOne
-    @JoinColumn (name = "institution_cui", referencedColumnName = "cui", nullable = false)
+    @JoinColumn(name = "institution_cui", referencedColumnName = "cui", nullable = false)
     private Institution institution;
 
     @OneToOne
-    @JoinColumn (name = "diagnostic_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "diagnostic_id", referencedColumnName = "id", nullable = false)
     private Diagnostic diagnostic;
+
+    @OneToOne
+    @JoinColumn(name = "treatment_id", referencedColumnName = "id")
+    private Treatment treatment;
 
     public Consult() {
     }

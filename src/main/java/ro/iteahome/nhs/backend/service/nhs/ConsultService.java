@@ -13,8 +13,4 @@ public class ConsultService {
 //    private
 
 
-
-
-
-
 }

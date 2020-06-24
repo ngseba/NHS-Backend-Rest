@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "treatments")
-public class Treatment { // TODO: Decide if these should be standardized (with all of the complications that would come along with that) and develop it into an entity either way.
+public class Treatment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,7 +13,7 @@ public class Treatment { // TODO: Decide if these should be standardized (with a
     private int id;
 
     @NotNull(message = "DESCRIPTION CANNOT BE EMPTY.")
-    @Column(name = "description", nullable = false, columnDefinition = "VARCHAR(255)")
+    @Column(name = "description", nullable = false, columnDefinition = "VARCHAR(4000)")
     private String description;
 
     @Column(name = "schedule", columnDefinition = "VARCHAR(255)")
@@ -26,10 +26,6 @@ public class Treatment { // TODO: Decide if these should be standardized (with a
     @NotNull(message = "MAXIMUM NUMBER OF DAYS CANNOT BE EMPTY.")
     @Column(name = "max_days", nullable = false, columnDefinition = "INT")
     private int maxDays;
-
-    @NotNull(message = "DIAGNOSTIC CANNOT BE EMPTY.")
-    @ManyToOne(cascade = CascadeType.DETACH)
-    private Diagnostic diagnostic;
 
     public Treatment() {
     }

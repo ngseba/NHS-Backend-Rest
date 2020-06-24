@@ -2,11 +2,10 @@ package ro.iteahome.nhs.backend.model.nhs.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
 
 @Entity
 @Table(name = "diagnostics")
-public class Diagnostic { // TODO: Decide if these should be standardized (with all of the complications that would come along with that) and develop it into an entity either way.
+public class Diagnostic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,16 +15,6 @@ public class Diagnostic { // TODO: Decide if these should be standardized (with 
     @NotNull(message = "DESCRIPTION CANNOT BE EMPTY.")
     @Column(name = "description", nullable = false, columnDefinition = "VARCHAR(255)")
     private String description;
-
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinTable(
-            name = "diagnostics_treatments",
-            joinColumns = @JoinColumn(name = "diagnostic_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "treatment_id", referencedColumnName = "id"))
-    private Set<Treatment> treatments;
-
-    @ManyToOne(cascade = CascadeType.DETACH)
-    private Patient patient;
 
     public Diagnostic() {
     }
@@ -44,13 +33,5 @@ public class Diagnostic { // TODO: Decide if these should be standardized (with 
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Set<Treatment> getTreatments() {
-        return treatments;
-    }
-
-    public void setTreatments(Set<Treatment> treatments) {
-        this.treatments = treatments;
     }
 }

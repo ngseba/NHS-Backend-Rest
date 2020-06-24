@@ -21,27 +21,20 @@ public class Patient {
     private String cnp;
 
     @NotNull(message = "FIRST NAME CANNOT BE EMPTY.")
-    @Column(name = "first_name", nullable = false, columnDefinition = "VARCHAR(50)")
+    @Column(name = "first_name", nullable = false, columnDefinition = "VARCHAR(100)")
     private String firstName;
 
     @NotNull(message = "LAST NAME CANNOT BE EMPTY.")
-    @Column(name = "last_name", nullable = false, columnDefinition = "VARCHAR(50)")
+    @Column(name = "last_name", nullable = false, columnDefinition = "VARCHAR(100)")
     private String lastName;
 
-    @Email(regexp = ".+@.+\\.\\w+", message = "INVALID EMAIL ADDRESS")
-    @Column(name = "email", unique = true, columnDefinition = "VARCHAR(50)")
+    @Email(regexp = ".+@.+\\..+", message = "INVALID EMAIL ADDRESS")
+    @Column(name = "email", unique = true, columnDefinition = "VARCHAR(100)")
     private String email;
 
     @Pattern(regexp = "^0040\\d{9}$", message = "INVALID PHONE NUMBER")
     @Column(name = "phone_ro", unique = true, columnDefinition = "VARCHAR(13)")
     private String phoneNoRo;
-
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinTable(
-            name = "patients_diagnostics",
-            joinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "diagnostic_id", referencedColumnName = "id"))
-    private Set<Diagnostic> diagnostics;
 
     public Patient() {
     }

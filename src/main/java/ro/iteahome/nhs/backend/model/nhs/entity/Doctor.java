@@ -20,21 +20,21 @@ public class Doctor {
     @Column(name = "cnp", nullable = false, unique = true, columnDefinition = "VARCHAR(13)")
     private String cnp;
 
-    @NotNull(message = "TITLE CANNOT BE EMPTY.")
+//    @NotNull(message = "TITLE CANNOT BE EMPTY.")
     @Column(name = "title", nullable = false, columnDefinition = "VARCHAR(50)")
     private String title; // TODO: Create this by concatenating corresponding enum values chosen via a drop-down menu.
 
     @NotNull(message = "FIRST NAME CANNOT BE EMPTY.")
-    @Column(name = "first_name", nullable = false, columnDefinition = "VARCHAR(50)")
+    @Column(name = "first_name", nullable = false, columnDefinition = "VARCHAR(100)")
     private String firstName;
 
     @NotNull(message = "LAST NAME CANNOT BE EMPTY.")
-    @Column(name = "last_name", nullable = false, columnDefinition = "VARCHAR(50)")
+    @Column(name = "last_name", nullable = false, columnDefinition = "VARCHAR(100)")
     private String lastName;
 
     @NotNull(message = "EMAIL CANNOT BE EMPTY.")
-    @Email(regexp = ".+@.+\\.\\w+", message = "INVALID EMAIL ADDRESS")
-    @Column(name = "email", nullable = false, unique = true, columnDefinition = "VARCHAR(50)")
+    @Email(regexp = ".+@.+\\..+", message = "INVALID EMAIL ADDRESS")
+    @Column(name = "email", nullable = false, unique = true, columnDefinition = "VARCHAR(100)")
     private String email;
 
     @NotNull(message = "PHONE NUMBER CANNOT BE EMPTY.")
@@ -46,11 +46,11 @@ public class Doctor {
     @Column(name = "medical_license", nullable = false, unique = true, columnDefinition = "VARCHAR(50)")
     private String licenseNo;
 
-    @NotNull(message = "SPECIALTIES CANNOT BE EMPTY.")
+//    @NotNull(message = "SPECIALTIES CANNOT BE EMPTY.")
     @Column(name = "specialties", nullable = false, columnDefinition = "VARCHAR(255)")
     private String specialties; // TODO: Create this by concatenating corresponding enum values chosen via a drop-down menu.
 
-    @ManyToMany(cascade = CascadeType.DETACH)
+    @ManyToMany(cascade = CascadeType.DETACH) //TODO: Check detach cascade type.
     @JoinTable(
             name = "doctors_institutions",
             joinColumns = @JoinColumn(name = "doctor_id", referencedColumnName = "id"),

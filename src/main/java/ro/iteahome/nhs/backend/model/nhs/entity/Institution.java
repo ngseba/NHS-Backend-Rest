@@ -29,7 +29,7 @@ public class Institution {
     private String name;
 
     @NotNull(message = "ADDRESS CANNOT BE EMPTY.")
-    @Column(name = "address", nullable = false, columnDefinition = "VARCHAR(100)")
+    @Column(name = "address", nullable = false, columnDefinition = "VARCHAR(500)")
     private String address;
 
     @NotNull(message = "PHONE NUMBER CANNOT BE EMPTY.")
@@ -38,12 +38,11 @@ public class Institution {
     private String phoneNoRo;
 
     @NotNull(message = "EMAIL CANNOT BE EMPTY.")
-    @Email(regexp = ".+@.+\\.\\w+", message = "INVALID EMAIL ADDRESS")
-    @Column(name = "email", nullable = false, unique = true, columnDefinition = "VARCHAR(50)")
+    @Email(regexp = ".+@.+\\..+", message = "INVALID EMAIL ADDRESS")
+    @Column(name = "email", nullable = false, unique = true, columnDefinition = "VARCHAR(100)")
     private String email;
 
-    @NotNull(message = "WEBSITE CANNOT BE EMPTY.")
-    @Column(name = "website", nullable = false, unique = true, columnDefinition = "VARCHAR(50)")
+    @Column(name = "website", unique = true, columnDefinition = "VARCHAR(200)")
     private String website;
 
     public Institution() {
