@@ -45,8 +45,8 @@ public class Admin {
     @Column(name = "status", nullable = false, columnDefinition = "INT")
     private int status;
 
-    @Column(name = "role", nullable = false, columnDefinition = "VARCHAR(20")
-    private String role = "ADMIN";
+    @Column(name = "role", nullable = false, columnDefinition = "VARCHAR(20)")
+    private String role;
 
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
