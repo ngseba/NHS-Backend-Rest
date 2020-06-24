@@ -2,7 +2,11 @@ package ro.iteahome.nhs.backend.model.nhs.dto;
 
 import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 
+import java.util.Set;
+
 public class AdminDTO {
+
+// FIELDS: -------------------------------------------------------------------------------------------------------------
 
     private int id;
 
@@ -18,12 +22,11 @@ public class AdminDTO {
 
     private int status;
 
-    private Role role;
+    private Set<Role> roles;
+
+// METHODS: ------------------------------------------------------------------------------------------------------------
 
     public AdminDTO() {
-        this.role = new Role();
-        role.setId(1);
-        role.setName("ROLE_ADMIN");
     }
 
     public int getId() {
@@ -64,5 +67,21 @@ public class AdminDTO {
 
     public void setPhoneNoRo(String phoneNoRo) {
         this.phoneNoRo = phoneNoRo;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

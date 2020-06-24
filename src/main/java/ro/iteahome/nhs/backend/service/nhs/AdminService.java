@@ -31,12 +31,13 @@ public class AdminService {
 
     public EntityModel<AdminDTO> add(Admin admin) {
         if (!adminRepository.existsByEmail(admin.getEmail())) {
-            adminRepository.save(modelMapper.map(admin, Admin.class));
+            admin.setStatus(1);
+            adminRepository.save(admin);
             Admin savedAdmin = adminRepository.getByEmail(admin.getEmail());
-            AdminDTO adminDTO = modelMapper.map(savedAdmin, AdminDTO.class);
+            AdminDTO savedAdminDTO = modelMapper.map(savedAdmin, AdminDTO.class);
             return new EntityModel<>(
-                    adminDTO,
-                    linkTo(methodOn(AdminController.class).findById(adminDTO.getId())).withSelfRel());
+                    savedAdminDTO,
+                    linkTo(methodOn(AdminController.class).findById(savedAdminDTO.getId())).withSelfRel());
         } else {
             throw new GlobalAlreadyExistsException("ADMIN");
         }
@@ -63,6 +64,18 @@ public class AdminService {
             return new EntityModel<>(
                     adminDTO,
                     linkTo(methodOn(AdminController.class).findById(adminDTO.getId())).withSelfRel());
+        } else {
+            throw new GlobalNotFoundException("ADMIN");
+        }
+    }
+
+    public EntityModel<Admin> findSensitiveById(int id) {
+        Optional<Admin> optionalAdmin = adminRepository.findById(id);
+        if (optionalAdmin.isPresent()) {
+            Admin admin = optionalAdmin.get();
+            return new EntityModel<>(
+                    admin,
+                    linkTo(methodOn(AdminController.class).findById(admin.getId())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("ADMIN");
         }
