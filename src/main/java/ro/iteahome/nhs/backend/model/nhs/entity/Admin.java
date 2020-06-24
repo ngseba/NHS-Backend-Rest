@@ -45,7 +45,7 @@ public class Admin {
     @Column(name = "status", nullable = false, columnDefinition = "INT")
     private int status;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "admins_roles",
             joinColumns = @JoinColumn(name = "admin_id", referencedColumnName = "id"),

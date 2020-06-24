@@ -32,7 +32,7 @@ public class ClientApp implements UserDetails {
     @Column(name = "status", nullable = false, columnDefinition = "INT")
     private int status;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "client_apps_roles",
             joinColumns = @JoinColumn(name = "client_app_id", referencedColumnName = "id"),
