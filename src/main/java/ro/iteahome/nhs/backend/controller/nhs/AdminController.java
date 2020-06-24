@@ -38,10 +38,6 @@ public class AdminController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public EntityModel<AdminDTO> add(@RequestBody @Valid Admin admin) {
-        Role role = roleService.findByName("ADMIN").getContent();
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        admin.setRoles(roles);
         return adminService.add(admin);
     }
 

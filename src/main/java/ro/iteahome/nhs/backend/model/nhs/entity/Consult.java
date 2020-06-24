@@ -1,6 +1,7 @@
 package ro.iteahome.nhs.backend.model.nhs.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
 
@@ -16,33 +17,21 @@ public class Consult {
     @Column(name = "date")
     private Date date;
 
-    @ManyToOne
-    @JoinTable(
-            name = "consults_patients",
-            joinColumns = @JoinColumn(name = "consult_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = false, unique = true))
+    @OneToOne
+    @JoinColumn (name = "patient_cnp", referencedColumnName = "cnp", nullable = false)
     private Patient patient;
 
-    @ManyToOne
-    @JoinTable(
-            name = "consults_doctors",
-            joinColumns = @JoinColumn(name = "consult_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "doctor_id", referencedColumnName = "id"))
+    @OneToOne
+    @JoinColumn (name = "doctor_cnp", referencedColumnName = "cnp", nullable = false)
     private Doctor doctor;
 
-    @ManyToOne
-    @JoinTable(
-            name = "consults_institutions",
-            joinColumns = @JoinColumn(name = "consult_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "institution_id", referencedColumnName = "id"))
+    @OneToOne
+    @JoinColumn (name = "institution_cui", referencedColumnName = "cui", nullable = false)
     private Institution institution;
 
-    @OneToMany
-    @JoinTable(
-            name = "consults_diagnostics",
-            joinColumns = @JoinColumn(name = "diagnostic_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "consult_id", referencedColumnName = "id"))
-    private Set<Diagnostic> diagnostics;
+    @OneToOne
+    @JoinColumn (name = "diagnostic_id", referencedColumnName = "id", nullable = false)
+    private Diagnostic diagnostic;
 
     public Consult() {
     }
