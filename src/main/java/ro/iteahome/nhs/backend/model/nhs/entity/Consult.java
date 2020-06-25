@@ -1,6 +1,9 @@
 package ro.iteahome.nhs.backend.model.nhs.entity;
 
+import org.springframework.context.annotation.Configuration;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -14,6 +17,11 @@ public class Consult {
 
     @Column(name = "date")
     private Date date;
+
+    @NotNull
+    @Column(name = "fetcher", nullable = false, columnDefinition = "VARCHAR(4000)")
+    private String fetcher;
+
     @ManyToOne
     @JoinColumn(name = "patient_cnp", referencedColumnName = "cnp", nullable = false)
     private Patient patient;
@@ -26,13 +34,6 @@ public class Consult {
     @JoinColumn(name = "institution_cui", referencedColumnName = "cui", nullable = false)
     private Institution institution;
 
-    @OneToOne
-    @JoinColumn(name = "diagnostic_id", referencedColumnName = "id", nullable = false)
-    private Diagnostic diagnostic;
-
-    @OneToOne
-    @JoinColumn(name = "treatment_id", referencedColumnName = "id")
-    private Treatment treatment;
 
     public Consult() {
     }
@@ -77,19 +78,11 @@ public class Consult {
         this.institution = institution;
     }
 
-    public Diagnostic getDiagnostic() {
-        return diagnostic;
+    public String getFetcher() {
+        return fetcher;
     }
 
-    public void setDiagnostic(Diagnostic diagnostic) {
-        this.diagnostic = diagnostic;
-    }
-
-    public Treatment getTreatment() {
-        return treatment;
-    }
-
-    public void setTreatment(Treatment treatment) {
-        this.treatment = treatment;
+    public void setFetcher(String string) {
+        this.fetcher = string;
     }
 }

@@ -6,14 +6,14 @@ public class ConsultDTO {
     private Date date;
     private int patient_cnp;
     private int doctor_cnp;
-    private int institution_cui;
+    private String institution_cui;
     private String diagnostic_desc;
     private String treatment_desc;
     private String treatment_schedule;
     private int min_days;
     private int max_days;
 
-    public ConsultDTO(Date date, int patient_cnp, int doctor_cnp, int institution_cui, String diagnostic_desc, String treatment_desc, String treatment_schedule, int min_days, int max_days) {
+    public ConsultDTO(Date date, int patient_cnp, int doctor_cnp, String institution_cui, String diagnostic_desc, String treatment_desc, String treatment_schedule, int min_days, int max_days) {
         this.date = date;
         this.patient_cnp = patient_cnp;
         this.doctor_cnp = doctor_cnp;
@@ -49,11 +49,11 @@ public class ConsultDTO {
         this.doctor_cnp = doctor_cnp;
     }
 
-    public int getInstitution_cui() {
+    public String getInstitution_cui() {
         return institution_cui;
     }
 
-    public void setInstitution_cui(int institution_cui) {
+    public void setInstitution_cui(String institution_cui) {
         this.institution_cui = institution_cui;
     }
 

@@ -6,4 +6,5 @@ import ro.iteahome.nhs.backend.model.nhs.entity.Consult;
 
 @Repository
 public interface ConsultRepository extends JpaRepository <Consult, Integer> {
+    Consult getByFetcher (String fetcher);
 }
