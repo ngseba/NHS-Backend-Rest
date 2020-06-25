@@ -1,9 +1,5 @@
 package ro.iteahome.nhs.backend.model.nhs.dto;
 
-import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
-
-import java.util.Set;
-
 public class AdminDTO {
 
 // FIELDS: -------------------------------------------------------------------------------------------------------------
@@ -22,7 +18,7 @@ public class AdminDTO {
 
     private int status;
 
-    private Set<Role> roles;
+    private String role;
 
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
@@ -77,11 +73,11 @@ public class AdminDTO {
         this.status = status;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
 }
