@@ -3,10 +3,12 @@ package ro.iteahome.nhs.backend.service.nhs;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ro.iteahome.nhs.backend.controller.nhs.AdminController;
 import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
+import ro.iteahome.nhs.backend.model.nhs.dto.AdminCreationDTO;
 import ro.iteahome.nhs.backend.model.nhs.dto.AdminDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Admin;
 import ro.iteahome.nhs.backend.repository.nhs.AdminRepository;
@@ -27,13 +29,15 @@ public class AdminService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 // C.R.U.D. METHODS: ---------------------------------------------------------------------------------------------------
 
-    public EntityModel<AdminDTO> add(Admin admin) {
-        if (!adminRepository.existsByEmail(admin.getEmail())) {
-            admin.setStatus(1);
-            adminRepository.save(admin);
-            Admin savedAdmin = adminRepository.getByEmail(admin.getEmail());
+    public EntityModel<AdminDTO> add(AdminCreationDTO adminCreationDTO) {
+        if (doesNotExistByEmail(adminCreationDTO)) {
+            Admin admin = buildAdmin(adminCreationDTO);
+            Admin savedAdmin = adminRepository.save(admin);
             AdminDTO savedAdminDTO = modelMapper.map(savedAdmin, AdminDTO.class);
             return new EntityModel<>(
                     savedAdminDTO,
@@ -75,7 +79,7 @@ public class AdminService {
             Admin admin = optionalAdmin.get();
             return new EntityModel<>(
                     admin,
-                    linkTo(methodOn(AdminController.class).findById(admin.getId())).withSelfRel());
+                    linkTo(methodOn(AdminController.class).findSensitiveById(admin.getId())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("ADMIN");
         }
@@ -87,7 +91,7 @@ public class AdminService {
             Admin admin = optionalAdmin.get();
             return new EntityModel<>(
                     admin,
-                    linkTo(methodOn(AdminController.class).findById(admin.getId())).withSelfRel());
+                    linkTo(methodOn(AdminController.class).findSensitiveByEmail(admin.getEmail())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("ADMIN");
         }
@@ -131,7 +135,15 @@ public class AdminService {
 
 // OTHER METHODS: -----------------------------------------------------------------------------------------------------
 
-    public boolean existsByCredentials(String email, String password) {
-        return adminRepository.existsByEmailAndPassword(email, password);
+    private boolean doesNotExistByEmail(AdminCreationDTO adminCreationDTO) {
+        return !adminRepository.existsByEmail(adminCreationDTO.getEmail());
+    }
+
+    private Admin buildAdmin(AdminCreationDTO adminCreationDTO) {
+        Admin admin = modelMapper.map(adminCreationDTO, Admin.class);
+        admin.setPassword(passwordEncoder.encode(adminCreationDTO.getPassword()));
+        admin.setStatus(1);
+        admin.setRole("ADMIN");
+        return admin;
     }
 }

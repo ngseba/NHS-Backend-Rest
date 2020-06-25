@@ -1,61 +1,40 @@
-package ro.iteahome.nhs.backend.model.nhs.entity;
+package ro.iteahome.nhs.backend.model.nhs.dto;
 
-import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-@Entity
-@Table(name = "admins")
-public class Admin {
+public class AdminCreationDTO {
 
 // FIELDS: -------------------------------------------------------------------------------------------------------------
 
-    @Id
-    @Column(name = "id", updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    // NO ID. (REST-GENERATED)
 
     @NotNull(message = "EMAIL CANNOT BE EMPTY.")
-    @Email(regexp = ".+@.+\\..+", message = "INVALID EMAIL ADDRESS")
-    @Column(name = "email", nullable = false, unique = true, columnDefinition = "VARCHAR(100)")
+    @Email(regexp = ".+@.+\\.\\w+", message = "INVALID EMAIL ADDRESS")
     private String email;
 
     @NotNull(message = "PASSWORD CANNOT BE EMPTY.")
-    @Pattern(regexp = "((?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,100})", message = "INVALID PASSWORD")
-    @Column(name = "password", nullable = false, columnDefinition = "VARCHAR(110)")
+    @Pattern(regexp = "((?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,32})", message = "INVALID PASSWORD")
     private String password;
 
     @NotNull(message = "FIRST NAME CANNOT BE EMPTY.")
-    @Column(name = "first_name", nullable = false, columnDefinition = "VARCHAR(100)")
     private String firstName;
 
     @NotNull(message = "LAST NAME CANNOT BE EMPTY.")
-    @Column(name = "last_name", nullable = false, columnDefinition = "VARCHAR(100)")
     private String lastName;
 
-    @NotNull(message = "PHONE NUMBER CANNOT BE EMPTY.")
+    @NotNull(message = "PHONE NUMBER NAME CANNOT BE EMPTY.")
     @Pattern(regexp = "^0040\\d{9}$", message = "INVALID PHONE NUMBER")
-    @Column(name = "phone_ro", nullable = false, unique = true, columnDefinition = "VARCHAR(13)")
     private String phoneNoRo;
 
-    @Column(name = "status", nullable = false, columnDefinition = "INT")
-    private int status;
+    // NO STATUS. (REST-GENERATED)
 
-    @Column(name = "role", nullable = false, columnDefinition = "VARCHAR(20)")
-    private String role;
+    // NO ROLE. (REST-GENERATED)
 
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
-    public Admin() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public AdminCreationDTO() {
     }
 
     public String getEmail() {
@@ -96,21 +75,5 @@ public class Admin {
 
     public void setPhoneNoRo(String phoneNoRo) {
         this.phoneNoRo = phoneNoRo;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 }

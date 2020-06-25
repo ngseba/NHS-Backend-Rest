@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import ro.iteahome.nhs.backend.model.nhs.dto.AdminCreationDTO;
 import ro.iteahome.nhs.backend.model.nhs.dto.AdminDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Admin;
 import ro.iteahome.nhs.backend.service.clientapp.RoleService;
@@ -34,8 +35,8 @@ public class AdminController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<AdminDTO> add(@RequestBody @Valid Admin admin) {
-        return adminService.add(admin);
+    public EntityModel<AdminDTO> add(@RequestBody @Valid AdminCreationDTO adminCreationDTO) {
+        return adminService.add(adminCreationDTO);
     }
 
     @GetMapping("/by-id/{id}")
@@ -50,13 +51,13 @@ public class AdminController {
         return adminService.findByEmail(email);
     }
 
-    @GetMapping("/for-update/by-id/{id}")
+    @GetMapping("/sensitive/by-id/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public EntityModel<Admin> findSensitiveById(@PathVariable int id) {
         return adminService.findSensitiveById(id);
     }
 
-    @GetMapping("/for-update/by-email/{email}")
+    @GetMapping("/sensitive/by-email/{email}")
     @PreAuthorize("hasRole('ADMIN')")
     public EntityModel<Admin> findSensitiveByEmail(@PathVariable String email) {
         return adminService.findSensitiveByEmail(email);
