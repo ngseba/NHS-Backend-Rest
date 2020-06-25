@@ -14,16 +14,15 @@ public class Consult {
 
     @Column(name = "date")
     private Date date;
-
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "patient_cnp", referencedColumnName = "cnp", nullable = false)
     private Patient patient;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "doctor_cnp", referencedColumnName = "cnp", nullable = false)
     private Doctor doctor;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "institution_cui", referencedColumnName = "cui", nullable = false)
     private Institution institution;
 
@@ -52,5 +51,45 @@ public class Consult {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public Institution getInstitution() {
+        return institution;
+    }
+
+    public void setInstitution(Institution institution) {
+        this.institution = institution;
+    }
+
+    public Diagnostic getDiagnostic() {
+        return diagnostic;
+    }
+
+    public void setDiagnostic(Diagnostic diagnostic) {
+        this.diagnostic = diagnostic;
+    }
+
+    public Treatment getTreatment() {
+        return treatment;
+    }
+
+    public void setTreatment(Treatment treatment) {
+        this.treatment = treatment;
     }
 }

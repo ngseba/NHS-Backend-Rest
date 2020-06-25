@@ -55,7 +55,7 @@ public class PatientService {
         }
     }
 
-    public EntityModel<PatientDTO> findByCnp(String cnp) {
+    public EntityModel<PatientDTO> findByCnp(int cnp) {
         Optional<Patient> optionalPatient = patientRepository.findByCnp(cnp);
         if (optionalPatient.isPresent()) {
             Patient patient = optionalPatient.get();
@@ -92,7 +92,7 @@ public class PatientService {
         }
     }
 
-    public EntityModel<PatientDTO> deleteByCnp(String cnp) {
+    public EntityModel<PatientDTO> deleteByCnp(int cnp) {
         Optional<Patient> optionalPatient = patientRepository.findByCnp(cnp);
         if (optionalPatient.isPresent()) {
             Patient patient = optionalPatient.get();

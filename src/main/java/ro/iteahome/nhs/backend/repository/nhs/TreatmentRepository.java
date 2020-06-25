@@ -8,6 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface TreatmentRepository extends JpaRepository<Treatment, Integer>{
+
     Optional<Treatment> findById(int id);
 
     Treatment getById(int id);
