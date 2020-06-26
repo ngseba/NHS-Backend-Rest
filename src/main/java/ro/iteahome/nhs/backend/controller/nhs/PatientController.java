@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import ro.iteahome.nhs.backend.model.nhs.dto.ConsultDTO;
 import ro.iteahome.nhs.backend.model.nhs.dto.PatientDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Patient;
+import ro.iteahome.nhs.backend.service.nhs.ConsultService;
 import ro.iteahome.nhs.backend.service.nhs.PatientService;
 
 import javax.validation.Valid;
@@ -25,11 +27,19 @@ public class PatientController {
     @Autowired
     PatientService patientService;
 
+    @Autowired
+    ConsultService consultService;
+
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
     @PostMapping
     public EntityModel<PatientDTO> add(@RequestBody @Valid Patient patient) {
         return patientService.add(patient);
+    }
+
+    @PostMapping("/add-consult")
+    public void add(@RequestBody ConsultDTO consultDTO) {
+        consultService.add(consultDTO);
     }
 
     @GetMapping("/by-id/{id}")
