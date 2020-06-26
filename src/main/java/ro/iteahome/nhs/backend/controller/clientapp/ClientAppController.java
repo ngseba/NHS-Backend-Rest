@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
 import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppCredentials;
 import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppDTO;
+import ro.iteahome.nhs.backend.model.clientapp.dto.RoleDTO;
 import ro.iteahome.nhs.backend.model.clientapp.entity.ClientApp;
-import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 import ro.iteahome.nhs.backend.service.clientapp.ClientAppService;
 import ro.iteahome.nhs.backend.service.clientapp.RoleService;
 
@@ -42,9 +42,9 @@ public class ClientAppController {
     @PostMapping("/with-role-id/{roleId}")
     @PreAuthorize("hasRole('ADMIN')")
     public EntityModel<ClientAppDTO> addWithRoleId(@RequestBody @Valid ClientAppCredentials clientAppCredentials, @PathVariable int roleId) {
-        EntityModel<Role> role = roleService.findById(roleId);
-        if (role.getContent() != null) {
-            return clientAppService.add(clientAppCredentials, role.getContent());
+        EntityModel<RoleDTO> roleDTO = roleService.findById(roleId);
+        if (roleDTO.getContent() != null) {
+            return clientAppService.add(clientAppCredentials, roleDTO.getContent());
         } else {
             throw new GlobalNotFoundException("ROLE");
         }

@@ -13,6 +13,7 @@ import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
 import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppCredentials;
 import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppDTO;
+import ro.iteahome.nhs.backend.model.clientapp.dto.RoleDTO;
 import ro.iteahome.nhs.backend.model.clientapp.entity.ClientApp;
 import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 import ro.iteahome.nhs.backend.repository.clientapp.ClientAppRepository;
@@ -44,13 +45,17 @@ public class ClientAppService implements UserDetailsService {
 
 // METHODS: ------------------------------------------------------------------------------------------------------------
 
-    public EntityModel<ClientAppDTO> add(ClientAppCredentials clientAppCredentials, Role initialRole) {
+    public EntityModel<ClientAppDTO> add(ClientAppCredentials clientAppCredentials, RoleDTO initialRoleDTO) {
         if (!clientAppRepository.existsByName(clientAppCredentials.getName())) {
+
             ClientApp clientApp = modelMapper.map(clientAppCredentials, ClientApp.class);
             clientApp.setPassword(passwordEncoder.encode(clientAppCredentials.getPassword()));
             clientApp.setStatus(1);
+
+            Role role = modelMapper.map(initialRoleDTO, Role.class);
             Set<Role> roles = new HashSet<>();
-            roles.add(initialRole);
+            roles.add(role);
+
             clientApp.setRoles(roles);
             ClientApp savedClientApp = clientAppRepository.save(clientApp);
             ClientAppDTO savedClientAppDTO = modelMapper.map(savedClientApp, ClientAppDTO.class);
