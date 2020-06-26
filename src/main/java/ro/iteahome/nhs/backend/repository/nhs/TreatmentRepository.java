@@ -7,7 +7,7 @@ import ro.iteahome.nhs.backend.model.nhs.entity.Treatment;
 import java.util.Optional;
 
 @Repository
-public interface TreatmentRepository extends JpaRepository<Treatment, Integer>{
+public interface TreatmentRepository extends JpaRepository<Treatment, Integer> {
 
     Optional<Treatment> findById(int id);
 

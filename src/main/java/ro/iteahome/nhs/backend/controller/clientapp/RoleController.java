@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
+import ro.iteahome.nhs.backend.model.clientapp.dto.RoleDTO;
 import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 import ro.iteahome.nhs.backend.repository.clientapp.RoleRepository;
 import ro.iteahome.nhs.backend.service.clientapp.RoleService;
@@ -34,7 +35,7 @@ public class RoleController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<Role> add(@RequestBody @Valid Role role) {
+    public EntityModel<RoleDTO> add(@RequestBody @Valid Role role) {
         if (!roleService.existsByName(role.getName())) {
             return roleService.add(role);
         } else {
@@ -44,7 +45,7 @@ public class RoleController {
 
     @GetMapping("/by-id/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<Role> findById(@PathVariable int id) {
+    public EntityModel<RoleDTO> findById(@PathVariable int id) {
         return roleService.findById(id);
     }
 
@@ -56,19 +57,19 @@ public class RoleController {
 
     @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<Role> update(@RequestBody @Valid Role role) {
+    public EntityModel<RoleDTO> update(@RequestBody @Valid Role role) {
         return roleService.update(role);
     }
 
     @DeleteMapping("/by-id/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<Role> deleteById(@PathVariable int id) {
+    public EntityModel<RoleDTO> deleteById(@PathVariable int id) {
         return roleService.deleteById(id);
     }
 
     @DeleteMapping("/by-name/{name}")
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<Role> deleteByName(@PathVariable String name) {
+    public EntityModel<RoleDTO> deleteByName(@PathVariable String name) {
         return roleService.deleteByName(name);
     }
 

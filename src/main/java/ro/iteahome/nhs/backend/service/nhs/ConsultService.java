@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ro.iteahome.nhs.backend.model.nhs.dto.ConsultDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.*;
-import ro.iteahome.nhs.backend.repository.nhs.*;
+import ro.iteahome.nhs.backend.repository.nhs.ConsultRepository;
+import ro.iteahome.nhs.backend.repository.nhs.DiagnosticRepository;
+import ro.iteahome.nhs.backend.repository.nhs.TreatmentRepository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,20 +17,26 @@ import java.util.Date;
 @Service
 public class ConsultService {
 
+// DEPENDENCIES: -------------------------------------------------------------------------------------------------------
+
     @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
     private DiagnosticRepository diagnosticRepository;
+
     @Autowired
     private ConsultRepository consultRepository;
+
     @Autowired
     private TreatmentRepository treatmentRepository;
 
     @Autowired
     private DoctorService doctorService;
+
     @Autowired
     private PatientService patientService;
+
     @Autowired
     private InstitutionService institutionService;
 
@@ -40,7 +48,7 @@ public class ConsultService {
         extractDiagnostic(consultDTO, consult);
     }
 
-    private Consult extractConsult (ConsultDTO consultDTO){
+    private Consult extractConsult(ConsultDTO consultDTO) {
         Consult consult = new Consult();
         LocalDate localDate = LocalDate.now();
         LocalTime time = LocalTime.now();
@@ -65,7 +73,7 @@ public class ConsultService {
         return consult;
     }
 
-    private void extractTreatment (ConsultDTO consultDTO, Consult consult) {
+    private void extractTreatment(ConsultDTO consultDTO, Consult consult) {
         Treatment treatment = new Treatment();
         treatment.setDescription(consultDTO.getTreatment_desc());
         treatment.setMaxDays(consultDTO.getMax_days());
@@ -74,7 +82,8 @@ public class ConsultService {
         treatment.setConsult(consult);
         treatmentRepository.save(treatment);
     }
-    private void extractDiagnostic (ConsultDTO consultDTO, Consult consult) {
+
+    private void extractDiagnostic(ConsultDTO consultDTO, Consult consult) {
         Diagnostic diagnostic = new Diagnostic();
         diagnostic.setConsult(consult);
         diagnostic.setDescription(consultDTO.getDiagnostic_desc());

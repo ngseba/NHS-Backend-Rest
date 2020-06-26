@@ -1,7 +1,5 @@
 package ro.iteahome.nhs.backend.model.nhs.entity;
 
-import org.springframework.context.annotation.Configuration;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
