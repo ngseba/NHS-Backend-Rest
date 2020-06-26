@@ -38,7 +38,7 @@ public class PatientController {
     }
 
     @GetMapping("/by-cnp/{cnp}")
-    public EntityModel<PatientDTO> findByCnp(@PathVariable String cnp) {
+    public EntityModel<PatientDTO> findByCnp(@PathVariable int cnp) {
         return patientService.findByCnp(cnp);
     }
 
@@ -53,7 +53,7 @@ public class PatientController {
     }
 
     @DeleteMapping("/by-cnp/{cnp}")
-    public EntityModel<PatientDTO> deleteByCnp(@PathVariable String cnp) {
+    public EntityModel<PatientDTO> deleteByCnp(@PathVariable int cnp) {
         return patientService.deleteByCnp(cnp);
     }
 

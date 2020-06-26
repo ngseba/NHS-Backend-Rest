@@ -27,6 +27,11 @@ public class Treatment {
     @Column(name = "max_days", nullable = false, columnDefinition = "INT")
     private int maxDays;
 
+    @OneToOne
+    @NotNull(message = "TREATMENT SHOULD ALWAYS BE LINKED TO A CONSULT")
+    @JoinColumn(name = "consult_id", referencedColumnName = "id")
+    private Consult consult;
+
     public Treatment() {
     }
 
@@ -68,5 +73,13 @@ public class Treatment {
 
     public void setMaxDays(int maxDays) {
         this.maxDays = maxDays;
+    }
+
+    public Consult getConsult() {
+        return consult;
+    }
+
+    public void setConsult(Consult consult) {
+        this.consult = consult;
     }
 }

@@ -16,6 +16,11 @@ public class Diagnostic {
     @Column(name = "description", nullable = false, columnDefinition = "VARCHAR(255)")
     private String description;
 
+    @OneToOne
+    @NotNull(message = "DIAGNOSTIC MUST BE LINKED TO A CONSULT.")
+    @JoinColumn(name = "consult_id", referencedColumnName = "id", nullable = false)
+    private Consult consult;
+
     public Diagnostic() {
     }
 
@@ -33,5 +38,13 @@ public class Diagnostic {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Consult getConsult() {
+        return consult;
+    }
+
+    public void setConsult(Consult consult) {
+        this.consult = consult;
     }
 }

@@ -11,9 +11,9 @@ public interface PatientRepository extends JpaRepository<Patient, Integer> {
 
     Patient getById(int id);
 
-    Optional<Patient> findByCnp(String cnp);
+    Optional<Patient> findByCnp(int cnp);
 
-    Patient getByCnp(String cnp);
+    Patient getByCnp(int cnp);
 
-    boolean existsByCnp(String cnp);
+    boolean existsByCnp(int cnp);
 }

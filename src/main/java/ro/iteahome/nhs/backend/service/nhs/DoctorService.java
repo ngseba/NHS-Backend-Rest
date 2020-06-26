@@ -55,6 +55,19 @@ public class DoctorService {
         }
     }
 
+    public EntityModel<DoctorDTO> findByCnp(int cnp) {
+        Optional<Doctor> optionalDoctor = doctorRepository.findByCnp(cnp);
+        if (optionalDoctor.isPresent()) {
+            Doctor doctor = optionalDoctor.get();
+            DoctorDTO doctorDTO = modelMapper.map(doctor, DoctorDTO.class);
+            return new EntityModel<>(
+                    doctorDTO,
+                    linkTo(methodOn(DoctorController.class).findById(cnp)).withSelfRel());
+        } else {
+            throw new GlobalNotFoundException("DOCTOR");
+        }
+    }
+
     public EntityModel<DoctorDTO> findByEmail(String email) {
         Optional<Doctor> optionalDoctor = doctorRepository.findByEmail(email);
         if (optionalDoctor.isPresent()) {

@@ -1,6 +1,9 @@
 package ro.iteahome.nhs.backend.model.nhs.entity;
 
+import org.springframework.context.annotation.Configuration;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -15,25 +18,22 @@ public class Consult {
     @Column(name = "date")
     private Date date;
 
-    @OneToOne
+    @NotNull
+    @Column(name = "fetcher", nullable = false, columnDefinition = "VARCHAR(4000)")
+    private String fetcher;
+
+    @ManyToOne
     @JoinColumn(name = "patient_cnp", referencedColumnName = "cnp", nullable = false)
     private Patient patient;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "doctor_cnp", referencedColumnName = "cnp", nullable = false)
     private Doctor doctor;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "institution_cui", referencedColumnName = "cui", nullable = false)
     private Institution institution;
 
-    @OneToOne
-    @JoinColumn(name = "diagnostic_id", referencedColumnName = "id", nullable = false)
-    private Diagnostic diagnostic;
-
-    @OneToOne
-    @JoinColumn(name = "treatment_id", referencedColumnName = "id")
-    private Treatment treatment;
 
     public Consult() {
     }
@@ -52,5 +52,37 @@ public class Consult {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public Institution getInstitution() {
+        return institution;
+    }
+
+    public void setInstitution(Institution institution) {
+        this.institution = institution;
+    }
+
+    public String getFetcher() {
+        return fetcher;
+    }
+
+    public void setFetcher(String string) {
+        this.fetcher = string;
     }
 }
