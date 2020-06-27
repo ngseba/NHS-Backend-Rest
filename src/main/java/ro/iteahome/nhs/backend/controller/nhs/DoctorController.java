@@ -9,6 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ro.iteahome.nhs.backend.model.nhs.dto.DoctorDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Doctor;
+import ro.iteahome.nhs.backend.model.nhs.reference.DoctorSpecialty;
+import ro.iteahome.nhs.backend.model.nhs.reference.DoctorTitle;
 import ro.iteahome.nhs.backend.service.nhs.DoctorService;
 
 import javax.validation.Valid;
@@ -45,6 +47,16 @@ public class DoctorController {
     @GetMapping("/existence/by-cnp-and-license-number")
     public boolean existsByCnpAndLicenseNo(@RequestParam String cnp, @RequestParam String licenseNo) {
         return doctorService.existsByCnpAndLicenseNo(cnp, licenseNo);
+    }
+
+    @GetMapping("/retrieve-doctor-title")
+    public DoctorTitle[] retrieveDoctorTitle() {
+        return DoctorTitle.values();
+    }
+
+    @GetMapping("/retrieve-doctor-specialty")
+    public DoctorSpecialty[] retrieveDoctorSpecialty() {
+        return DoctorSpecialty.values();
     }
 
     @PutMapping

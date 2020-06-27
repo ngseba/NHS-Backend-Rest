@@ -8,6 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ro.iteahome.nhs.backend.model.nhs.entity.Institution;
+import ro.iteahome.nhs.backend.model.nhs.reference.InstitutionType;
 import ro.iteahome.nhs.backend.service.nhs.InstitutionService;
 
 import javax.validation.Valid;
@@ -29,6 +30,10 @@ public class InstitutionController {
     @PostMapping
     public EntityModel<Institution> add(@RequestBody @Valid Institution institution) {
         return institutionService.add(institution);
+    }
+    @GetMapping("/retrieve-institution-type")
+    public InstitutionType[] retrieveInstTypes() {
+        return InstitutionType.values();
     }
 
     @GetMapping("/by-id/{id}")

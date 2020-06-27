@@ -9,6 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ro.iteahome.nhs.backend.model.nhs.dto.NurseDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Nurse;
+import ro.iteahome.nhs.backend.model.nhs.reference.NurseSpecialty;
+import ro.iteahome.nhs.backend.model.nhs.reference.NurseTitle;
 import ro.iteahome.nhs.backend.service.nhs.NurseService;
 
 import javax.validation.Valid;
@@ -45,6 +47,16 @@ public class NurseController {
     @GetMapping("/existence/by-cnp-and-license-number")
     public boolean existsByCnpAndLicenseNo(@RequestParam String cnp, @RequestParam String licenseNo) {
         return nurseService.existsByCnpAndLicenseNo(cnp, licenseNo);
+    }
+
+    @GetMapping("/retrieve-nurse-title")
+    public NurseTitle[] retrieveNurseTitle() {
+        return NurseTitle.values();
+    }
+
+    @GetMapping("/retrieve-nurse-specialty")
+    public NurseSpecialty[] retrieveNurseSpecialty() {
+        return NurseSpecialty.values();
     }
 
     @PutMapping
