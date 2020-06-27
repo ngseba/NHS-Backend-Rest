@@ -38,8 +38,8 @@ public class PatientController {
     }
 
     @PostMapping("/add-consult")
-    public void add(@RequestBody ConsultDTO consultDTO) {
-        consultService.add(consultDTO);
+    public EntityModel<ConsultDTO> add(@RequestBody ConsultDTO consultDTO) {
+        return consultService.add(consultDTO);
     }
 
     @GetMapping("/by-id/{id}")
