@@ -13,16 +13,8 @@ public class ConsultDTO {
     private int min_days;
     private int max_days;
 
-    public ConsultDTO(Date date, int patient_cnp, int doctor_cnp, String institution_cui, String diagnostic_desc, String treatment_desc, String treatment_schedule, int min_days, int max_days) {
-        this.date = date;
-        this.patient_cnp = patient_cnp;
-        this.doctor_cnp = doctor_cnp;
-        this.institution_cui = institution_cui;
-        this.diagnostic_desc = diagnostic_desc;
-        this.treatment_desc = treatment_desc;
-        this.treatment_schedule = treatment_schedule;
-        this.min_days = min_days;
-        this.max_days = max_days;
+    public ConsultDTO() {
+
     }
 
     public Date getDate() {

@@ -5,16 +5,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 import ro.iteahome.nhs.backend.controller.nhs.PatientController;
+import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
 import ro.iteahome.nhs.backend.model.nhs.dto.ConsultDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.*;
 import ro.iteahome.nhs.backend.repository.nhs.ConsultRepository;
 import ro.iteahome.nhs.backend.repository.nhs.DiagnosticRepository;
+import ro.iteahome.nhs.backend.repository.nhs.PatientRepository;
 import ro.iteahome.nhs.backend.repository.nhs.TreatmentRepository;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.Optional;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class ConsultService {
@@ -34,6 +42,9 @@ public class ConsultService {
     private TreatmentRepository treatmentRepository;
 
     @Autowired
+    private PatientRepository patientRepository;
+
+    @Autowired
     private DoctorService doctorService;
 
     @Autowired
@@ -49,10 +60,40 @@ public class ConsultService {
         extractTreatment(consultDTO, consult);
         extractDiagnostic(consultDTO, consult);
         return new EntityModel<>(
-                consultDTO
-        );
+                consultDTO,
+                linkTo(methodOn(PatientController.class).findConsult(consultDTO.getPatient_cnp())).withSelfRel());
     }
 
+    public EntityModel<ConsultDTO> findConsult(int patientCnp){
+        Patient patient = new Patient();
+        Consult consult = new Consult();
+        Treatment treatment = new Treatment();
+        Diagnostic diagnostic = new Diagnostic();
+        ConsultDTO consultDTO = new ConsultDTO();
+
+        patient = patientRepository.findByCnp(patientCnp).get();
+        Optional<Consult> optionalConsult = consultRepository.getByPatient(patient);
+        if (optionalConsult.isPresent()) {
+            treatment = treatmentRepository.getByConsult(consult);
+            diagnostic = diagnosticRepository.getByConsult(consult);
+
+            consultDTO.setDate(consult.getDate());
+            consultDTO.setDiagnostic_desc(diagnostic.getDescription());
+            consultDTO.setDoctor_cnp(consult.getDoctor().getCnp());
+            consultDTO.setInstitution_cui(consult.getInstitution().getCui());
+            consultDTO.setMax_days(treatment.getMaxDays());
+            consultDTO.setMin_days(treatment.getMinDays());
+            consultDTO.setPatient_cnp(consult.getPatient().getCnp());
+            consultDTO.setTreatment_desc(treatment.getDescription());
+            consultDTO.setTreatment_schedule(treatment.getSchedule());
+
+            return new EntityModel<>(
+                    consultDTO,
+                    linkTo(methodOn(PatientController.class).findConsult(consultDTO.getPatient_cnp())).withSelfRel());
+        } else {
+            throw new GlobalNotFoundException("Consult DTO");
+        }
+    }
 
 
     private Consult extractConsult(ConsultDTO consultDTO) {
