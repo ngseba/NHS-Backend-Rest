@@ -74,7 +74,7 @@ public class AdminService {
     }
 
     public EntityModel<Admin> findSensitiveById(int id) {
-        Optional<Admin> optionalAdmin = adminRepository.findById(id);
+        Optional<Admin> optionalAdmin = adminRepository.findOneById(id);
         if (optionalAdmin.isPresent()) {
             Admin admin = optionalAdmin.get();
             return new EntityModel<>(
@@ -86,7 +86,7 @@ public class AdminService {
     }
 
     public EntityModel<Admin> findSensitiveByEmail(String email) {
-        Optional<Admin> optionalAdmin = adminRepository.findByEmail(email);
+        Optional<Admin> optionalAdmin = adminRepository.findOneByEmail(email);
         if (optionalAdmin.isPresent()) {
             Admin admin = optionalAdmin.get();
             return new EntityModel<>(
