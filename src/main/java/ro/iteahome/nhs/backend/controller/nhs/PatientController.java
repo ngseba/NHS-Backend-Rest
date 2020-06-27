@@ -43,7 +43,7 @@ public class PatientController {
         return consultService.add(consultDTO);
     }
 
-    @PostMapping("find-consult")
+    @GetMapping("find-consult")
     public EntityModel<ConsultDTO> findConsult(@RequestParam int cnp) {
         return consultService.findConsult(cnp);
     }
