@@ -13,8 +13,10 @@ import ro.iteahome.nhs.backend.service.nhs.InstitutionService;
 
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/medical-institutions")
@@ -31,13 +33,15 @@ public class InstitutionController {
     public EntityModel<Institution> add(@RequestBody @Valid Institution institution) {
         return institutionService.add(institution);
     }
-    @GetMapping("/retrieve-institution-type")
-    public InstitutionType[] retrieveInstTypes() {
-        return InstitutionType.values();
+    @GetMapping("/type")
+    public String[] getInstitutionType() {
+        return Stream.of(InstitutionType.values())
+                .map(Enum::name)
+                .toArray(String[]::new);
     }
 
-    @GetMapping("/by-cui")
-    public EntityModel<Institution> findByCui(@RequestParam String cui) {
+    @GetMapping("/by-cui/{cui}")
+    public EntityModel<Institution> findByCui(@PathVariable String cui) {
         return institutionService.findByCui(cui);
     }
 
@@ -46,8 +50,8 @@ public class InstitutionController {
         return institutionService.update(institution);
     }
 
-    @DeleteMapping("/delete/by-cui")
-    public EntityModel<Institution> deleteByCui(@RequestParam String cui) {
+    @DeleteMapping("/by-cui/{cui}")
+    public EntityModel<Institution> deleteByCui(@PathVariable String cui) {
         return institutionService.deleteByCui(cui);
     }
 

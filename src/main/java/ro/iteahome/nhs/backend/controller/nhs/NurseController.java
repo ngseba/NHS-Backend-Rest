@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ro.iteahome.nhs.backend.model.nhs.dto.NurseDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Nurse;
+import ro.iteahome.nhs.backend.model.nhs.reference.DoctorSpecialty;
 import ro.iteahome.nhs.backend.model.nhs.reference.NurseSpecialty;
 import ro.iteahome.nhs.backend.model.nhs.reference.NurseTitle;
 import ro.iteahome.nhs.backend.service.nhs.NurseService;
@@ -17,6 +18,7 @@ import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/nurses")
@@ -39,24 +41,28 @@ public class NurseController {
         return nurseService.findByEmail(email);
     }
 
-    @GetMapping("/existence/by-cnp")
-    public boolean existsByCnpAndLicenseNo(@RequestParam String cnp) {
+    @GetMapping("/existence/by-cnp/{cnp}")
+    public boolean existsByCnpAndLicenseNo(@PathVariable String cnp) {
         return nurseService.existsByCnp(cnp);
     }
 
-    @GetMapping("/find-by-cnp")
-    public EntityModel<NurseDTO> findByCnp(@RequestParam String cnp) {
+    @GetMapping("/by-cnp/{cnp}")
+    public EntityModel<NurseDTO> findByCnp(@PathVariable String cnp) {
         return nurseService.findByCnp(cnp);
     }
 
-    @GetMapping("/retrieve-nurse-title")
-    public NurseTitle[] retrieveNurseTitle() {
-        return NurseTitle.values();
+    @GetMapping("/title")
+    public String[] getNurseTitle() {
+          return Stream.of(NurseTitle.values())
+                .map(Enum::name)
+                .toArray(String[]::new);
     }
 
-    @GetMapping("/retrieve-nurse-specialty")
-    public NurseSpecialty[] retrieveNurseSpecialty() {
-        return NurseSpecialty.values();
+    @GetMapping("/specialty")
+    public String[] getNurseSpecialty() {
+        return Stream.of(NurseSpecialty.values())
+                .map(Enum::name)
+                .toArray(String[]::new);
     }
 
     @PutMapping
@@ -64,8 +70,8 @@ public class NurseController {
         return nurseService.update(nurse);
     }
 
-    @DeleteMapping("/delete/by-cnp")
-    public EntityModel<NurseDTO> deleteById(@RequestParam String cnp) {
+    @DeleteMapping("/by-cnp/{cnp}")
+    public EntityModel<NurseDTO> deleteByCnp(@PathVariable String cnp) {
         return nurseService.deleteByCnp(cnp);
     }
 

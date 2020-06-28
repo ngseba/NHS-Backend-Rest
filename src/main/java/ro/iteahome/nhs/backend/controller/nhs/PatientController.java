@@ -42,13 +42,13 @@ public class PatientController {
         return consultService.add(consultDTO);
     }
 
-    @GetMapping("find-consult")
-    public EntityModel<ConsultDTO> findConsult(@RequestParam String cnp) {
+    @GetMapping("/find-consult/{cnp}")
+    public EntityModel<ConsultDTO> findConsult(@PathVariable String cnp) {
         return consultService.findConsult(cnp);
     }
 
-    @GetMapping("/by-cnp")
-    public EntityModel<PatientDTO> findByCnp(@RequestParam String cnp) {
+    @GetMapping("/by-cnp/{cnp}")
+    public EntityModel<PatientDTO> findByCnp(@PathVariable String cnp) {
         return patientService.findByCnp(cnp);
     }
 
@@ -57,8 +57,8 @@ public class PatientController {
         return patientService.update(patient);
     }
 
-    @DeleteMapping("/by-cnp")
-    public EntityModel<PatientDTO> deleteByCnp(@RequestParam String cnp) {
+    @DeleteMapping("/by-cnp/{cnp}")
+    public EntityModel<PatientDTO> deleteByCnp(@PathVariable String cnp) {
         return patientService.deleteByCnp(cnp);
     }
 
