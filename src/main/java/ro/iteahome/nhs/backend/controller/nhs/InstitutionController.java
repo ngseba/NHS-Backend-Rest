@@ -36,11 +36,6 @@ public class InstitutionController {
         return InstitutionType.values();
     }
 
-    @GetMapping("/by-id/{id}")
-    public EntityModel<Institution> findById(@PathVariable int id) {
-        return institutionService.findById(id);
-    }
-
     @GetMapping("/by-cui")
     public EntityModel<Institution> findByCui(@RequestParam String cui) {
         return institutionService.findByCui(cui);
@@ -51,12 +46,7 @@ public class InstitutionController {
         return institutionService.update(institution);
     }
 
-    @DeleteMapping("/by-id/{id}")
-    public EntityModel<Institution> deleteById(@PathVariable int id) {
-        return institutionService.deleteById(id);
-    }
-
-    @DeleteMapping("/by-cui")
+    @DeleteMapping("/delete/by-cui")
     public EntityModel<Institution> deleteByCui(@RequestParam String cui) {
         return institutionService.deleteByCui(cui);
     }

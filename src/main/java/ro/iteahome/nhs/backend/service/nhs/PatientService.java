@@ -36,22 +36,9 @@ public class PatientService {
             PatientDTO savedPatientDTO = modelMapper.map(savedPatient, PatientDTO.class);
             return new EntityModel<>(
                     savedPatientDTO,
-                    linkTo(methodOn(PatientController.class).findById(savedPatient.getId())).withSelfRel());
+                    linkTo(methodOn(PatientController.class).findByCnp(savedPatient.getCnp())).withSelfRel());
         } else {
             throw new GlobalAlreadyExistsException("PATIENT");
-        }
-    }
-
-    public EntityModel<PatientDTO> findById(int id) {
-        Optional<Patient> optionalPatient = patientRepository.findById(id);
-        if (optionalPatient.isPresent()) {
-            Patient patient = optionalPatient.get();
-            PatientDTO patientDTO = modelMapper.map(patient, PatientDTO.class);
-            return new EntityModel<>(
-                    patientDTO,
-                    linkTo(methodOn(PatientController.class).findById(id)).withSelfRel());
-        } else {
-            throw new GlobalNotFoundException("PATIENT");
         }
     }
 
@@ -62,7 +49,7 @@ public class PatientService {
             PatientDTO patientDTO = modelMapper.map(patient, PatientDTO.class);
             return new EntityModel<>(
                     patientDTO,
-                    linkTo(methodOn(PatientController.class).findById(patient.getId())).withSelfRel());
+                    linkTo(methodOn(PatientController.class).findByCnp(patient.getCnp())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("PATIENT");
         }
@@ -74,19 +61,7 @@ public class PatientService {
             PatientDTO updatedPatientDTO = modelMapper.map(updatedPatient, PatientDTO.class);
             return new EntityModel<>(
                     updatedPatientDTO,
-                    linkTo(methodOn(PatientController.class).findById(updatedPatient.getId())).withSelfRel());
-        } else {
-            throw new GlobalNotFoundException("PATIENT");
-        }
-    }
-
-    public EntityModel<PatientDTO> deleteById(int id) {
-        Optional<Patient> optionalPatient = patientRepository.findById(id);
-        if (optionalPatient.isPresent()) {
-            Patient patient = optionalPatient.get();
-            PatientDTO patientDTO = modelMapper.map(patient, PatientDTO.class);
-            patientRepository.deleteById(id);
-            return new EntityModel<>(patientDTO);
+                    linkTo(methodOn(PatientController.class).findByCnp(updatedPatient.getCnp())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("PATIENT");
         }
@@ -97,7 +72,7 @@ public class PatientService {
         if (optionalPatient.isPresent()) {
             Patient patient = optionalPatient.get();
             PatientDTO patientDTO = modelMapper.map(patient, PatientDTO.class);
-            patientRepository.deleteById(patient.getId());
+            patientRepository.delete(patient);
             return new EntityModel<>(patientDTO);
         } else {
             throw new GlobalNotFoundException("PATIENT");

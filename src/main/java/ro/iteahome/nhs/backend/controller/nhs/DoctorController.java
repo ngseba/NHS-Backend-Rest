@@ -64,14 +64,9 @@ public class DoctorController {
         return doctorService.update(doctor);
     }
 
-    @DeleteMapping("/by-cnp/{cnp}")
-    public EntityModel<DoctorDTO> deleteById(@PathVariable String cnp) {
-        return doctorService.deleteById(cnp);
-    }
-
-    @DeleteMapping("/by-email/{email}")
-    public EntityModel<DoctorDTO> deleteByEmail(@PathVariable String email) {
-        return doctorService.deleteByEmail(email);
+    @DeleteMapping("/delete/by-cnp")
+    public EntityModel<DoctorDTO> deleteById(@RequestParam String cnp) {
+        return doctorService.deleteByCnp(cnp);
     }
 
     // OTHER METHODS: --------------------------------------------------------------------------------------------------

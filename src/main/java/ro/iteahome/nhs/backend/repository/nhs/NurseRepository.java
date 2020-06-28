@@ -13,13 +13,11 @@ public interface NurseRepository extends JpaRepository<Nurse, Integer> {
 
     Optional<Nurse> findByCnp(String cnp);
 
-    Nurse getByEmail(String email);
+    Nurse getByCnp(String cnp);
 
     void deleteById(int id);
 
-    void deleteByEmail(String email);
-
     boolean existsByEmail(String email);
 
-    boolean existsByCnpAndLicenseNo(String cnp, String licenseNo);
+    boolean existsByCnp(String cnp);
 }

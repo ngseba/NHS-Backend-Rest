@@ -11,10 +11,6 @@ import java.util.Set;
 public class Doctor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false)
-    private int id;
-
     @NotNull(message = "CNP CANNOT BE EMPTY.")
     @Pattern(regexp = "[1-8]\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])(0[1-9]|[1-4]\\d|5[0-2]|99)\\d{4}", message = "INVALID CNP")
     @Column(name = "cnp", nullable = false, unique = true, columnDefinition = "VARCHAR(13)")
@@ -53,19 +49,11 @@ public class Doctor {
     @ManyToMany(cascade = CascadeType.DETACH) //TODO: Check detach cascade type.
     @JoinTable(
             name = "doctors_institutions",
-            joinColumns = @JoinColumn(name = "doctor_id", referencedColumnName = "id"),
+            joinColumns = @JoinColumn(name = "doctor_cnp", referencedColumnName = "cnp"),
             inverseJoinColumns = @JoinColumn(name = "institution_id", referencedColumnName = "id"))
     private Set<Institution> institutions;
 
     public Doctor() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getCnp() {

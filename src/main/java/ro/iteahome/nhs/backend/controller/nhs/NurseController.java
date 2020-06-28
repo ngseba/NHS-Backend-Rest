@@ -34,19 +34,19 @@ public class NurseController {
         return nurseService.add(nurse);
     }
 
-    @GetMapping("/by-id/{id}")
-    public EntityModel<NurseDTO> findById(@PathVariable int id) {
-        return nurseService.findById(id);
-    }
-
     @GetMapping("/by-email/{email}")
     public EntityModel<NurseDTO> findByEmail(@PathVariable String email) {
         return nurseService.findByEmail(email);
     }
 
-    @GetMapping("/existence/by-cnp-and-license-number")
-    public boolean existsByCnpAndLicenseNo(@RequestParam String cnp, @RequestParam String licenseNo) {
-        return nurseService.existsByCnpAndLicenseNo(cnp, licenseNo);
+    @GetMapping("/existence/by-cnp")
+    public boolean existsByCnpAndLicenseNo(@RequestParam String cnp) {
+        return nurseService.existsByCnp(cnp);
+    }
+
+    @GetMapping("/find-by-cnp")
+    public EntityModel<NurseDTO> findByCnp(@RequestParam String cnp) {
+        return nurseService.findByCnp(cnp);
     }
 
     @GetMapping("/retrieve-nurse-title")
@@ -64,14 +64,9 @@ public class NurseController {
         return nurseService.update(nurse);
     }
 
-    @DeleteMapping("/by-id/{id}")
-    public EntityModel<NurseDTO> deleteById(@PathVariable int id) {
-        return nurseService.deleteById(id);
-    }
-
-    @DeleteMapping("/by-email/{email}")
-    public EntityModel<NurseDTO> deleteByEmail(@PathVariable String email) {
-        return nurseService.deleteByEmail(email);
+    @DeleteMapping("/delete/by-cnp")
+    public EntityModel<NurseDTO> deleteById(@RequestParam String cnp) {
+        return nurseService.deleteByCnp(cnp);
     }
 
     // OTHER METHODS: --------------------------------------------------------------------------------------------------
