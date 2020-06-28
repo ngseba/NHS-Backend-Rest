@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import ro.iteahome.nhs.backend.controller.nhs.AdminController;
 import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
-import ro.iteahome.nhs.backend.model.nhs.dto.AdminCreationDTO;
 import ro.iteahome.nhs.backend.model.nhs.dto.AdminDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Admin;
 import ro.iteahome.nhs.backend.repository.nhs.AdminRepository;
@@ -34,14 +33,13 @@ public class AdminService {
 
 // C.R.U.D. METHODS: ---------------------------------------------------------------------------------------------------
 
-    public EntityModel<AdminDTO> add(AdminCreationDTO adminCreationDTO) {
-        if (doesNotExistByEmail(adminCreationDTO)) {
-            Admin admin = buildAdmin(adminCreationDTO);
+    public EntityModel<AdminDTO> add(Admin admin) {
+        if (doesNotExistByEmail(admin)) {
             Admin savedAdmin = adminRepository.save(admin);
             AdminDTO savedAdminDTO = modelMapper.map(savedAdmin, AdminDTO.class);
             return new EntityModel<>(
                     savedAdminDTO,
-                    linkTo(methodOn(AdminController.class).findById(savedAdminDTO.getId())).withSelfRel());
+                    linkTo(methodOn(AdminController.class).findByEmail(savedAdminDTO.getEmail())).withSelfRel());
         } else {
             throw new GlobalAlreadyExistsException("ADMIN");
         }
@@ -133,17 +131,9 @@ public class AdminService {
         }
     }
 
-// OTHER METHODS: -----------------------------------------------------------------------------------------------------
+// OTHER METHODS: ------------------------------------------------------------------------------------------------------
 
-    private boolean doesNotExistByEmail(AdminCreationDTO adminCreationDTO) {
-        return !adminRepository.existsByEmail(adminCreationDTO.getEmail());
-    }
-
-    private Admin buildAdmin(AdminCreationDTO adminCreationDTO) {
-        Admin admin = modelMapper.map(adminCreationDTO, Admin.class);
-        admin.setPassword(passwordEncoder.encode(adminCreationDTO.getPassword()));
-        admin.setStatus(1);
-        admin.setRole("ADMIN");
-        return admin;
+    private boolean doesNotExistByEmail(Admin admin) {
+        return !adminRepository.existsByEmail(admin.getEmail());
     }
 }

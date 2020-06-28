@@ -8,7 +8,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import ro.iteahome.nhs.backend.model.nhs.dto.AdminCreationDTO;
 import ro.iteahome.nhs.backend.model.nhs.dto.AdminDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Admin;
 import ro.iteahome.nhs.backend.service.clientapp.RoleService;
@@ -35,8 +34,8 @@ public class AdminController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<AdminDTO> add(@RequestBody @Valid AdminCreationDTO adminCreationDTO) {
-        return adminService.add(adminCreationDTO);
+    public EntityModel<AdminDTO> add(@RequestBody @Valid Admin admin) {
+        return adminService.add(admin);
     }
 
     @GetMapping("/by-id/{id}")
