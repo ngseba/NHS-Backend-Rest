@@ -6,8 +6,6 @@ import java.util.Set;
 
 public class DoctorDTO {
 
-    private int id;
-
     private String cnp;
 
     private String title;
@@ -29,13 +27,6 @@ public class DoctorDTO {
     public DoctorDTO() {
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getCnp() {
         return cnp;
