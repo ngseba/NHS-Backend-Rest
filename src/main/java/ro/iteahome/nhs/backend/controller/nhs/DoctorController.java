@@ -69,11 +69,6 @@ public class DoctorController {
         return doctorService.deleteByCnp(cnp);
     }
 
-    @DeleteMapping("/delete/by-email/{email}")
-    public EntityModel<DoctorDTO> deleteByEmail(@PathVariable String email) {
-        return doctorService.deleteByEmail(email);
-    }
-
     // OTHER METHODS: --------------------------------------------------------------------------------------------------
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

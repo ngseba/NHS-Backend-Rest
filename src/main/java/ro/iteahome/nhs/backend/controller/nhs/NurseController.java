@@ -44,6 +44,11 @@ public class NurseController {
         return nurseService.existsByCnp(cnp);
     }
 
+    @GetMapping("/find-by-cnp")
+    public EntityModel<NurseDTO> findByCnp(@RequestParam String cnp) {
+        return nurseService.findByCnp(cnp);
+    }
+
     @GetMapping("/retrieve-nurse-title")
     public NurseTitle[] retrieveNurseTitle() {
         return NurseTitle.values();

@@ -96,18 +96,6 @@ public class DoctorService {
         }
     }
 
-    public EntityModel<DoctorDTO> deleteByEmail(String email) {
-        Optional<Doctor> optionalDoctor = doctorRepository.findByEmail(email);
-        if (optionalDoctor.isPresent()) {
-            Doctor doctor = optionalDoctor.get();
-            DoctorDTO doctorDTO = modelMapper.map(doctor, DoctorDTO.class);
-            doctorRepository.delete(doctor);
-            return new EntityModel<>(doctorDTO);
-        } else {
-            throw new GlobalNotFoundException("DOCTOR");
-        }
-    }
-
 // OTHER METHODS: -----------------------------------------------------------------------------------------------------
 
 }
