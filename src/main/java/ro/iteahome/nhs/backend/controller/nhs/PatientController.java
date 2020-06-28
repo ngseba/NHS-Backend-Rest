@@ -42,7 +42,7 @@ public class PatientController {
         return consultService.add(consultDTO);
     }
 
-    @GetMapping("/find-consult")
+    @GetMapping("/find-consult/{cnp}")
     public EntityModel<ConsultDTO> findConsult(@PathVariable String cnp) {
         return consultService.findConsult(cnp);
     }
