@@ -13,7 +13,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 
     Doctor getByEmail(String email);
 
-    Optional<Doctor> findByCnp(int cnp);
+    Optional<Doctor> findByCnp(String cnp);
 
     void deleteById(int id);
 

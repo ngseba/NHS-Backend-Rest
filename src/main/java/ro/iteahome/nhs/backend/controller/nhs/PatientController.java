@@ -44,7 +44,7 @@ public class PatientController {
     }
 
     @GetMapping("find-consult")
-    public EntityModel<ConsultDTO> findConsult(@RequestParam int cnp) {
+    public EntityModel<ConsultDTO> findConsult(@RequestParam String cnp) {
         return consultService.findConsult(cnp);
     }
 
@@ -54,7 +54,7 @@ public class PatientController {
     }
 
     @GetMapping("/by-cnp/{cnp}")
-    public EntityModel<PatientDTO> findByCnp(@PathVariable int cnp) {
+    public EntityModel<PatientDTO> findByCnp(@PathVariable String cnp) {
         return patientService.findByCnp(cnp);
     }
 
@@ -69,7 +69,7 @@ public class PatientController {
     }
 
     @DeleteMapping("/by-cnp/{cnp}")
-    public EntityModel<PatientDTO> deleteByCnp(@PathVariable int cnp) {
+    public EntityModel<PatientDTO> deleteByCnp(@PathVariable String cnp) {
         return patientService.deleteByCnp(cnp);
     }
 

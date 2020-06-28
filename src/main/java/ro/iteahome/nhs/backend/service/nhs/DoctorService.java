@@ -36,33 +36,33 @@ public class DoctorService {
             DoctorDTO savedDoctorDTO = modelMapper.map(savedDoctor, DoctorDTO.class);
             return new EntityModel<>(
                     savedDoctorDTO,
-                    linkTo(methodOn(DoctorController.class).findById(savedDoctorDTO.getId())).withSelfRel());
+                    linkTo(methodOn(DoctorController.class).findByCnp(savedDoctorDTO.getCnp())).withSelfRel());
         } else {
             throw new GlobalAlreadyExistsException("DOCTOR");
         }
     }
 
-    public EntityModel<DoctorDTO> findById(int id) {
-        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
-        if (optionalDoctor.isPresent()) {
-            Doctor doctor = optionalDoctor.get();
-            DoctorDTO doctorDTO = modelMapper.map(doctor, DoctorDTO.class);
-            return new EntityModel<>(
-                    doctorDTO,
-                    linkTo(methodOn(DoctorController.class).findById(id)).withSelfRel());
-        } else {
-            throw new GlobalNotFoundException("DOCTOR");
-        }
-    }
+//    public EntityModel<DoctorDTO> findById(int id) {
+//        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+//        if (optionalDoctor.isPresent()) {
+//            Doctor doctor = optionalDoctor.get();
+//            DoctorDTO doctorDTO = modelMapper.map(doctor, DoctorDTO.class);
+//            return new EntityModel<>(
+//                    doctorDTO,
+//                    linkTo(methodOn(DoctorController.class).findByCnp(cnp)).withSelfRel());
+//        } else {
+//            throw new GlobalNotFoundException("DOCTOR");
+//        }
+//    }
 
-    public EntityModel<DoctorDTO> findByCnp(int cnp) {
+    public EntityModel<DoctorDTO> findByCnp(String cnp) {
         Optional<Doctor> optionalDoctor = doctorRepository.findByCnp(cnp);
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
             DoctorDTO doctorDTO = modelMapper.map(doctor, DoctorDTO.class);
             return new EntityModel<>(
                     doctorDTO,
-                    linkTo(methodOn(DoctorController.class).findById(cnp)).withSelfRel());
+                    linkTo(methodOn(DoctorController.class).findByCnp(cnp)).withSelfRel());
         } else {
             throw new GlobalNotFoundException("DOCTOR");
         }
@@ -75,7 +75,7 @@ public class DoctorService {
             DoctorDTO doctorDTO = modelMapper.map(doctor, DoctorDTO.class);
             return new EntityModel<>(
                     doctorDTO,
-                    linkTo(methodOn(DoctorController.class).findById(doctorDTO.getId())).withSelfRel());
+                    linkTo(methodOn(DoctorController.class).findByCnp(doctorDTO.getCnp())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("DOCTOR");
         }
@@ -91,7 +91,7 @@ public class DoctorService {
             DoctorDTO updatedDoctorDTO = modelMapper.map(updatedDoctor, DoctorDTO.class);
             return new EntityModel<>(
                     updatedDoctorDTO,
-                    linkTo(methodOn(DoctorController.class).findById(updatedDoctorDTO.getId())).withSelfRel());
+                    linkTo(methodOn(DoctorController.class).findByCnp(updatedDoctorDTO.getCnp())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("DOCTOR");
         }

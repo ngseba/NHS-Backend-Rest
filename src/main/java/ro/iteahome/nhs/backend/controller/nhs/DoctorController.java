@@ -34,9 +34,9 @@ public class DoctorController {
         return doctorService.add(doctor);
     }
 
-    @GetMapping("/by-id/{id}")
-    public EntityModel<DoctorDTO> findById(@PathVariable int id) {
-        return doctorService.findById(id);
+    @GetMapping("/by-cnp/{cnp}")
+    public EntityModel<DoctorDTO> findByCnp(@PathVariable String cnp) {
+        return doctorService.findByCnp(cnp);
     }
 
     @GetMapping("/by-email/{email}")

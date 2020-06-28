@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class ConsultDTO {
     private Date date;
-    private int patient_cnp;
-    private int doctor_cnp;
+    private String patient_cnp;
+    private String doctor_cnp;
     private String institution_cui;
     private String diagnostic_desc;
     private String treatment_desc;
@@ -25,19 +25,19 @@ public class ConsultDTO {
         this.date = date;
     }
 
-    public int getPatient_cnp() {
+    public String getPatient_cnp() {
         return patient_cnp;
     }
 
-    public void setPatient_cnp(int patient_cnp) {
+    public void setPatient_cnp(String patient_cnp) {
         this.patient_cnp = patient_cnp;
     }
 
-    public int getDoctor_cnp() {
+    public String getDoctor_cnp() {
         return doctor_cnp;
     }
 
-    public void setDoctor_cnp(int doctor_cnp) {
+    public void setDoctor_cnp(String doctor_cnp) {
         this.doctor_cnp = doctor_cnp;
     }
 

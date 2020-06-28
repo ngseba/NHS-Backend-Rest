@@ -64,7 +64,7 @@ public class ConsultService {
                 linkTo(methodOn(PatientController.class).findConsult(consultDTO.getPatient_cnp())).withSelfRel());
     }
 
-    public EntityModel<ConsultDTO> findConsult(int patientCnp){
+    public EntityModel<ConsultDTO> findConsult(String patientCnp){
         Patient patient = new Patient();
         Consult consult = new Consult();
         Treatment treatment = new Treatment();

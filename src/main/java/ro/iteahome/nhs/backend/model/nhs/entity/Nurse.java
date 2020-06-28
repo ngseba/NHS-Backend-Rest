@@ -18,7 +18,7 @@ public class Nurse {
     @NotNull(message = "CNP CANNOT BE EMPTY.")
     @Pattern(regexp = "[1-8]\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])(0[1-9]|[1-4]\\d|5[0-2]|99)\\d{4}", message = "INVALID CNP")
     @Column(name = "cnp", nullable = false, unique = true, columnDefinition = "VARCHAR(13)")
-    private int cnp;
+    private String cnp;
 
     //    @NotNull(message = "TITLE CANNOT BE EMPTY.")
     @Column(name = "title", nullable = false, columnDefinition = "VARCHAR(50)")
@@ -68,11 +68,11 @@ public class Nurse {
         this.id = id;
     }
 
-    public int getCnp() {
+    public String getCnp() {
         return cnp;
     }
 
-    public void setCnp(int cnp) {
+    public void setCnp(String cnp) {
         this.cnp = cnp;
     }
 
