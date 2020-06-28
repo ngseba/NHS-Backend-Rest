@@ -11,12 +11,14 @@ import ro.iteahome.nhs.backend.model.nhs.dto.DoctorDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Doctor;
 import ro.iteahome.nhs.backend.model.nhs.reference.DoctorSpecialty;
 import ro.iteahome.nhs.backend.model.nhs.reference.DoctorTitle;
+import ro.iteahome.nhs.backend.model.nhs.reference.InstitutionType;
 import ro.iteahome.nhs.backend.service.nhs.DoctorService;
 
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/doctors")
@@ -44,19 +46,23 @@ public class DoctorController {
         return doctorService.findByEmail(email);
     }
 
-    @GetMapping("/existence/by-cnp")
-    public boolean existsByCnpAndLicenseNo(@RequestParam String cnp) {
+    @GetMapping("/existence/by-cnp/{cnp}")
+    public boolean existsByCnp(@PathVariable String cnp) {
         return doctorService.existsByCnp(cnp);
     }
 
-    @GetMapping("/retrieve-doctor-title")
-    public DoctorTitle[] retrieveDoctorTitle() {
-        return DoctorTitle.values();
+    @GetMapping("/title")
+    public String[] retrieveDoctorTitle() {
+        return Stream.of(DoctorTitle.values())
+                .map(Enum::name)
+                .toArray(String[]::new);
     }
 
-    @GetMapping("/retrieve-doctor-specialty")
-    public DoctorSpecialty[] retrieveDoctorSpecialty() {
-        return DoctorSpecialty.values();
+    @GetMapping("/specialty")
+    public String[] retrieveDoctorSpecialty() {
+          return Stream.of(DoctorSpecialty.values())
+                .map(Enum::name)
+                .toArray(String[]::new);
     }
 
     @PutMapping
@@ -64,8 +70,8 @@ public class DoctorController {
         return doctorService.update(doctor);
     }
 
-    @DeleteMapping("/delete/by-cnp")
-    public EntityModel<DoctorDTO> deleteById(@RequestParam String cnp) {
+    @DeleteMapping("/by-cnp/{cnp}")
+    public EntityModel<DoctorDTO> deleteByCnp(@PathVariable String cnp) {
         return doctorService.deleteByCnp(cnp);
     }
 
