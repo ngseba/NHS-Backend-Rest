@@ -30,9 +30,9 @@ public class DoctorService {
 // C.R.U.D. METHODS: ---------------------------------------------------------------------------------------------------
 
     public EntityModel<DoctorDTO> add(Doctor doctor) {
-        if (!doctorRepository.existsByEmail(doctor.getEmail())) {
+        if (!doctorRepository.existsByCnp(doctor.getCnp())) {
             doctorRepository.save(doctor);
-            Doctor savedDoctor = doctorRepository.getByEmail(doctor.getEmail());
+            Doctor savedDoctor = doctorRepository.getByCnp(doctor.getCnp());
             DoctorDTO savedDoctorDTO = modelMapper.map(savedDoctor, DoctorDTO.class);
             return new EntityModel<>(
                     savedDoctorDTO,
@@ -81,12 +81,12 @@ public class DoctorService {
         }
     }
 
-    public boolean existsByCnpAndLicenseNo(String cnp, String licenseNo) {
-        return doctorRepository.existsByCnpAndLicenseNo(cnp, licenseNo);
+    public boolean existsByCnp(String cnp) {
+        return doctorRepository.existsByCnp(cnp);
     }
 
     public EntityModel<DoctorDTO> update(Doctor doctor) {
-        if (doctorRepository.existsById(doctor.getId())) {
+        if (doctorRepository.existsByCnp(doctor.getCnp())) {
             Doctor updatedDoctor = doctorRepository.save(doctor);
             DoctorDTO updatedDoctorDTO = modelMapper.map(updatedDoctor, DoctorDTO.class);
             return new EntityModel<>(
@@ -97,12 +97,12 @@ public class DoctorService {
         }
     }
 
-    public EntityModel<DoctorDTO> deleteById(int id) {
-        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+    public EntityModel<DoctorDTO> deleteById(String cnp) {
+        Optional<Doctor> optionalDoctor = doctorRepository.findByCnp(cnp);
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
             DoctorDTO doctorDTO = modelMapper.map(doctor, DoctorDTO.class);
-            doctorRepository.deleteById(id);
+            doctorRepository.deleteByCnp(cnp);
             return new EntityModel<>(doctorDTO);
         } else {
             throw new GlobalNotFoundException("DOCTOR");

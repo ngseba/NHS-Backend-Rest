@@ -13,13 +13,15 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 
     Doctor getByEmail(String email);
 
+    Doctor getByCnp(String cnp);
+
     Optional<Doctor> findByCnp(String cnp);
 
-    void deleteById(int id);
+    void deleteByCnp(String Cnp);
 
     void deleteByEmail(String email);
 
     boolean existsByEmail(String email);
 
-    boolean existsByCnpAndLicenseNo(String cnp, String licenseNo);
+    boolean existsByCnp(String cnp);
 }

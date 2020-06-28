@@ -44,9 +44,9 @@ public class DoctorController {
         return doctorService.findByEmail(email);
     }
 
-    @GetMapping("/existence/by-cnp-and-license-number")
-    public boolean existsByCnpAndLicenseNo(@RequestParam String cnp, @RequestParam String licenseNo) {
-        return doctorService.existsByCnpAndLicenseNo(cnp, licenseNo);
+    @GetMapping("/existence/by-cnp")
+    public boolean existsByCnpAndLicenseNo(@RequestParam String cnp) {
+        return doctorService.existsByCnp(cnp);
     }
 
     @GetMapping("/retrieve-doctor-title")
@@ -64,9 +64,9 @@ public class DoctorController {
         return doctorService.update(doctor);
     }
 
-    @DeleteMapping("/by-id/{id}")
-    public EntityModel<DoctorDTO> deleteById(@PathVariable int id) {
-        return doctorService.deleteById(id);
+    @DeleteMapping("/by-cnp/{cnp}")
+    public EntityModel<DoctorDTO> deleteById(@PathVariable String cnp) {
+        return doctorService.deleteById(cnp);
     }
 
     @DeleteMapping("/by-email/{email}")
