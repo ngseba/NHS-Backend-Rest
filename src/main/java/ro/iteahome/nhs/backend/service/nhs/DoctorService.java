@@ -101,7 +101,7 @@ public class DoctorService {
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
             DoctorDTO doctorDTO = modelMapper.map(doctor, DoctorDTO.class);
-            doctorRepository.deleteById(doctor.getId());
+            doctorRepository.deleteByEmail(doctor.getEmail());
             return new EntityModel<>(doctorDTO);
         } else {
             throw new GlobalNotFoundException("DOCTOR");
