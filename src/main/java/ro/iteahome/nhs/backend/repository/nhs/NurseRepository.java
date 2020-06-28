@@ -11,6 +11,8 @@ public interface NurseRepository extends JpaRepository<Nurse, Integer> {
 
     Optional<Nurse> findByEmail(String email);
 
+    Optional<Nurse> findByCnp(int cnp);
+
     Nurse getByEmail(String email);
 
     void deleteById(int id);
