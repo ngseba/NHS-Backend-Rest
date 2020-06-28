@@ -30,21 +30,9 @@ public class InstitutionService {
             Institution savedInstitution = institutionRepository.getByCui(institution.getCui());
             return new EntityModel<>(
                     savedInstitution,
-                    linkTo(methodOn(InstitutionController.class).findById(savedInstitution.getId())).withSelfRel());
+                    linkTo(methodOn(InstitutionController.class).findByCui(savedInstitution.getCui())).withSelfRel());
         } else {
             throw new GlobalAlreadyExistsException("MEDICAL INSTITUTION");
-        }
-    }
-
-    public EntityModel<Institution> findById(int id) {
-        Optional<Institution> optionalInstitution = institutionRepository.findById(id);
-        if (optionalInstitution.isPresent()) {
-            Institution institution = optionalInstitution.get();
-            return new EntityModel<>(
-                    institution,
-                    linkTo(methodOn(InstitutionController.class).findById(id)).withSelfRel());
-        } else {
-            throw new GlobalNotFoundException("MEDICAL INSTITUTION");
         }
     }
 
@@ -54,7 +42,7 @@ public class InstitutionService {
             Institution institution = optionalInstitution.get();
             return new EntityModel<>(
                     institution,
-                    linkTo(methodOn(InstitutionController.class).findById(institution.getId())).withSelfRel());
+                    linkTo(methodOn(InstitutionController.class).findByCui(institution.getCui())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("MEDICAL INSTITUTION");
         }
@@ -66,18 +54,7 @@ public class InstitutionService {
             Institution updatedInstitution = institutionRepository.getById(institution.getId());
             return new EntityModel<>(
                     updatedInstitution,
-                    linkTo(methodOn(InstitutionController.class).findById(updatedInstitution.getId())).withSelfRel());
-        } else {
-            throw new GlobalNotFoundException("MEDICAL INSTITUTION");
-        }
-    }
-
-    public EntityModel<Institution> deleteById(int id) {
-        Optional<Institution> optionalInstitution = institutionRepository.findById(id);
-        if (optionalInstitution.isPresent()) {
-            Institution institution = optionalInstitution.get();
-            institutionRepository.delete(institution);
-            return new EntityModel<>(institution);
+                    linkTo(methodOn(InstitutionController.class).findByCui(updatedInstitution.getCui())).withSelfRel());
         } else {
             throw new GlobalNotFoundException("MEDICAL INSTITUTION");
         }

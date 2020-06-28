@@ -23,4 +23,12 @@ ON DUPLICATE KEY UPDATE
     role_id = role_id
 ;
 
+INSERT INTO
+	nhs.admins (id, email, password, first_name, last_name, phone_ro, status, role)
+VALUES
+	(1, 'masteradmin@nhs.ro', '$2a$10$9vU.PAYYj2VNibIj9LvaW.4nFWkzH7qTQhynZ7a97146sucR.s1V2', 'Master', 'Admin', '0040700100100', 1, 'ADMIN')
+ON DUPLICATE KEY UPDATE
+	id = id
+;
+
 -- TODO: Rename this to "data.sql" after truncating/dropping the database security tables. "Spring.jpa.hibernate.ddl-auto" needs to be set to "update" and "schema.sql" must not be available.
