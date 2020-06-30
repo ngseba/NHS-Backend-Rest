@@ -5,14 +5,7 @@
 INSERT INTO
 	nhs.client_apps (id, name, password, status)
 VALUES
-	(1, 'NHS_ADMIN_UI', '$2a$10$HWH5u3XDwT/KY2uu/Px87.ieezR0NJPBqKxd1WVK/M06kGbKtaW9y', 1)
-ON DUPLICATE KEY UPDATE
-	id = id
-;
-
-INSERT INTO
-	nhs.client_apps (id, name, password, status)
-VALUES
+	(1, 'NHS_ADMIN_UI', '$2a$10$HWH5u3XDwT/KY2uu/Px87.ieezR0NJPBqKxd1WVK/M06kGbKtaW9y', 1),
 	(2, 'MEDICOM', '$2a$10$E.ieaVi1glgq6YN0PwcG7eCrz4HRAcahbGfyp/66bDPM0WnP.QaU6', 1)
 ON DUPLICATE KEY UPDATE
 	id = id
@@ -31,14 +24,7 @@ ON DUPLICATE KEY UPDATE
 
 INSERT INTO
     nhs.client_apps_roles (client_app_id, role_id)
-VALUES (1, 1)
-ON DUPLICATE KEY UPDATE
-    role_id = role_id
-;
-
-INSERT INTO
-    nhs.client_apps_roles (client_app_id, role_id)
-VALUES (2, 2)
+VALUES (1, 1), (2, 2)
 ON DUPLICATE KEY UPDATE
     role_id = role_id
 ;
