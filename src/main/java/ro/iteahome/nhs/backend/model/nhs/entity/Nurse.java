@@ -1,5 +1,10 @@
 package ro.iteahome.nhs.backend.model.nhs.entity;
 
+import ro.iteahome.nhs.backend.annotations.ValidOption;
+import ro.iteahome.nhs.backend.model.nhs.reference.InstitutionType;
+import ro.iteahome.nhs.backend.model.nhs.reference.NurseSpecialty;
+import ro.iteahome.nhs.backend.model.nhs.reference.NurseTitle;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -20,7 +25,7 @@ public class Nurse {
     @Column(name = "cnp", nullable = false, unique = true, columnDefinition = "VARCHAR(13)")
     private String cnp;
 
-    //    @NotNull(message = "TITLE CANNOT BE EMPTY.")
+    @ValidOption(message = "THE SELECTED NURSE TITLE IS NOT AVAILABLE",enumOption = NurseTitle.class)
     @Column(name = "title", nullable = false, columnDefinition = "VARCHAR(50)")
     private String title; // TODO: Create this by concatenating corresponding enum values chosen via a drop-down menu.
 
@@ -46,9 +51,9 @@ public class Nurse {
     @Column(name = "nursing_license", nullable = false, unique = true, columnDefinition = "VARCHAR(50)")
     private String licenseNo;
 
-    //    @NotNull(message = "SPECIALTIES CANNOT BE EMPTY.")
+    @ValidOption(message = "THE SELECTED NURSE SPECIALTY IS NOT AVAILABLE",enumOption = NurseSpecialty.class)
     @Column(name = "specialties", nullable = false, columnDefinition = "VARCHAR(255)")
-    private String specialties; // TODO: Create this by concatenating corresponding enum values chosen via a drop-down menu.
+    private String specialties;
 
     @ManyToMany(cascade = CascadeType.DETACH) //TODO: Check detach cascade type.
     @JoinTable(
