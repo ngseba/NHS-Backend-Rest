@@ -1,5 +1,10 @@
 package ro.iteahome.nhs.backend.model.nhs.entity;
 
+import ro.iteahome.nhs.backend.annotations.ValidOption;
+import ro.iteahome.nhs.backend.model.nhs.reference.DoctorSpecialty;
+import ro.iteahome.nhs.backend.model.nhs.reference.DoctorTitle;
+import ro.iteahome.nhs.backend.model.nhs.reference.NurseSpecialty;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -16,7 +21,7 @@ public class Doctor {
     @Column(name = "cnp", nullable = false, unique = true, columnDefinition = "VARCHAR(13)")
     private String cnp;
 
-    //    @NotNull(message = "TITLE CANNOT BE EMPTY.")
+    @ValidOption(message = "THE SELECTED DOCTOR TITLE IS NOT AVAILABLE",enumOption = DoctorTitle.class)
     @Column(name = "title", nullable = false, columnDefinition = "VARCHAR(50)")
     private String title; // TODO: Create this by concatenating corresponding enum values chosen via a drop-down menu.
 
@@ -42,7 +47,7 @@ public class Doctor {
     @Column(name = "medical_license", nullable = false, unique = true, columnDefinition = "VARCHAR(50)")
     private String licenseNo;
 
-    //    @NotNull(message = "SPECIALTIES CANNOT BE EMPTY.")
+    @ValidOption(message = "THE SELECTED DOCTOR SPECIALTY IS NOT AVAILABLE",enumOption = DoctorSpecialty.class)
     @Column(name = "specialties", nullable = false, columnDefinition = "VARCHAR(255)")
     private String specialties; // TODO: Create this by concatenating corresponding enum values chosen via a drop-down menu.
 

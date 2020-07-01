@@ -1,5 +1,6 @@
 package ro.iteahome.nhs.backend.model.nhs.entity;
 
+import ro.iteahome.nhs.backend.annotations.ValidOption;
 import ro.iteahome.nhs.backend.model.nhs.reference.InstitutionType;
 
 import javax.persistence.*;
@@ -16,9 +17,10 @@ public class Institution {
     @Column(name = "id", updatable = false)
     private int id;
 
+    @ValidOption(message = "THE SELECTED INSTITUTION TYPE  IS NOT AVAILABLE",enumOption = InstitutionType.class)
     @NotNull(message = "MEDICAL INSTITUTION TYPE CANNOT BE EMPTY.")
     @Column(name = "type", nullable = false, columnDefinition = "VARCHAR(50)")
-    private InstitutionType type;
+    private String type;
 
     @NotNull(message = "CUI CANNOT BE EMPTY.")
     @Column(name = "cui", nullable = false, unique = true, columnDefinition = "VARCHAR(50)")
@@ -56,11 +58,11 @@ public class Institution {
         this.id = id;
     }
 
-    public InstitutionType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(InstitutionType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
