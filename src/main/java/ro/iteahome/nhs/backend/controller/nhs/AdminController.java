@@ -53,6 +53,12 @@ public class AdminController {
         }
     }
 
+//    @PostMapping
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public EntityModel<AdminDTO> add(@RequestBody @Valid Admin admin) {
+//        return adminService.add(admin);
+//    }
+
     @GetMapping("/by-id/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public EntityModel<AdminDTO> findById(@PathVariable int id) {
