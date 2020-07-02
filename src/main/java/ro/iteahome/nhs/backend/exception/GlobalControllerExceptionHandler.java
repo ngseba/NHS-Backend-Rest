@@ -13,8 +13,8 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
 
 //  ENTITY EXCEPTIONS: -------------------------------------------------------------------------------------------------
 
-    @ExceptionHandler(GlobalServiceException.class)
-    public ResponseEntity<GlobalError> handleGlobalServiceException(GlobalServiceException ex) {
+    @ExceptionHandler(GlobalEntityException.class)
+    public ResponseEntity<GlobalError> handleGlobalEntityException(GlobalEntityException ex) {
         return new ResponseEntity<>(new GlobalError(ex.getRestEntity().substring(0, 3) + "-00", ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

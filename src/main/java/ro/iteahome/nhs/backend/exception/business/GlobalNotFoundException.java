@@ -4,9 +4,9 @@ public class GlobalNotFoundException extends RuntimeException {
 
     private final String restEntity;
 
-    public GlobalNotFoundException(String restEntity) {
-        super(restEntity + " NOT FOUND.");
-        this.restEntity = restEntity;
+    public GlobalNotFoundException(String entityName) {
+        super(entityName + " NOT FOUND.");
+        this.restEntity = entityName;
     }
 
     public String getRestEntity() {
