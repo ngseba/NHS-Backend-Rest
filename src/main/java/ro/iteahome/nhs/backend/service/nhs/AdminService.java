@@ -2,19 +2,15 @@ package ro.iteahome.nhs.backend.service.nhs;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ro.iteahome.nhs.backend.controller.nhs.AdminController;
-import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
-import ro.iteahome.nhs.backend.exception.business.GlobalDatabaseValidationException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
 import ro.iteahome.nhs.backend.model.nhs.dto.AdminDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Admin;
 import ro.iteahome.nhs.backend.repository.nhs.AdminRepository;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -36,19 +32,26 @@ public class AdminService {
 
 // C.R.U.D. METHODS: ---------------------------------------------------------------------------------------------------
 
-    @Transactional
-    public AdminDTO add(Admin admin) throws GlobalDatabaseValidationException, GlobalAlreadyExistsException {
-        if (doesNotExistByEmail(admin)) {
-            try {
-                Admin savedAdmin = adminRepository.saveAndFlush(admin);
-                return modelMapper.map(savedAdmin, AdminDTO.class);
-            } catch (DataAccessException ex) {
-                throw new GlobalDatabaseValidationException("ADMIN");
-            }
-        } else {
-            throw new GlobalAlreadyExistsException("ADMIN");
+    public AdminDTO add(Admin admin) throws Exception {
+        try {
+            Admin savedAdmin = adminRepository.saveAndFlush(admin);
+            return modelMapper.map(savedAdmin, AdminDTO.class);
+        } catch (Exception ex) {
+            throw new Exception(ex.getCause().getCause().getMessage());
         }
     }
+
+//    public EntityModel<AdminDTO> add(Admin admin) {
+//        if (doesNotExistByEmail(admin)) {
+//            Admin savedAdmin = adminRepository.save(admin);
+//            AdminDTO savedAdminDTO = modelMapper.map(savedAdmin, AdminDTO.class);
+//            return new EntityModel<>(
+//                    savedAdminDTO,
+//                    linkTo(methodOn(AdminController.class).findByEmail(savedAdminDTO.getEmail())).withSelfRel());
+//        } else {
+//            throw new GlobalAlreadyExistsException("ADMIN");
+//        }
+//    }
 
     public EntityModel<AdminDTO> findById(int id) {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);

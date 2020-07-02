@@ -8,8 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
-import ro.iteahome.nhs.backend.exception.business.GlobalDatabaseValidationException;
+import ro.iteahome.nhs.backend.exception.business.GlobalDatabaseException;
 import ro.iteahome.nhs.backend.model.nhs.dto.AdminDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Admin;
 import ro.iteahome.nhs.backend.service.clientapp.RoleService;
@@ -37,7 +36,7 @@ public class AdminController {
 
 // C.R.U.D. METHODS: ---------------------------------------------------------------------------------------------------
 
-    @PostMapping
+    @PostMapping("/v2")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EntityModel<AdminDTO>> add(@RequestBody @Valid Admin admin) {
         try {
@@ -46,11 +45,15 @@ public class AdminController {
                     savedAdminDTO,
                     linkTo(methodOn(AdminController.class).findByEmail(savedAdminDTO.getEmail())).withSelfRel());
             return new ResponseEntity<>(savedAdminDTOEntity, HttpStatus.CREATED);
-        } catch (GlobalDatabaseValidationException ex) {
-            return new ResponseEntity<>(null, null, HttpStatus.BAD_REQUEST);
-        } catch (GlobalAlreadyExistsException ex) {
-            return new ResponseEntity<>(null, null, HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("ADMIN", ex);
         }
+//        catch (GlobalDatabaseException ex) {
+//            throw new GlobalDatabaseException("ADMIN");
+//        }
+//        catch (GlobalAlreadyExistsException ex) {
+//            return new ResponseEntity<>(null, null, HttpStatus.CONFLICT);
+//        }
     }
 
 //    @PostMapping
