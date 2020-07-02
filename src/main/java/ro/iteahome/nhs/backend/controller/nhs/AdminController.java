@@ -36,9 +36,9 @@ public class AdminController {
 
 // C.R.U.D. METHODS: ---------------------------------------------------------------------------------------------------
 
-    @PostMapping("/v2")
+    @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<EntityModel<AdminDTO>> add(@RequestBody @Valid Admin admin) {
+    public ResponseEntity<EntityModel<AdminDTO>> add(@RequestBody @Valid Admin admin) throws Exception {
         try {
             AdminDTO savedAdminDTO = adminService.add(admin);
             EntityModel<AdminDTO> savedAdminDTOEntity = new EntityModel<>(
@@ -46,21 +46,9 @@ public class AdminController {
                     linkTo(methodOn(AdminController.class).findByEmail(savedAdminDTO.getEmail())).withSelfRel());
             return new ResponseEntity<>(savedAdminDTOEntity, HttpStatus.CREATED);
         } catch (Exception ex) {
-            throw new GlobalDatabaseException("ADMIN", ex);
+            throw new GlobalDatabaseException("ADMIN", ex.getMessage());
         }
-//        catch (GlobalDatabaseException ex) {
-//            throw new GlobalDatabaseException("ADMIN");
-//        }
-//        catch (GlobalAlreadyExistsException ex) {
-//            return new ResponseEntity<>(null, null, HttpStatus.CONFLICT);
-//        }
     }
-
-//    @PostMapping
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public EntityModel<AdminDTO> add(@RequestBody @Valid Admin admin) {
-//        return adminService.add(admin);
-//    }
 
     @GetMapping("/by-id/{id}")
     @PreAuthorize("hasRole('ADMIN')")

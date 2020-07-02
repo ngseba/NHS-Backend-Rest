@@ -4,8 +4,8 @@ public class GlobalDatabaseException extends RuntimeException {
 
     private final String restEntity;
 
-    public GlobalDatabaseException(String restEntity, Throwable exception) {
-        super("DATABASE OPERATION FAILED FOR: " + restEntity + ". MESSAGE: " + exception.getMessage());
+    public GlobalDatabaseException(String restEntity, String originalMessage) {
+        super("DATABASE OPERATION FAILED FOR: " + restEntity + ". MESSAGE: " + originalMessage);
         this.restEntity = restEntity;
     }
 

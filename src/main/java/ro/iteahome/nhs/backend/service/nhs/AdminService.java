@@ -34,24 +34,12 @@ public class AdminService {
 
     public AdminDTO add(Admin admin) throws Exception {
         try {
-            Admin savedAdmin = adminRepository.saveAndFlush(admin);
+            Admin savedAdmin = adminRepository.save(admin);
             return modelMapper.map(savedAdmin, AdminDTO.class);
         } catch (Exception ex) {
             throw new Exception(ex.getCause().getCause().getMessage());
         }
     }
-
-//    public EntityModel<AdminDTO> add(Admin admin) {
-//        if (doesNotExistByEmail(admin)) {
-//            Admin savedAdmin = adminRepository.save(admin);
-//            AdminDTO savedAdminDTO = modelMapper.map(savedAdmin, AdminDTO.class);
-//            return new EntityModel<>(
-//                    savedAdminDTO,
-//                    linkTo(methodOn(AdminController.class).findByEmail(savedAdminDTO.getEmail())).withSelfRel());
-//        } else {
-//            throw new GlobalAlreadyExistsException("ADMIN");
-//        }
-//    }
 
     public EntityModel<AdminDTO> findById(int id) {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
