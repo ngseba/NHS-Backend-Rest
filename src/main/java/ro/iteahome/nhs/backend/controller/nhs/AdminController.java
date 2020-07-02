@@ -8,6 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
+import ro.iteahome.nhs.backend.exception.business.GlobalDatabaseValidationException;
 import ro.iteahome.nhs.backend.model.nhs.dto.AdminDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Admin;
 import ro.iteahome.nhs.backend.service.clientapp.RoleService;
@@ -17,6 +19,9 @@ import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/admins")
@@ -34,8 +39,18 @@ public class AdminController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<AdminDTO> add(@RequestBody @Valid Admin admin) {
-        return adminService.add(admin);
+    public ResponseEntity<EntityModel<AdminDTO>> add(@RequestBody @Valid Admin admin) {
+        try {
+            AdminDTO savedAdminDTO = adminService.add(admin);
+            EntityModel<AdminDTO> savedAdminDTOEntity = new EntityModel<>(
+                    savedAdminDTO,
+                    linkTo(methodOn(AdminController.class).findByEmail(savedAdminDTO.getEmail())).withSelfRel());
+            return new ResponseEntity<>(savedAdminDTOEntity, HttpStatus.CREATED);
+        } catch (GlobalDatabaseValidationException ex) {
+            return new ResponseEntity<>(null, null, HttpStatus.BAD_REQUEST);
+        } catch (GlobalAlreadyExistsException ex) {
+            return new ResponseEntity<>(null, null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/by-id/{id}")
@@ -85,8 +100,8 @@ public class AdminController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new LinkedHashMap<>();
-        errors.put("errorCode", "ADM-00");
-        errors.put("errorMessage", "ADMIN FIELDS HAVE VALIDATION ERRORS.");
+        errors.put("errorCode", "ADM-04");
+        errors.put("errorMessage", "ADMIN FIELDS HAVE VALIDATION ERRORS:");
         errors.putAll(ex.getBindingResult()
                 .getFieldErrors()
                 .stream()

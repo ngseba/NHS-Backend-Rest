@@ -6,13 +6,20 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
+import ro.iteahome.nhs.backend.exception.business.GlobalDatabaseValidationException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
+import ro.iteahome.nhs.backend.exception.business.GlobalServiceException;
 import ro.iteahome.nhs.backend.exception.error.GlobalError;
 
 @ControllerAdvice
 public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
 //  ENTITY EXCEPTIONS: -------------------------------------------------------------------------------------------------
+
+    @ExceptionHandler(GlobalServiceException.class)
+    public ResponseEntity<GlobalError> handleGlobalServiceException(GlobalServiceException ex) {
+        return new ResponseEntity<>(new GlobalError(ex.getRestEntity().substring(0, 3) + "-00", ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @ExceptionHandler(GlobalNotFoundException.class)
     public ResponseEntity<GlobalError> handleGlobalNotFoundException(GlobalNotFoundException ex) {
@@ -22,6 +29,11 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
     @ExceptionHandler(GlobalAlreadyExistsException.class)
     public ResponseEntity<GlobalError> handleGlobalAlreadyExistsException(GlobalAlreadyExistsException ex) {
         return new ResponseEntity<>(new GlobalError(ex.getEntityName().substring(0, 3) + "-02", ex.getMessage()), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(GlobalDatabaseValidationException.class)
+    public ResponseEntity<GlobalError> handleGlobalDatabaseValidationException(GlobalDatabaseValidationException ex) {
+        return new ResponseEntity<>(new GlobalError(ex.getRestEntity().substring(0, 3) + "-04", ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
 // VALIDATION EXCEPTIONS: ----------------------------------------------------------------------------------------------
