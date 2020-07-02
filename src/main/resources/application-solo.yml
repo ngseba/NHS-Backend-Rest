@@ -1,0 +1,7 @@
+# PERSISTENCE - LOCAL MYSQL DATABASE:
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/nhs?createDatabaseIfNotExist=true
+    username: "root"
+    password: "P@ssW0rd!"
