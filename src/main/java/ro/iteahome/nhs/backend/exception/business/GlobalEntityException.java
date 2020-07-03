@@ -2,14 +2,14 @@ package ro.iteahome.nhs.backend.exception.business;
 
 public class GlobalEntityException extends RuntimeException {
 
-    private final String restEntity;
+    private final String entityName;
 
-    public GlobalEntityException(String restEntity, String originalMessage) {
-        super("INTERNAL ERROR FOR ENTITY: \"" + restEntity + "\". MESSAGE: \"" + originalMessage + "\"");
-        this.restEntity = restEntity;
+    public GlobalEntityException(String entityName, String originalMessage) {
+        super("INTERNAL ERROR FOR ENTITY: \"" + entityName + "\". MESSAGE: \"" + originalMessage + "\"");
+        this.entityName = entityName;
     }
 
-    public String getRestEntity() {
-        return restEntity;
+    public String getEntityName() {
+        return entityName;
     }
 }

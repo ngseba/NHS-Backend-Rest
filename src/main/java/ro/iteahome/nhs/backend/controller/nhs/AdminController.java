@@ -8,7 +8,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
 import ro.iteahome.nhs.backend.exception.business.GlobalDatabaseException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
 import ro.iteahome.nhs.backend.model.nhs.dto.AdminDTO;
@@ -47,8 +46,6 @@ public class AdminController {
                     savedAdminDTO,
                     linkTo(methodOn(AdminController.class).findByEmail(savedAdminDTO.getEmail())).withSelfRel());
             return new ResponseEntity<>(savedAdminDTOEntity, HttpStatus.CREATED);
-        } catch (GlobalAlreadyExistsException ex) {
-            throw new GlobalAlreadyExistsException(ex.getEntityName());
         } catch (Exception ex) {
             throw new GlobalDatabaseException("ADMIN", ex.getMessage());
         }
@@ -64,7 +61,7 @@ public class AdminController {
                     linkTo(methodOn(AdminController.class).findById(id)).withSelfRel());
             return new ResponseEntity<>(adminDTOEntity, HttpStatus.FOUND);
         } catch (GlobalNotFoundException ex) {
-            throw new GlobalNotFoundException(ex.getRestEntity());
+            throw new GlobalNotFoundException(ex.getEntityName());
         }
     }
 
@@ -78,7 +75,7 @@ public class AdminController {
                     linkTo(methodOn(AdminController.class).findByEmail(email)).withSelfRel());
             return new ResponseEntity<>(adminDTOEntity, HttpStatus.FOUND);
         } catch (GlobalNotFoundException ex) {
-            throw new GlobalNotFoundException(ex.getRestEntity());
+            throw new GlobalNotFoundException(ex.getEntityName());
         }
     }
 
@@ -92,7 +89,7 @@ public class AdminController {
                     linkTo(methodOn(AdminController.class).findSensitiveById(id)).withSelfRel());
             return new ResponseEntity<>(adminEntity, HttpStatus.FOUND);
         } catch (GlobalNotFoundException ex) {
-            throw new GlobalNotFoundException(ex.getRestEntity());
+            throw new GlobalNotFoundException(ex.getEntityName());
         }
     }
 
@@ -106,7 +103,7 @@ public class AdminController {
                     linkTo(methodOn(AdminController.class).findSensitiveByEmail(email)).withSelfRel());
             return new ResponseEntity<>(adminEntity, HttpStatus.FOUND);
         } catch (GlobalNotFoundException ex) {
-            throw new GlobalNotFoundException(ex.getRestEntity());
+            throw new GlobalNotFoundException(ex.getEntityName());
         }
     }
 
@@ -120,7 +117,7 @@ public class AdminController {
                     linkTo(methodOn(AdminController.class).findById(admin.getId())).withSelfRel());
             return new ResponseEntity<>(updatedAdminDTOEntity, HttpStatus.OK);
         } catch (GlobalNotFoundException ex) {
-            throw new GlobalNotFoundException(ex.getRestEntity());
+            throw new GlobalNotFoundException(ex.getEntityName());
         } catch (Exception ex) {
             throw new GlobalDatabaseException("ADMIN", ex.getMessage());
         }

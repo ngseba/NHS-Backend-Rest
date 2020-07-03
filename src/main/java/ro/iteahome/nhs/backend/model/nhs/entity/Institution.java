@@ -17,7 +17,7 @@ public class Institution {
     @Column(name = "id", updatable = false)
     private int id;
 
-    @ValidOption(message = "THE SELECTED INSTITUTION TYPE  IS NOT AVAILABLE",enumOption = InstitutionType.class)
+    @ValidOption(message = "THE SELECTED INSTITUTION TYPE  IS NOT AVAILABLE", enumOption = InstitutionType.class)
     @NotNull(message = "MEDICAL INSTITUTION TYPE CANNOT BE EMPTY.")
     @Column(name = "type", nullable = false, columnDefinition = "VARCHAR(50)")
     private String type;

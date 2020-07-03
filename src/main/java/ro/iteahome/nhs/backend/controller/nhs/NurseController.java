@@ -9,7 +9,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ro.iteahome.nhs.backend.model.nhs.dto.NurseDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Nurse;
-import ro.iteahome.nhs.backend.model.nhs.reference.DoctorSpecialty;
 import ro.iteahome.nhs.backend.model.nhs.reference.NurseSpecialty;
 import ro.iteahome.nhs.backend.model.nhs.reference.NurseTitle;
 import ro.iteahome.nhs.backend.service.nhs.NurseService;
@@ -53,7 +52,7 @@ public class NurseController {
 
     @GetMapping("/title")
     public String[] getNurseTitle() {
-          return Stream.of(NurseTitle.values())
+        return Stream.of(NurseTitle.values())
                 .map(Enum::name)
                 .toArray(String[]::new);
     }

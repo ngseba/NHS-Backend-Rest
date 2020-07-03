@@ -2,14 +2,14 @@ package ro.iteahome.nhs.backend.exception.business;
 
 public class GlobalNotFoundException extends RuntimeException {
 
-    private final String restEntity;
+    private final String entityName;
 
     public GlobalNotFoundException(String entityName) {
         super(entityName + " NOT FOUND.");
-        this.restEntity = entityName;
+        this.entityName = entityName;
     }
 
-    public String getRestEntity() {
-        return restEntity;
+    public String getEntityName() {
+        return entityName;
     }
 }

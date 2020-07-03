@@ -4,7 +4,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
 import ro.iteahome.nhs.backend.model.nhs.dto.AdminDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Admin;
@@ -29,15 +28,11 @@ public class AdminService {
 // C.R.U.D. METHODS: ---------------------------------------------------------------------------------------------------
 
     public AdminDTO add(Admin admin) throws Exception {
-        if (!adminRepository.existsById(admin.getId())) {
-            try {
-                Admin savedAdmin = adminRepository.saveAndFlush(admin);
-                return modelMapper.map(savedAdmin, AdminDTO.class);
-            } catch (Exception ex) {
-                throw new Exception(ex.getCause().getCause().getMessage());
-            }
-        } else {
-            throw new GlobalAlreadyExistsException("ADMIN");
+        try {
+            Admin savedAdmin = adminRepository.saveAndFlush(admin);
+            return modelMapper.map(savedAdmin, AdminDTO.class);
+        } catch (Exception ex) {
+            throw new Exception(ex.getCause().getCause().getMessage());
         }
     }
 

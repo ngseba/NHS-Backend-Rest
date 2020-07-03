@@ -11,7 +11,6 @@ import ro.iteahome.nhs.backend.model.nhs.dto.DoctorDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Doctor;
 import ro.iteahome.nhs.backend.model.nhs.reference.DoctorSpecialty;
 import ro.iteahome.nhs.backend.model.nhs.reference.DoctorTitle;
-import ro.iteahome.nhs.backend.model.nhs.reference.InstitutionType;
 import ro.iteahome.nhs.backend.service.nhs.DoctorService;
 
 import javax.validation.Valid;
@@ -60,7 +59,7 @@ public class DoctorController {
 
     @GetMapping("/specialty")
     public String[] retrieveDoctorSpecialty() {
-          return Stream.of(DoctorSpecialty.values())
+        return Stream.of(DoctorSpecialty.values())
                 .map(Enum::name)
                 .toArray(String[]::new);
     }
