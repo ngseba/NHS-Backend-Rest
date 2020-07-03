@@ -2,19 +2,12 @@ package ro.iteahome.nhs.backend.controller.nhs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ro.iteahome.nhs.backend.model.nhs.entity.Institution;
 import ro.iteahome.nhs.backend.model.nhs.reference.InstitutionType;
 import ro.iteahome.nhs.backend.service.nhs.InstitutionService;
 
 import javax.validation.Valid;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
