@@ -54,22 +54,4 @@ public class InstitutionController {
     public EntityModel<Institution> deleteByCui(@PathVariable String cui) {
         return institutionService.deleteByCui(cui);
     }
-
-    // OTHER METHODS: --------------------------------------------------------------------------------------------------
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new LinkedHashMap<>();
-        errors.put("errorCode", "MED-00");
-        errors.put("errorMessage", "MEDICAL INSTITUTION FIELDS HAVE VALIDATION ERRORS.");
-        errors.putAll(ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .collect(Collectors.toMap(
-                        FieldError::getField,
-                        FieldError::getDefaultMessage)));
-        return new ResponseEntity<>(
-                errors,
-                HttpStatus.BAD_REQUEST);
-    }
 }

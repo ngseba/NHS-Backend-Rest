@@ -144,32 +144,4 @@ public class AdminController {
             throw new GlobalNotFoundException(ex.getEntityName());
         }
     }
-
-    // OTHER METHODS: --------------------------------------------------------------------------------------------------
-
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-//        Map<String, String> errors = new LinkedHashMap<>();
-//        errors.put("errorCode", "ADM-04");
-//        errors.put("errorMessage", "ADMIN FIELDS HAVE VALIDATION ERRORS:");
-//        errors.putAll(ex.getBindingResult()
-//                .getFieldErrors()
-//                .stream()
-//                .collect(Collectors.toMap(
-//                        FieldError::getField,
-//                        FieldError::getDefaultMessage)));
-//        return new ResponseEntity<>(
-//                errors,
-//                HttpStatus.BAD_REQUEST);
-//    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new LinkedHashMap<>();
-        errors.put("errorCode", "ADM-04");
-        errors.put("errorMessage", "ADMIN FIELDS HAVE VALIDATION ERRORS:");
-        ex.getBindingResult().getFieldErrors()
-                .forEach(FieldError -> errors.put(FieldError.getField(), FieldError.getDefaultMessage()));
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
 }

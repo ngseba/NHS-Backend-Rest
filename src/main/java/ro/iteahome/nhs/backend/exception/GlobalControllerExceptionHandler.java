@@ -1,15 +1,21 @@
 package ro.iteahome.nhs.backend.exception;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
 import ro.iteahome.nhs.backend.exception.business.GlobalDatabaseException;
 import ro.iteahome.nhs.backend.exception.business.GlobalEntityException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
 import ro.iteahome.nhs.backend.exception.error.GlobalError;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @ControllerAdvice
 public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHandler {
@@ -38,21 +44,18 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
 
 // VALIDATION EXCEPTIONS: ----------------------------------------------------------------------------------------------
 
-    // TODO: Find out why this doesn't work here:
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-//        return new ResponseEntity<>(
-//                ex.getBindingResult()
-//                        .getFieldErrors()
-//                        .stream()
-//                        .collect(Collectors.toMap(
-//                                FieldError::getField,
-//                                FieldError::getDefaultMessage)),
-//                HttpStatus.BAD_REQUEST);
-//    }
-
-// DATABASE VALIDATION EXCEPTIONS: -------------------------------------------------------------------------------------
-
-    // TODO: Find out how to manage database validation exceptions. I'm guessing the answer is stored procedures.
-
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ex.getBindingResult().getFieldErrors().forEach(
+                fieldError -> logger.warn("VALIDATION EXCEPTION \'" + fieldError.getDefaultMessage() + "\' " +
+                        "OCCURRED IN REQUEST SENT BY \'" + request.getRemoteUser() + "\', " +
+                        "STATUS \'" + status + "\', " +
+                        "HEADERS: \'" + headers + "\'."));
+        Map<String, String> errors = new LinkedHashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(
+                fieldError -> errors.put("ERROR IN FIELD \'" + fieldError.getField() + "\'", fieldError.getDefaultMessage()));
+        return new ResponseEntity<>(
+                errors,
+                status);
+    }
 }
