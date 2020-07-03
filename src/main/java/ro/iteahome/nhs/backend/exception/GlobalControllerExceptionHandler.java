@@ -48,8 +48,9 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ex.getBindingResult().getFieldErrors().forEach(
                 fieldError -> logger.warn("VALIDATION EXCEPTION \'" + fieldError.getDefaultMessage() + "\' " +
-                        "OCCURRED IN REQUEST SENT BY \'" + request.getRemoteUser() + "\', " +
-                        "STATUS \'" + status + "\', " +
+                        "FOR FIELD \'" + fieldError.getField() + "\' " +
+                        "OCCURRED IN REQUEST SENT BY APPLICATION \'" + request.getRemoteUser() + "\'. " +
+                        "STATUS \'" + status + "\'. " +
                         "HEADERS: \'" + headers + "\'."));
         Map<String, String> errors = new LinkedHashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(
