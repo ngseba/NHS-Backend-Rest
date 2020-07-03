@@ -44,7 +44,7 @@ public class AdminController {
             AdminDTO savedAdminDTO = adminService.add(admin);
             EntityModel<AdminDTO> savedAdminDTOEntity = new EntityModel<>(
                     savedAdminDTO,
-                    linkTo(methodOn(AdminController.class).findByEmail(savedAdminDTO.getEmail())).withSelfRel());
+                    linkTo(methodOn(AdminController.class).findById(savedAdminDTO.getId())).withSelfRel());
             return new ResponseEntity<>(savedAdminDTOEntity, HttpStatus.CREATED);
         } catch (Exception ex) {
             throw new GlobalDatabaseException("ADMIN", ex.getMessage());
@@ -126,17 +126,25 @@ public class AdminController {
     @DeleteMapping("/by-id/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EntityModel<AdminDTO>> deleteById(@PathVariable int id) {
-        AdminDTO deletedAdminDTO = adminService.deleteById(id);
-        EntityModel<AdminDTO> deletedAdminDTOEntity = new EntityModel<>(deletedAdminDTO);
-        return new ResponseEntity<>(deletedAdminDTOEntity, HttpStatus.OK);
+        try {
+            AdminDTO deletedAdminDTO = adminService.deleteById(id);
+            EntityModel<AdminDTO> deletedAdminDTOEntity = new EntityModel<>(deletedAdminDTO);
+            return new ResponseEntity<>(deletedAdminDTOEntity, HttpStatus.OK);
+        } catch (GlobalNotFoundException ex) {
+            throw new GlobalNotFoundException(ex.getEntityName());
+        }
     }
 
     @DeleteMapping("/by-email/{email}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EntityModel<AdminDTO>> deleteByEmail(@PathVariable String email) {
-        AdminDTO deletedAdminDTO = adminService.deleteByEmail(email);
-        EntityModel<AdminDTO> deletedAdminDTOEntity = new EntityModel<>(deletedAdminDTO);
-        return new ResponseEntity<>(deletedAdminDTOEntity, HttpStatus.OK);
+        try {
+            AdminDTO deletedAdminDTO = adminService.deleteByEmail(email);
+            EntityModel<AdminDTO> deletedAdminDTOEntity = new EntityModel<>(deletedAdminDTO);
+            return new ResponseEntity<>(deletedAdminDTOEntity, HttpStatus.OK);
+        } catch (GlobalNotFoundException ex) {
+            throw new GlobalNotFoundException(ex.getEntityName());
+        }
     }
 
     // OTHER METHODS: --------------------------------------------------------------------------------------------------

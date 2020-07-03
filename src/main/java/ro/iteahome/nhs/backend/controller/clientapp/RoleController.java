@@ -82,20 +82,42 @@ public class RoleController {
 
     @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<RoleDTO> update(@RequestBody @Valid Role role) {
-        return roleService.update(role);
+    public ResponseEntity<EntityModel<RoleDTO>> update(@RequestBody @Valid Role role) {
+        try {
+            RoleDTO updatedRoleDTO = roleService.update(role);
+            EntityModel<RoleDTO> updatedRoleDTOEntity = new EntityModel<>(
+                    updatedRoleDTO,
+                    linkTo(methodOn(RoleController.class).findById(role.getId())).withSelfRel());
+            return new ResponseEntity<>(updatedRoleDTOEntity, HttpStatus.OK);
+        } catch (GlobalNotFoundException ex) {
+            throw new GlobalNotFoundException(ex.getEntityName());
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("ROLE", ex.getMessage());
+        }
     }
 
     @DeleteMapping("/by-id/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<RoleDTO> deleteById(@PathVariable int id) {
-        return roleService.deleteById(id);
+    public ResponseEntity<EntityModel<RoleDTO>> deleteById(@PathVariable int id) {
+        try {
+            RoleDTO deletedRoleDTO = roleService.deleteById(id);
+            EntityModel<RoleDTO> deletedRoleDTOEntity = new EntityModel<>(deletedRoleDTO);
+            return new ResponseEntity<>(deletedRoleDTOEntity, HttpStatus.OK);
+        } catch (GlobalNotFoundException ex) {
+            throw new GlobalNotFoundException(ex.getEntityName());
+        }
     }
 
     @DeleteMapping("/by-name/{name}")
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<RoleDTO> deleteByName(@PathVariable String name) {
-        return roleService.deleteByName(name);
+    public ResponseEntity<EntityModel<RoleDTO>> deleteByName(@PathVariable String name) {
+        try {
+            RoleDTO deletedRoleDTO = roleService.deleteByName(name);
+            EntityModel<RoleDTO> deletedRoleDTOEntity = new EntityModel<>(deletedRoleDTO);
+            return new ResponseEntity<>(deletedRoleDTOEntity, HttpStatus.OK);
+        } catch (GlobalNotFoundException ex) {
+            throw new GlobalNotFoundException(ex.getEntityName());
+        }
     }
 
 // OTHER METHODS: ------------------------------------------------------------------------------------------------------
