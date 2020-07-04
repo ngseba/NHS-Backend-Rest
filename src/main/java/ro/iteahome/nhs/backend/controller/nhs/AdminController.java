@@ -42,7 +42,7 @@ public class AdminController {
                     linkTo(methodOn(AdminController.class).findById(savedAdminDTO.getId())).withSelfRel());
             return new ResponseEntity<>(savedAdminDTOEntity, HttpStatus.CREATED);
         } catch (Exception ex) {
-            throw new GlobalDatabaseException("ADMIN", ex.getMessage());
+            throw new GlobalDatabaseException("ADMIN", ex.getCause().getCause().getMessage());
         }
     }
 
@@ -57,6 +57,8 @@ public class AdminController {
             return new ResponseEntity<>(adminDTOEntity, HttpStatus.FOUND);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("ADMIN", ex.getCause().getCause().getMessage());
         }
     }
 
@@ -71,6 +73,8 @@ public class AdminController {
             return new ResponseEntity<>(adminDTOEntity, HttpStatus.FOUND);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("ADMIN", ex.getCause().getCause().getMessage());
         }
     }
 
@@ -85,6 +89,8 @@ public class AdminController {
             return new ResponseEntity<>(adminEntity, HttpStatus.FOUND);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("ADMIN", ex.getCause().getCause().getMessage());
         }
     }
 
@@ -99,22 +105,24 @@ public class AdminController {
             return new ResponseEntity<>(adminEntity, HttpStatus.FOUND);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("ADMIN", ex.getCause().getCause().getMessage());
         }
     }
 
     @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<EntityModel<AdminDTO>> update(@RequestBody Admin admin) {
+    public ResponseEntity<EntityModel<AdminDTO>> update(@RequestBody @Valid Admin admin) {
         try {
             AdminDTO updatedAdminDTO = adminService.update(admin);
             EntityModel<AdminDTO> updatedAdminDTOEntity = new EntityModel<>(
                     updatedAdminDTO,
                     linkTo(methodOn(AdminController.class).findById(admin.getId())).withSelfRel());
-            return new ResponseEntity<>(updatedAdminDTOEntity, HttpStatus.OK);
+            return new ResponseEntity<>(updatedAdminDTOEntity, HttpStatus.CREATED);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
         } catch (Exception ex) {
-            throw new GlobalDatabaseException("ADMIN", ex.getMessage());
+            throw new GlobalDatabaseException("ADMIN", ex.getCause().getCause().getMessage());
         }
     }
 
@@ -127,6 +135,8 @@ public class AdminController {
             return new ResponseEntity<>(deletedAdminDTOEntity, HttpStatus.OK);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("ADMIN", ex.getCause().getCause().getMessage());
         }
     }
 
@@ -139,6 +149,8 @@ public class AdminController {
             return new ResponseEntity<>(deletedAdminDTOEntity, HttpStatus.OK);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("ADMIN", ex.getCause().getCause().getMessage());
         }
     }
 }
