@@ -8,7 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
+import ro.iteahome.nhs.backend.exception.business.GlobalDatabaseException;
+import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
 import ro.iteahome.nhs.backend.model.clientapp.dto.RoleDTO;
 import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 import ro.iteahome.nhs.backend.repository.clientapp.RoleRepository;
@@ -18,6 +19,10 @@ import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 
 @RestController
 @RequestMapping("/roles")
@@ -35,42 +40,84 @@ public class RoleController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<RoleDTO> add(@RequestBody @Valid Role role) {
-        if (!roleService.existsByName(role.getName())) {
-            return roleService.add(role);
-        } else {
-            throw new GlobalAlreadyExistsException("ROLE");
+    public ResponseEntity<EntityModel<RoleDTO>> add(@RequestBody @Valid Role role) {
+        try {
+            RoleDTO savedRoleDTO = roleService.add(role);
+            EntityModel<RoleDTO> savedRoleDTOEntity = new EntityModel<>(
+                    savedRoleDTO,
+                    linkTo(methodOn(RoleController.class).findByName(savedRoleDTO.getName())).withSelfRel());
+            return new ResponseEntity<>(savedRoleDTOEntity, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("ROLE", ex.getMessage());
         }
     }
 
     @GetMapping("/by-id/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<RoleDTO> findById(@PathVariable int id) {
-        return roleService.findById(id);
+    public ResponseEntity<EntityModel<RoleDTO>> findById(@PathVariable int id) {
+        try {
+            RoleDTO roleDTO = roleService.findById(id);
+            EntityModel<RoleDTO> roleDTOEntity = new EntityModel<>(
+                    roleDTO,
+                    linkTo(methodOn(RoleController.class).findById(id)).withSelfRel());
+            return new ResponseEntity<>(roleDTOEntity, HttpStatus.FOUND);
+        } catch (GlobalNotFoundException ex) {
+            throw new GlobalNotFoundException(ex.getEntityName());
+        }
     }
 
     @GetMapping("/by-name/{name}")
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<Role> findByName(@PathVariable String name) {
-        return roleService.findByName(name);
+    public ResponseEntity<EntityModel<RoleDTO>> findByName(@PathVariable String name) {
+        try {
+            RoleDTO roleDTO = roleService.findByName(name);
+            EntityModel<RoleDTO> roleDTOEntity = new EntityModel<>(
+                    roleDTO,
+                    linkTo(methodOn(RoleController.class).findByName(name)).withSelfRel());
+            return new ResponseEntity<>(roleDTOEntity, HttpStatus.FOUND);
+        } catch (GlobalNotFoundException ex) {
+            throw new GlobalNotFoundException(ex.getEntityName());
+        }
     }
 
     @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<RoleDTO> update(@RequestBody @Valid Role role) {
-        return roleService.update(role);
+    public ResponseEntity<EntityModel<RoleDTO>> update(@RequestBody @Valid Role role) {
+        try {
+            RoleDTO updatedRoleDTO = roleService.update(role);
+            EntityModel<RoleDTO> updatedRoleDTOEntity = new EntityModel<>(
+                    updatedRoleDTO,
+                    linkTo(methodOn(RoleController.class).findById(role.getId())).withSelfRel());
+            return new ResponseEntity<>(updatedRoleDTOEntity, HttpStatus.OK);
+        } catch (GlobalNotFoundException ex) {
+            throw new GlobalNotFoundException(ex.getEntityName());
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("ROLE", ex.getMessage());
+        }
     }
 
     @DeleteMapping("/by-id/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<RoleDTO> deleteById(@PathVariable int id) {
-        return roleService.deleteById(id);
+    public ResponseEntity<EntityModel<RoleDTO>> deleteById(@PathVariable int id) {
+        try {
+            RoleDTO deletedRoleDTO = roleService.deleteById(id);
+            EntityModel<RoleDTO> deletedRoleDTOEntity = new EntityModel<>(deletedRoleDTO);
+            return new ResponseEntity<>(deletedRoleDTOEntity, HttpStatus.OK);
+        } catch (GlobalNotFoundException ex) {
+            throw new GlobalNotFoundException(ex.getEntityName());
+        }
     }
 
     @DeleteMapping("/by-name/{name}")
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<RoleDTO> deleteByName(@PathVariable String name) {
-        return roleService.deleteByName(name);
+    public ResponseEntity<EntityModel<RoleDTO>> deleteByName(@PathVariable String name) {
+        try {
+            RoleDTO deletedRoleDTO = roleService.deleteByName(name);
+            EntityModel<RoleDTO> deletedRoleDTOEntity = new EntityModel<>(deletedRoleDTO);
+            return new ResponseEntity<>(deletedRoleDTOEntity, HttpStatus.OK);
+        } catch (GlobalNotFoundException ex) {
+            throw new GlobalNotFoundException(ex.getEntityName());
+        }
     }
 
 // OTHER METHODS: ------------------------------------------------------------------------------------------------------

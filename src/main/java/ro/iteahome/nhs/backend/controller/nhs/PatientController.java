@@ -2,10 +2,6 @@ package ro.iteahome.nhs.backend.controller.nhs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ro.iteahome.nhs.backend.model.nhs.dto.ConsultDTO;
 import ro.iteahome.nhs.backend.model.nhs.dto.PatientDTO;
@@ -14,9 +10,6 @@ import ro.iteahome.nhs.backend.service.nhs.ConsultService;
 import ro.iteahome.nhs.backend.service.nhs.PatientService;
 
 import javax.validation.Valid;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/patients")
@@ -60,23 +53,5 @@ public class PatientController {
     @DeleteMapping("/by-cnp/{cnp}")
     public EntityModel<PatientDTO> deleteByCnp(@PathVariable String cnp) {
         return patientService.deleteByCnp(cnp);
-    }
-
-    // OTHER METHODS: --------------------------------------------------------------------------------------------------
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new LinkedHashMap<>();
-        errors.put("errorCode", "PAC-00");
-        errors.put("errorMessage", "PATIENT FIELDS HAVE VALIDATION ERRORS.");
-        errors.putAll(ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .collect(Collectors.toMap(
-                        FieldError::getField,
-                        FieldError::getDefaultMessage)));
-        return new ResponseEntity<>(
-                errors,
-                HttpStatus.BAD_REQUEST);
     }
 }

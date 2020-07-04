@@ -2,22 +2,14 @@ package ro.iteahome.nhs.backend.controller.nhs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ro.iteahome.nhs.backend.model.nhs.dto.DoctorDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Doctor;
 import ro.iteahome.nhs.backend.model.nhs.reference.DoctorSpecialty;
 import ro.iteahome.nhs.backend.model.nhs.reference.DoctorTitle;
-import ro.iteahome.nhs.backend.model.nhs.reference.InstitutionType;
 import ro.iteahome.nhs.backend.service.nhs.DoctorService;
 
 import javax.validation.Valid;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
@@ -60,7 +52,7 @@ public class DoctorController {
 
     @GetMapping("/specialty")
     public String[] retrieveDoctorSpecialty() {
-          return Stream.of(DoctorSpecialty.values())
+        return Stream.of(DoctorSpecialty.values())
                 .map(Enum::name)
                 .toArray(String[]::new);
     }
@@ -73,23 +65,5 @@ public class DoctorController {
     @DeleteMapping("/by-cnp/{cnp}")
     public EntityModel<DoctorDTO> deleteByCnp(@PathVariable String cnp) {
         return doctorService.deleteByCnp(cnp);
-    }
-
-    // OTHER METHODS: --------------------------------------------------------------------------------------------------
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new LinkedHashMap<>();
-        errors.put("errorCode", "DOC-00");
-        errors.put("errorMessage", "DOCTOR FIELDS HAVE VALIDATION ERRORS.");
-        errors.putAll(ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .collect(Collectors.toMap(
-                        FieldError::getField,
-                        FieldError::getDefaultMessage)));
-        return new ResponseEntity<>(
-                errors,
-                HttpStatus.BAD_REQUEST);
     }
 }
