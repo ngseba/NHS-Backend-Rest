@@ -8,6 +8,7 @@ import ro.iteahome.nhs.backend.model.clientapp.dto.RoleDTO;
 import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 import ro.iteahome.nhs.backend.repository.clientapp.RoleRepository;
 
+import javax.persistence.PersistenceException;
 import java.util.Optional;
 
 @Service
@@ -27,24 +28,32 @@ public class RoleService {
         try {
             Role savedRole = roleRepository.saveAndFlush(role);
             return modelMapper.map(savedRole, RoleDTO.class);
-        } catch (Exception ex) {
-            throw new Exception(ex.getCause().getCause().getMessage());
+        } catch (PersistenceException ex) {
+            throw new Exception(ex.getMessage());
         }
     }
 
-    public RoleDTO findById(int id) {
+    public RoleDTO findById(int id) throws Exception {
         Optional<Role> optionalRole = roleRepository.findById(id);
         if (optionalRole.isPresent()) {
-            return modelMapper.map(optionalRole.get(), RoleDTO.class);
+            try {
+                return modelMapper.map(optionalRole.get(), RoleDTO.class);
+            } catch (PersistenceException ex) {
+                throw new Exception(ex.getMessage());
+            }
         } else {
             throw new GlobalNotFoundException("ROLE");
         }
     }
 
-    public RoleDTO findByName(String name) {
+    public RoleDTO findByName(String name) throws Exception {
         Optional<Role> optionalRole = roleRepository.findByName(name);
         if (optionalRole.isPresent()) {
-            return modelMapper.map(optionalRole.get(), RoleDTO.class);
+            try {
+                return modelMapper.map(optionalRole.get(), RoleDTO.class);
+            } catch (PersistenceException ex) {
+                throw new Exception(ex.getMessage());
+            }
         } else {
             throw new GlobalNotFoundException("ROLE");
         }
@@ -53,36 +62,41 @@ public class RoleService {
     public RoleDTO update(Role role) throws Exception {
         if (roleRepository.existsById(role.getId())) {
             try {
-                roleRepository.saveAndFlush(role);
-                Role savedRole = roleRepository.getById(role.getId());
+                Role savedRole = roleRepository.saveAndFlush(role);
                 return modelMapper.map(savedRole, RoleDTO.class);
-            } catch (Exception ex) {
-                throw new Exception(ex.getCause().getCause().getMessage());
+            } catch (PersistenceException ex) {
+                throw new Exception(ex.getMessage());
             }
         } else {
             throw new GlobalNotFoundException("ROLE");
         }
     }
 
-    public RoleDTO deleteById(int id) {
+    public RoleDTO deleteById(int id) throws Exception {
         Optional<Role> optionalRole = roleRepository.findById(id);
         if (optionalRole.isPresent()) {
-            Role role = optionalRole.get();
-            RoleDTO roleDTO = modelMapper.map(role, RoleDTO.class);
-            roleRepository.delete(role);
-            return roleDTO;
+            try {
+                RoleDTO targetRoleDTO = modelMapper.map(optionalRole.get(), RoleDTO.class);
+                roleRepository.deleteById(id);
+                return targetRoleDTO;
+            } catch (PersistenceException ex) {
+                throw new Exception(ex.getMessage());
+            }
         } else {
             throw new GlobalNotFoundException("ROLE");
         }
     }
 
-    public RoleDTO deleteByName(String name) {
+    public RoleDTO deleteByName(String name) throws Exception {
         Optional<Role> optionalRole = roleRepository.findByName(name);
         if (optionalRole.isPresent()) {
-            Role role = optionalRole.get();
-            RoleDTO roleDTO = modelMapper.map(role, RoleDTO.class);
-            roleRepository.delete(role);
-            return roleDTO;
+            try {
+                RoleDTO targetRoleDTO = modelMapper.map(optionalRole.get(), RoleDTO.class);
+                roleRepository.deleteByName(name);
+                return targetRoleDTO;
+            } catch (PersistenceException ex) {
+                throw new Exception(ex.getMessage());
+            }
         } else {
             throw new GlobalNotFoundException("ROLE");
         }

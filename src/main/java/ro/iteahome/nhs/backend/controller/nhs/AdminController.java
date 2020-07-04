@@ -54,7 +54,7 @@ public class AdminController {
             EntityModel<AdminDTO> adminDTOEntity = new EntityModel<>(
                     adminDTO,
                     linkTo(methodOn(AdminController.class).findById(id)).withSelfRel());
-            return new ResponseEntity<>(adminDTOEntity, HttpStatus.FOUND);
+            return new ResponseEntity<>(adminDTOEntity, HttpStatus.OK);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
         } catch (Exception ex) {
@@ -70,7 +70,7 @@ public class AdminController {
             EntityModel<AdminDTO> adminDTOEntity = new EntityModel<>(
                     adminDTO,
                     linkTo(methodOn(AdminController.class).findByEmail(email)).withSelfRel());
-            return new ResponseEntity<>(adminDTOEntity, HttpStatus.FOUND);
+            return new ResponseEntity<>(adminDTOEntity, HttpStatus.OK);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
         } catch (Exception ex) {
@@ -86,7 +86,7 @@ public class AdminController {
             EntityModel<Admin> adminEntity = new EntityModel<>(
                     admin,
                     linkTo(methodOn(AdminController.class).findSensitiveById(id)).withSelfRel());
-            return new ResponseEntity<>(adminEntity, HttpStatus.FOUND);
+            return new ResponseEntity<>(adminEntity, HttpStatus.OK);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
         } catch (Exception ex) {
@@ -102,7 +102,7 @@ public class AdminController {
             EntityModel<Admin> adminEntity = new EntityModel<>(
                     admin,
                     linkTo(methodOn(AdminController.class).findSensitiveByEmail(email)).withSelfRel());
-            return new ResponseEntity<>(adminEntity, HttpStatus.FOUND);
+            return new ResponseEntity<>(adminEntity, HttpStatus.OK);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
         } catch (Exception ex) {

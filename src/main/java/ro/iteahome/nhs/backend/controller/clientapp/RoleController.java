@@ -5,8 +5,6 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ro.iteahome.nhs.backend.exception.business.GlobalDatabaseException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
@@ -16,9 +14,6 @@ import ro.iteahome.nhs.backend.repository.clientapp.RoleRepository;
 import ro.iteahome.nhs.backend.service.clientapp.RoleService;
 
 import javax.validation.Valid;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -45,10 +40,10 @@ public class RoleController {
             RoleDTO savedRoleDTO = roleService.add(role);
             EntityModel<RoleDTO> savedRoleDTOEntity = new EntityModel<>(
                     savedRoleDTO,
-                    linkTo(methodOn(RoleController.class).findByName(savedRoleDTO.getName())).withSelfRel());
+                    linkTo(methodOn(RoleController.class).findById(savedRoleDTO.getId())).withSelfRel());
             return new ResponseEntity<>(savedRoleDTOEntity, HttpStatus.CREATED);
         } catch (Exception ex) {
-            throw new GlobalDatabaseException("ROLE", ex.getMessage());
+            throw new GlobalDatabaseException("ROLE", ex.getCause().getCause().getMessage());
         }
     }
 
@@ -60,9 +55,11 @@ public class RoleController {
             EntityModel<RoleDTO> roleDTOEntity = new EntityModel<>(
                     roleDTO,
                     linkTo(methodOn(RoleController.class).findById(id)).withSelfRel());
-            return new ResponseEntity<>(roleDTOEntity, HttpStatus.FOUND);
+            return new ResponseEntity<>(roleDTOEntity, HttpStatus.OK);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("ROLE", ex.getCause().getCause().getMessage());
         }
     }
 
@@ -74,9 +71,11 @@ public class RoleController {
             EntityModel<RoleDTO> roleDTOEntity = new EntityModel<>(
                     roleDTO,
                     linkTo(methodOn(RoleController.class).findByName(name)).withSelfRel());
-            return new ResponseEntity<>(roleDTOEntity, HttpStatus.FOUND);
+            return new ResponseEntity<>(roleDTOEntity, HttpStatus.OK);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("ROLE", ex.getCause().getCause().getMessage());
         }
     }
 
@@ -88,11 +87,11 @@ public class RoleController {
             EntityModel<RoleDTO> updatedRoleDTOEntity = new EntityModel<>(
                     updatedRoleDTO,
                     linkTo(methodOn(RoleController.class).findById(role.getId())).withSelfRel());
-            return new ResponseEntity<>(updatedRoleDTOEntity, HttpStatus.OK);
+            return new ResponseEntity<>(updatedRoleDTOEntity, HttpStatus.CREATED);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
         } catch (Exception ex) {
-            throw new GlobalDatabaseException("ROLE", ex.getMessage());
+            throw new GlobalDatabaseException("ROLE", ex.getCause().getCause().getMessage());
         }
     }
 
@@ -105,6 +104,8 @@ public class RoleController {
             return new ResponseEntity<>(deletedRoleDTOEntity, HttpStatus.OK);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("ROLE", ex.getCause().getCause().getMessage());
         }
     }
 
@@ -117,24 +118,8 @@ public class RoleController {
             return new ResponseEntity<>(deletedRoleDTOEntity, HttpStatus.OK);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("ROLE", ex.getCause().getCause().getMessage());
         }
-    }
-
-// OTHER METHODS: ------------------------------------------------------------------------------------------------------
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new LinkedHashMap<>();
-        errors.put("errorCode", "ROL-00");
-        errors.put("errorMessage", "ROLE APP FIELDS HAVE VALIDATION ERRORS.");
-        errors.putAll(ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .collect(Collectors.toMap(
-                        FieldError::getField,
-                        FieldError::getDefaultMessage)));
-        return new ResponseEntity<>(
-                errors,
-                HttpStatus.BAD_REQUEST);
     }
 }
