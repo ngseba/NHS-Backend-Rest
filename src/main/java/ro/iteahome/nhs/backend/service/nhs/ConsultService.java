@@ -16,8 +16,10 @@ import ro.iteahome.nhs.backend.repository.nhs.TreatmentRepository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -62,18 +64,37 @@ public class ConsultService {
                 linkTo(methodOn(PatientController.class).findConsult(consultDTO.getPatient_cnp())).withSelfRel());
     }
 
-    public EntityModel<ConsultDTO> findConsult(String patientCnp) {
-        Patient patient = new Patient();
-        Consult consult = new Consult();
-        Treatment treatment = new Treatment();
-        Diagnostic diagnostic = new Diagnostic();
-        ConsultDTO consultDTO = new ConsultDTO();
+    public List<ConsultDTO> findConsult(String patientCnp) {
+        Patient patient;
+        List<ConsultDTO> consultDTO = new ArrayList<>();
 
         patient = patientRepository.findByCnp(patientCnp).get();
-        Optional<Consult> optionalConsult = consultRepository.getByPatient(patient);
-        if (optionalConsult.isPresent()) {
+
+        List<Consult> optionalConsult = consultRepository.findByPatient(patient);
+
+        if (!optionalConsult.isEmpty()) {
+            return optionalConsult.stream()
+                .map(consultDTOs ->getConsultDTOs(optionalConsult))
+                    .collect(Collectors.toList())
+                    .get(0);
+        } else {
+            throw new GlobalNotFoundException("Consult DTO");
+        }
+    }
+
+    private List<ConsultDTO> getConsultDTOs (List<Consult> consults) {
+//        Patient patient = new Patient();
+        Treatment treatment = new Treatment();
+        Diagnostic diagnostic = new Diagnostic();
+
+        List<ConsultDTO> consultDTOs = new ArrayList<>();
+        ConsultDTO consultDTO = new ConsultDTO();
+
+        for (Consult consult : consults
+             ) {
             treatment = treatmentRepository.getByConsult(consult);
             diagnostic = diagnosticRepository.getByConsult(consult);
+
 
             consultDTO.setDate(consult.getDate());
             consultDTO.setDiagnostic_desc(diagnostic.getDescription());
@@ -84,15 +105,10 @@ public class ConsultService {
             consultDTO.setPatient_cnp(consult.getPatient().getCnp());
             consultDTO.setTreatment_desc(treatment.getDescription());
             consultDTO.setTreatment_schedule(treatment.getSchedule());
-
-            return new EntityModel<>(
-                    consultDTO,
-                    linkTo(methodOn(PatientController.class).findConsult(consultDTO.getPatient_cnp())).withSelfRel());
-        } else {
-            throw new GlobalNotFoundException("Consult DTO");
+            consultDTOs.add(consultDTO);
         }
+        return consultDTOs;
     }
-
 
     private Consult extractConsult(ConsultDTO consultDTO) {
         Consult consult = new Consult();
