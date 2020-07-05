@@ -9,9 +9,12 @@ import ro.iteahome.nhs.backend.exception.business.GlobalAlreadyExistsException;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
 import ro.iteahome.nhs.backend.model.nhs.dto.DoctorDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Doctor;
+import ro.iteahome.nhs.backend.model.nhs.entity.Institution;
 import ro.iteahome.nhs.backend.repository.nhs.DoctorRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -94,6 +97,14 @@ public class DoctorService {
         } else {
             throw new GlobalNotFoundException("DOCTOR");
         }
+    }
+
+    public String institutionsForDoctor (String cnp){
+        Doctor doctor = doctorRepository.getByCnp(cnp);
+
+        return doctor.getInstitutions().stream()
+                .map(Institution::getCui)
+                .collect(Collectors.joining(","));
     }
 
 // OTHER METHODS: -----------------------------------------------------------------------------------------------------
