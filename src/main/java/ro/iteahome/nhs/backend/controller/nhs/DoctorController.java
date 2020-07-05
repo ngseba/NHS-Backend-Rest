@@ -57,6 +57,11 @@ public class DoctorController {
                 .toArray(String[]::new);
     }
 
+    @GetMapping("/institution_cui/{cnp}")
+        public String retrieveDoctorInstitutions(@PathVariable String cnp) {
+        return doctorService.institutionsForDoctor(cnp);
+        }
+
     @PutMapping
     public EntityModel<DoctorDTO> update(@RequestBody @Valid Doctor doctor) {
         return doctorService.update(doctor);
