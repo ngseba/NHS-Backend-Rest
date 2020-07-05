@@ -9,20 +9,7 @@ import java.util.Optional;
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Integer> {
 
-    Admin getById(int id);
-
-    Optional<Admin> findOneById (int id);
-
     Optional<Admin> findByEmail(String email);
 
-    Optional<Admin> findOneByEmail(String email);
-
-    Admin getByEmail(String email);
-
-    Optional<Admin> findByEmailAndPassword(String email, String password);
-
-    boolean existsByEmail(String email);
-
-    boolean existsByEmailAndPassword(String email, String password);
-
+    void deleteByEmail(String email);
 }

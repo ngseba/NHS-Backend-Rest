@@ -12,6 +12,7 @@ public interface DiagnosticRepository extends JpaRepository<Diagnostic, Integer>
     Optional<Diagnostic> findById(int id);
 
     Diagnostic getById(int id);
+
     Diagnostic getByConsult(Consult consult);
 
     void deleteById(int id);

@@ -13,15 +13,13 @@ import ro.iteahome.nhs.backend.repository.nhs.DiagnosticRepository;
 import ro.iteahome.nhs.backend.repository.nhs.PatientRepository;
 import ro.iteahome.nhs.backend.repository.nhs.TreatmentRepository;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.Optional;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
@@ -64,7 +62,7 @@ public class ConsultService {
                 linkTo(methodOn(PatientController.class).findConsult(consultDTO.getPatient_cnp())).withSelfRel());
     }
 
-    public EntityModel<ConsultDTO> findConsult(String patientCnp){
+    public EntityModel<ConsultDTO> findConsult(String patientCnp) {
         Patient patient = new Patient();
         Consult consult = new Consult();
         Treatment treatment = new Treatment();
