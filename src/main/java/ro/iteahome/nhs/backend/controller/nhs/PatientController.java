@@ -10,6 +10,9 @@ import ro.iteahome.nhs.backend.service.nhs.ConsultService;
 import ro.iteahome.nhs.backend.service.nhs.PatientService;
 
 import javax.validation.Valid;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/patients")
@@ -36,7 +39,7 @@ public class PatientController {
     }
 
     @GetMapping("/find-consult/{cnp}")
-    public EntityModel<ConsultDTO> findConsult(@PathVariable String cnp) {
+    public List<ConsultDTO> findConsult(@PathVariable String cnp) {
         return consultService.findConsult(cnp);
     }
 
