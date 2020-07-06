@@ -56,7 +56,7 @@ public class ConsultService {
     @Autowired
     private InstitutionRepository institutionRepository;
 
-    public Boolean add(ConsultDTO consultDTO) {
+    public ConsultDTO add(ConsultDTO consultDTO) {
         new Consult();
         Consult consult;
         Diagnostic diagnostic;
@@ -68,7 +68,7 @@ public class ConsultService {
 
         diagnosticRepository.save(diagnostic);
         treatmentRepository.save(treatment);
-        return true;
+        return consultDTO;
     }
 
 
@@ -120,7 +120,7 @@ public class ConsultService {
     public List<ConsultDTO> findConsult(String patientCnp) {
         Patient patient;
 
-        patient = patientRepository.findByCnp(patientCnp).get();
+        patient = patientRepository.getByCnp(patientCnp);
 
         List<Consult> optionalConsult = consultRepository.findByPatient(patient);
 

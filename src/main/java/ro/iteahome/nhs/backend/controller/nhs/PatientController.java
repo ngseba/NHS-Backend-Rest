@@ -5,6 +5,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 import ro.iteahome.nhs.backend.model.nhs.dto.ConsultDTO;
 import ro.iteahome.nhs.backend.model.nhs.dto.PatientDTO;
+import ro.iteahome.nhs.backend.model.nhs.entity.Consult;
 import ro.iteahome.nhs.backend.model.nhs.entity.Patient;
 import ro.iteahome.nhs.backend.service.nhs.ConsultService;
 import ro.iteahome.nhs.backend.service.nhs.PatientService;
@@ -34,7 +35,7 @@ public class PatientController {
     }
 
     @PostMapping("/add-consult")
-    public Boolean add(@RequestBody ConsultDTO consultDTO) {
+    public ConsultDTO add(@RequestBody ConsultDTO consultDTO) {
         return consultService.add(consultDTO);
     }
 
