@@ -24,6 +24,8 @@ public class DoctorDTO {
 
     private Set<Institution> institutions;
 
+    private String institutionCUIs;
+
     public DoctorDTO() {
     }
 
@@ -98,5 +100,13 @@ public class DoctorDTO {
 
     public void setInstitutions(Set<Institution> institutions) {
         this.institutions = institutions;
+    }
+
+    public String getInstitutionCUIs() {
+        return institutionCUIs;
+    }
+
+    public void setInstitutionCUIs(String institutionCUIs) {
+        this.institutionCUIs = institutionCUIs;
     }
 }
