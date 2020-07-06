@@ -10,7 +10,10 @@ import ro.iteahome.nhs.backend.model.nhs.entity.Admin;
 import ro.iteahome.nhs.backend.repository.nhs.AdminRepository;
 
 import javax.persistence.PersistenceException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AdminService {
@@ -32,6 +35,15 @@ public class AdminService {
         try {
             Admin savedAdmin = adminRepository.saveAndFlush(admin);
             return modelMapper.map(savedAdmin, AdminDTO.class);
+        } catch (PersistenceException ex) {
+            throw new Exception(ex.getMessage());
+        }
+    }
+
+    public List<AdminDTO> findAll() throws Exception {
+        try {
+            List<Admin> adminList = new ArrayList<>(adminRepository.findAll());
+            return adminList.stream().map(admin -> modelMapper.map(admin, AdminDTO.class)).collect(Collectors.toList());
         } catch (PersistenceException ex) {
             throw new Exception(ex.getMessage());
         }

@@ -6,7 +6,6 @@ import ro.iteahome.nhs.backend.model.nhs.entity.Consult;
 import ro.iteahome.nhs.backend.model.nhs.entity.Patient;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Repository

@@ -12,7 +12,6 @@ import ro.iteahome.nhs.backend.model.nhs.entity.Doctor;
 import ro.iteahome.nhs.backend.model.nhs.entity.Institution;
 import ro.iteahome.nhs.backend.repository.nhs.DoctorRepository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -99,7 +98,7 @@ public class DoctorService {
         }
     }
 
-    public String institutionsForDoctor (String cnp){
+    public String institutionsForDoctor(String cnp) {
         Doctor doctor = doctorRepository.getByCnp(cnp);
 
         return doctor.getInstitutions().stream()

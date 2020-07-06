@@ -14,7 +14,6 @@ import ro.iteahome.nhs.backend.repository.clientapp.RoleRepository;
 import ro.iteahome.nhs.backend.service.clientapp.RoleService;
 
 import javax.validation.Valid;
-
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;

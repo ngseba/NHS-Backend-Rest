@@ -35,7 +35,7 @@ public class RoleService {
     }
 
     public List<Role> findAll() throws Exception {
-        try{
+        try {
             return roleRepository.findAll();
         } catch (PersistenceException ex) {
             throw new Exception(ex.getMessage());
@@ -73,7 +73,7 @@ public class RoleService {
         if (optionalRole.isPresent()) {
             try {
                 RoleDTO targetRoleDTO = modelMapper.map(optionalRole.get(), RoleDTO.class);
-                roleRepository.deleteByName(name);
+                roleRepository.deleteById(targetRoleDTO.getId());
                 return targetRoleDTO;
             } catch (PersistenceException ex) {
                 throw new Exception(ex.getMessage());
