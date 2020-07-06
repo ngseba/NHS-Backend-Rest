@@ -34,7 +34,7 @@ public class PatientController {
     }
 
     @PostMapping("/add-consult")
-    public EntityModel<ConsultDTO> add(@RequestBody ConsultDTO consultDTO) {
+    public Boolean add(@RequestBody ConsultDTO consultDTO) {
         return consultService.add(consultDTO);
     }
 
