@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppCredentials;
 import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppDTO;
 import ro.iteahome.nhs.backend.model.clientapp.entity.ClientApp;
 import ro.iteahome.nhs.backend.service.clientapp.ClientAppService;
@@ -36,16 +37,11 @@ public class ClientAppController {
 
 // C.R.U.D. METHODS: ---------------------------------------------------------------------------------------------------
 
-//    @PostMapping("/with-role-id/{roleId}")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public EntityModel<ClientAppDTO> addWithRoleId(@RequestBody @Valid ClientAppCredentials clientAppCredentials, @PathVariable int roleId) {
-//        EntityModel<RoleDTO> roleDTO = roleService.findById(roleId);
-//        if (roleDTO.getContent() != null) {
-//            return clientAppService.add(clientAppCredentials, roleDTO.getContent());
-//        } else {
-//            throw new GlobalNotFoundException("ROLE");
-//        }
-//    }
+    @PostMapping("/with-role-name/{roleName}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public EntityModel<ClientAppDTO> addWithRoleId(@RequestBody @Valid ClientAppCredentials clientAppCredentials, @PathVariable String roleName) throws Exception {
+        return clientAppService.findByName(roleName);
+    }
 
     @GetMapping("/by-id/{id}")
     @PreAuthorize("hasRole('ADMIN')")
