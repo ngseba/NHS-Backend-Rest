@@ -9,6 +9,7 @@ import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 import ro.iteahome.nhs.backend.repository.clientapp.RoleRepository;
 
 import javax.persistence.PersistenceException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,16 +34,11 @@ public class RoleService {
         }
     }
 
-    public RoleDTO findById(int id) throws Exception {
-        Optional<Role> optionalRole = roleRepository.findById(id);
-        if (optionalRole.isPresent()) {
-            try {
-                return modelMapper.map(optionalRole.get(), RoleDTO.class);
-            } catch (PersistenceException ex) {
-                throw new Exception(ex.getMessage());
-            }
-        } else {
-            throw new GlobalNotFoundException("ROLE");
+    public List<Role> findAll() throws Exception {
+        try {
+            return roleRepository.findAll();
+        } catch (PersistenceException ex) {
+            throw new Exception(ex.getMessage());
         }
     }
 
@@ -72,27 +68,12 @@ public class RoleService {
         }
     }
 
-    public RoleDTO deleteById(int id) throws Exception {
-        Optional<Role> optionalRole = roleRepository.findById(id);
-        if (optionalRole.isPresent()) {
-            try {
-                RoleDTO targetRoleDTO = modelMapper.map(optionalRole.get(), RoleDTO.class);
-                roleRepository.deleteById(id);
-                return targetRoleDTO;
-            } catch (PersistenceException ex) {
-                throw new Exception(ex.getMessage());
-            }
-        } else {
-            throw new GlobalNotFoundException("ROLE");
-        }
-    }
-
     public RoleDTO deleteByName(String name) throws Exception {
         Optional<Role> optionalRole = roleRepository.findByName(name);
         if (optionalRole.isPresent()) {
             try {
                 RoleDTO targetRoleDTO = modelMapper.map(optionalRole.get(), RoleDTO.class);
-                roleRepository.deleteByName(name);
+                roleRepository.deleteById(targetRoleDTO.getId());
                 return targetRoleDTO;
             } catch (PersistenceException ex) {
                 throw new Exception(ex.getMessage());

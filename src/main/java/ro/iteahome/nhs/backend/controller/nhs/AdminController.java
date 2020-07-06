@@ -14,6 +14,8 @@ import ro.iteahome.nhs.backend.service.clientapp.RoleService;
 import ro.iteahome.nhs.backend.service.nhs.AdminService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -41,6 +43,17 @@ public class AdminController {
                     savedAdminDTO,
                     linkTo(methodOn(AdminController.class).findByEmail(savedAdminDTO.getEmail())).withSelfRel());
             return new ResponseEntity<>(savedAdminDTOEntity, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("ADMIN", ex.getCause().getCause().getMessage());
+        }
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<AdminDTO>> findAll() {
+        try {
+            List<AdminDTO> adminDTOList = new ArrayList<>(adminService.findAll());
+            return new ResponseEntity<>(adminDTOList, HttpStatus.OK);
         } catch (Exception ex) {
             throw new GlobalDatabaseException("ADMIN", ex.getCause().getCause().getMessage());
         }

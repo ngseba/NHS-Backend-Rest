@@ -8,6 +8,7 @@ import ro.iteahome.nhs.backend.model.nhs.dto.PatientDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Patient;
 import ro.iteahome.nhs.backend.service.nhs.ConsultService;
 import ro.iteahome.nhs.backend.service.nhs.PatientService;
+import ro.iteahome.nhs.backend.utils.ConsultList;
 
 import javax.validation.Valid;
 
@@ -31,12 +32,12 @@ public class PatientController {
     }
 
     @PostMapping("/add-consult")
-    public EntityModel<ConsultDTO> add(@RequestBody ConsultDTO consultDTO) {
+    public ConsultDTO add(@RequestBody ConsultDTO consultDTO) {
         return consultService.add(consultDTO);
     }
 
     @GetMapping("/find-consult/{cnp}")
-    public EntityModel<ConsultDTO> findConsult(@PathVariable String cnp) {
+    public ConsultList findConsult(@PathVariable String cnp) {
         return consultService.findConsult(cnp);
     }
 
