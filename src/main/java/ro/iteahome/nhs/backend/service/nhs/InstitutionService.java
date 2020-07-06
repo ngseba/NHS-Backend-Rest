@@ -9,6 +9,8 @@ import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
 import ro.iteahome.nhs.backend.model.nhs.entity.Institution;
 import ro.iteahome.nhs.backend.repository.nhs.InstitutionRepository;
 
+import javax.persistence.PersistenceException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -33,6 +35,14 @@ public class InstitutionService {
                     linkTo(methodOn(InstitutionController.class).findByCui(savedInstitution.getCui())).withSelfRel());
         } else {
             throw new GlobalAlreadyExistsException("MEDICAL INSTITUTION");
+        }
+    }
+
+    public ArrayList<Institution> findAll() throws Exception {
+        try {
+            return institutionRepository.findAll();
+        } catch (PersistenceException ex) {
+            throw new Exception(ex.getMessage());
         }
     }
 
