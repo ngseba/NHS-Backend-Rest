@@ -15,6 +15,8 @@ import ro.iteahome.nhs.backend.service.clientapp.RoleService;
 
 import javax.validation.Valid;
 
+import java.util.List;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -40,24 +42,22 @@ public class RoleController {
             RoleDTO savedRoleDTO = roleService.add(role);
             EntityModel<RoleDTO> savedRoleDTOEntity = new EntityModel<>(
                     savedRoleDTO,
-                    linkTo(methodOn(RoleController.class).findById(savedRoleDTO.getId())).withSelfRel());
+                    linkTo(methodOn(RoleController.class).findByName(savedRoleDTO.getName())).withSelfRel());
             return new ResponseEntity<>(savedRoleDTOEntity, HttpStatus.CREATED);
         } catch (Exception ex) {
             throw new GlobalDatabaseException("ROLE", ex.getCause().getCause().getMessage());
         }
     }
 
-    @GetMapping("/by-id/{id}")
+    @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<EntityModel<RoleDTO>> findById(@PathVariable int id) {
+    public ResponseEntity<EntityModel<List<Role>>> findAll() {
         try {
-            RoleDTO roleDTO = roleService.findById(id);
-            EntityModel<RoleDTO> roleDTOEntity = new EntityModel<>(
-                    roleDTO,
-                    linkTo(methodOn(RoleController.class).findById(id)).withSelfRel());
-            return new ResponseEntity<>(roleDTOEntity, HttpStatus.OK);
-        } catch (GlobalNotFoundException ex) {
-            throw new GlobalNotFoundException(ex.getEntityName());
+            List<Role> roles = roleService.findAll();
+            EntityModel<List<Role>> rolesEntity = new EntityModel<>(
+                    roles,
+                    linkTo(methodOn(RoleController.class).findAll()).withSelfRel());
+            return new ResponseEntity<>(rolesEntity, HttpStatus.OK);
         } catch (Exception ex) {
             throw new GlobalDatabaseException("ROLE", ex.getCause().getCause().getMessage());
         }
@@ -86,22 +86,8 @@ public class RoleController {
             RoleDTO updatedRoleDTO = roleService.update(role);
             EntityModel<RoleDTO> updatedRoleDTOEntity = new EntityModel<>(
                     updatedRoleDTO,
-                    linkTo(methodOn(RoleController.class).findById(role.getId())).withSelfRel());
+                    linkTo(methodOn(RoleController.class).findByName(role.getName())).withSelfRel());
             return new ResponseEntity<>(updatedRoleDTOEntity, HttpStatus.CREATED);
-        } catch (GlobalNotFoundException ex) {
-            throw new GlobalNotFoundException(ex.getEntityName());
-        } catch (Exception ex) {
-            throw new GlobalDatabaseException("ROLE", ex.getCause().getCause().getMessage());
-        }
-    }
-
-    @DeleteMapping("/by-id/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<EntityModel<RoleDTO>> deleteById(@PathVariable int id) {
-        try {
-            RoleDTO deletedRoleDTO = roleService.deleteById(id);
-            EntityModel<RoleDTO> deletedRoleDTOEntity = new EntityModel<>(deletedRoleDTO);
-            return new ResponseEntity<>(deletedRoleDTOEntity, HttpStatus.OK);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
         } catch (Exception ex) {
