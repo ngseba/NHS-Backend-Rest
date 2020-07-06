@@ -104,7 +104,6 @@ public class ConsultService {
         treatment.setMinDays(consultDTO.getMin_days());
         treatment.setSchedule(consultDTO.getTreatment_schedule());
         treatment.setConsult(consult);
-//        treatmentRepository.save(treatment);
         return treatment;
     }
 
@@ -112,7 +111,6 @@ public class ConsultService {
         Diagnostic diagnostic = new Diagnostic();
         diagnostic.setConsult(consult);
         diagnostic.setDescription(consultDTO.getDiagnostic_desc());
-//        diagnosticRepository.save(diagnostic);
         return diagnostic;
     }
 
@@ -122,27 +120,27 @@ public class ConsultService {
 
         patient = patientRepository.getByCnp(patientCnp);
 
-        List<Consult> optionalConsult = consultRepository.findByPatient(patient);
+        List<Consult> consults = consultRepository.findByPatient(patient);
 
-        if (!optionalConsult.isEmpty()) {
-            return optionalConsult.stream()
-                    .map(consultDTOs ->getConsultDTOs(optionalConsult))
-                    .collect(Collectors.toList())
-                    .get(0);
+        List<ConsultDTO> consultDTOS = new ArrayList<>();
+
+        if (!consults.isEmpty()) {
+            for (Consult consult : consults) {
+                ConsultDTO consultDTO = getConsultDTOs(consult);
+                consultDTOS.add(consultDTO);
+            }
         } else {
             throw new GlobalNotFoundException("Consult DTO");
         }
+        return consultDTOS;
     }
 
-    private List<ConsultDTO> getConsultDTOs (List<Consult> consults) {
+    private ConsultDTO getConsultDTOs (Consult consult) {
         Treatment treatment = new Treatment();
         Diagnostic diagnostic = new Diagnostic();
 
-        List<ConsultDTO> consultDTOs = new ArrayList<>();
         ConsultDTO consultDTO = new ConsultDTO();
 
-        for (Consult consult : consults
-        ) {
             treatment = treatmentRepository.getByConsult(consult);
             diagnostic = diagnosticRepository.getByConsult(consult);
 
@@ -156,10 +154,8 @@ public class ConsultService {
             consultDTO.setPatient_cnp(consult.getPatient().getCnp());
             consultDTO.setTreatment_desc(treatment.getDescription());
             consultDTO.setTreatment_schedule(treatment.getSchedule());
-            consultDTOs.add(consultDTO);
-        }
-        return consultDTOs;
-    }
 
+        return consultDTO;
+    }
 
 }
