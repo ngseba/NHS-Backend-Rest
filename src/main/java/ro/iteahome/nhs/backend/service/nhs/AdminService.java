@@ -2,7 +2,6 @@ package ro.iteahome.nhs.backend.service.nhs;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
 import ro.iteahome.nhs.backend.model.nhs.dto.AdminDTO;
@@ -23,9 +22,6 @@ public class AdminService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
 // C.R.U.D. METHODS: ---------------------------------------------------------------------------------------------------
 
     public AdminDTO add(Admin admin) throws Exception {
@@ -37,37 +33,11 @@ public class AdminService {
         }
     }
 
-    public AdminDTO findById(int id) throws Exception {
-        Optional<Admin> optionalAdmin = adminRepository.findById(id);
-        if (optionalAdmin.isPresent()) {
-            try {
-                return modelMapper.map(optionalAdmin.get(), AdminDTO.class);
-            } catch (PersistenceException ex) {
-                throw new Exception(ex.getMessage());
-            }
-        } else {
-            throw new GlobalNotFoundException("ADMIN");
-        }
-    }
-
     public AdminDTO findByEmail(String email) throws Exception {
         Optional<Admin> optionalAdmin = adminRepository.findByEmail(email);
         if (optionalAdmin.isPresent()) {
             try {
                 return modelMapper.map(optionalAdmin.get(), AdminDTO.class);
-            } catch (PersistenceException ex) {
-                throw new Exception(ex.getMessage());
-            }
-        } else {
-            throw new GlobalNotFoundException("ADMIN");
-        }
-    }
-
-    public Admin findSensitiveById(int id) throws Exception {
-        Optional<Admin> optionalAdmin = adminRepository.findById(id);
-        if (optionalAdmin.isPresent()) {
-            try {
-                return optionalAdmin.get();
             } catch (PersistenceException ex) {
                 throw new Exception(ex.getMessage());
             }
@@ -102,28 +72,12 @@ public class AdminService {
         }
     }
 
-    public AdminDTO deleteById(int id) throws Exception {
-        Optional<Admin> optionalAdmin = adminRepository.findById(id);
-        if (optionalAdmin.isPresent()) {
-            try {
-                AdminDTO targetAdminDTO = modelMapper.map(optionalAdmin.get(), AdminDTO.class);
-                adminRepository.deleteById(id);
-                return targetAdminDTO;
-            } catch (PersistenceException ex) {
-                throw new Exception(ex.getMessage());
-            }
-        } else {
-            throw new GlobalNotFoundException("ADMIN");
-        }
-    }
-
     public AdminDTO deleteByEmail(String email) throws Exception {
         Optional<Admin> optionalAdmin = adminRepository.findByEmail(email);
         if (optionalAdmin.isPresent()) {
             try {
-                AdminDTO targetAdminDTO = modelMapper.map(optionalAdmin.get(), AdminDTO.class);
-                adminRepository.deleteByEmail(email);
-                return targetAdminDTO;
+                adminRepository.deleteById(optionalAdmin.get().getId());
+                return modelMapper.map(optionalAdmin.get(), AdminDTO.class);
             } catch (PersistenceException ex) {
                 throw new Exception(ex.getMessage());
             }
