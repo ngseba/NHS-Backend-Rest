@@ -5,15 +5,12 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 import ro.iteahome.nhs.backend.model.nhs.dto.ConsultDTO;
 import ro.iteahome.nhs.backend.model.nhs.dto.PatientDTO;
-import ro.iteahome.nhs.backend.model.nhs.entity.Consult;
 import ro.iteahome.nhs.backend.model.nhs.entity.Patient;
 import ro.iteahome.nhs.backend.service.nhs.ConsultService;
 import ro.iteahome.nhs.backend.service.nhs.PatientService;
+import ro.iteahome.nhs.backend.utils.ConsultList;
 
 import javax.validation.Valid;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/patients")
@@ -40,7 +37,7 @@ public class PatientController {
     }
 
     @GetMapping("/find-consult/{cnp}")
-    public List<ConsultDTO> findConsult(@PathVariable String cnp) {
+    public ConsultList findConsult(@PathVariable String cnp) {
         return consultService.findConsult(cnp);
     }
 

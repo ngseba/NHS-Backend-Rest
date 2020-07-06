@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import ro.iteahome.nhs.backend.model.nhs.entity.Consult;
 import ro.iteahome.nhs.backend.model.nhs.entity.Patient;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,5 +15,5 @@ public interface ConsultRepository extends JpaRepository<Consult, Integer> {
 
     Optional<Consult> getByPatient(Patient patient);
 
-    List<Consult> findByPatient(Patient patient);
+    ArrayList<Consult> findByPatient(Patient patient);
 }

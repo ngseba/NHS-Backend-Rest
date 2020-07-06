@@ -9,7 +9,9 @@ import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
 import ro.iteahome.nhs.backend.model.nhs.dto.ConsultDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.*;
 import ro.iteahome.nhs.backend.repository.nhs.*;
+import ro.iteahome.nhs.backend.utils.ConsultList;
 
+import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
@@ -68,6 +70,7 @@ public class ConsultService {
 
         diagnosticRepository.save(diagnostic);
         treatmentRepository.save(treatment);
+        consultDTO.setDate(consult.getDate());
         return consultDTO;
     }
 
@@ -115,24 +118,29 @@ public class ConsultService {
     }
 
 
-    public List<ConsultDTO> findConsult(String patientCnp) {
+    public ConsultList findConsult(String patientCnp) {
         Patient patient;
 
         patient = patientRepository.getByCnp(patientCnp);
 
-        List<Consult> consults = consultRepository.findByPatient(patient);
+        ArrayList<Consult> consults = consultRepository.findByPatient(patient);
 
-        List<ConsultDTO> consultDTOS = new ArrayList<>();
+        ArrayList<ConsultDTO> consultDTOS = new ArrayList<>();
 
         if (!consults.isEmpty()) {
             for (Consult consult : consults) {
-                ConsultDTO consultDTO = getConsultDTOs(consult);
-                consultDTOS.add(consultDTO);
+                    ConsultDTO consultDTO = getConsultDTOs(consult);
+                    consultDTOS.add(consultDTO);
+                    System.out.println(consultDTOS.toString());
             }
         } else {
             throw new GlobalNotFoundException("Consult DTO");
         }
-        return consultDTOS;
+        System.out.println("Step1");
+        ConsultList consultList = new ConsultList();
+        consultList.setConsultDTOList(consultDTOS);
+
+        return consultList;
     }
 
     private ConsultDTO getConsultDTOs (Consult consult) {
@@ -143,7 +151,6 @@ public class ConsultService {
 
             treatment = treatmentRepository.getByConsult(consult);
             diagnostic = diagnosticRepository.getByConsult(consult);
-
 
             consultDTO.setDate(consult.getDate());
             consultDTO.setDiagnostic_desc(diagnostic.getDescription());
