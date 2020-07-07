@@ -1,10 +1,11 @@
 package ro.iteahome.nhs.backend.model.clientapp.dto;
 
+import org.springframework.hateoas.RepresentationModel;
 import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 
 import java.util.Set;
 
-public class ClientAppDTO {
+public class ClientAppDTO extends RepresentationModel<ClientAppDTO> {
 
     private int id;
 

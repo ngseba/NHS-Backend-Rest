@@ -43,43 +43,42 @@ public class RoleService {
     }
 
     public RoleDTO findByName(String name) throws Exception {
-        Optional<Role> optionalRole = roleRepository.findByName(name);
-        if (optionalRole.isPresent()) {
-            try {
+        try {
+            Optional<Role> optionalRole = roleRepository.findByName(name);
+            if (optionalRole.isPresent()) {
                 return modelMapper.map(optionalRole.get(), RoleDTO.class);
-            } catch (PersistenceException ex) {
-                throw new Exception(ex.getMessage());
+            } else {
+                throw new GlobalNotFoundException("ROLE");
             }
-        } else {
-            throw new GlobalNotFoundException("ROLE");
+        } catch (PersistenceException ex) {
+            throw new Exception(ex.getMessage());
         }
     }
 
     public RoleDTO update(Role role) throws Exception {
-        if (roleRepository.existsById(role.getId())) {
-            try {
+        try {
+            if (roleRepository.existsById(role.getId())) {
                 Role savedRole = roleRepository.saveAndFlush(role);
                 return modelMapper.map(savedRole, RoleDTO.class);
-            } catch (PersistenceException ex) {
-                throw new Exception(ex.getMessage());
+            } else {
+                throw new GlobalNotFoundException("ROLE");
             }
-        } else {
-            throw new GlobalNotFoundException("ROLE");
+        } catch (PersistenceException ex) {
+            throw new Exception(ex.getMessage());
         }
     }
 
     public RoleDTO deleteByName(String name) throws Exception {
-        Optional<Role> optionalRole = roleRepository.findByName(name);
-        if (optionalRole.isPresent()) {
-            try {
-                RoleDTO targetRoleDTO = modelMapper.map(optionalRole.get(), RoleDTO.class);
-                roleRepository.deleteById(targetRoleDTO.getId());
-                return targetRoleDTO;
-            } catch (PersistenceException ex) {
-                throw new Exception(ex.getMessage());
+        try {
+            Optional<Role> optionalRole = roleRepository.findByName(name);
+            if (optionalRole.isPresent()) {
+                roleRepository.deleteById(optionalRole.get().getId());
+                return modelMapper.map(optionalRole.get(), RoleDTO.class);
+            } else {
+                throw new GlobalNotFoundException("ROLE");
             }
-        } else {
-            throw new GlobalNotFoundException("ROLE");
+        } catch (PersistenceException ex) {
+            throw new Exception(ex.getMessage());
         }
     }
 }

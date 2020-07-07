@@ -46,55 +46,55 @@ public class AdminService {
     }
 
     public AdminDTO findByEmail(String email) throws Exception {
-        Optional<Admin> optionalAdmin = adminRepository.findByEmail(email);
-        if (optionalAdmin.isPresent()) {
-            try {
+        try {
+            Optional<Admin> optionalAdmin = adminRepository.findByEmail(email);
+            if (optionalAdmin.isPresent()) {
                 return modelMapper.map(optionalAdmin.get(), AdminDTO.class);
-            } catch (PersistenceException ex) {
-                throw new Exception(ex.getMessage());
+            } else {
+                throw new GlobalNotFoundException("ADMIN");
             }
-        } else {
-            throw new GlobalNotFoundException("ADMIN");
+        } catch (PersistenceException ex) {
+            throw new Exception(ex.getMessage());
         }
     }
 
     public Admin findSensitiveByEmail(String email) throws Exception {
-        Optional<Admin> optionalAdmin = adminRepository.findByEmail(email);
-        if (optionalAdmin.isPresent()) {
-            try {
+        try {
+            Optional<Admin> optionalAdmin = adminRepository.findByEmail(email);
+            if (optionalAdmin.isPresent()) {
                 return optionalAdmin.get();
-            } catch (PersistenceException ex) {
-                throw new Exception(ex.getMessage());
+            } else {
+                throw new GlobalNotFoundException("ADMIN");
             }
-        } else {
-            throw new GlobalNotFoundException("ADMIN");
+        } catch (PersistenceException ex) {
+            throw new Exception(ex.getMessage());
         }
     }
 
     public AdminDTO update(Admin admin) throws Exception {
-        if (adminRepository.existsById(admin.getId())) {
-            try {
+        try {
+            if (adminRepository.existsById(admin.getId())) {
                 Admin savedAdmin = adminRepository.saveAndFlush(admin);
                 return modelMapper.map(savedAdmin, AdminDTO.class);
-            } catch (PersistenceException ex) {
-                throw new Exception(ex.getMessage());
+            } else {
+                throw new GlobalNotFoundException("ADMIN");
             }
-        } else {
-            throw new GlobalNotFoundException("ADMIN");
+        } catch (PersistenceException ex) {
+            throw new Exception(ex.getMessage());
         }
     }
 
     public AdminDTO deleteByEmail(String email) throws Exception {
-        Optional<Admin> optionalAdmin = adminRepository.findByEmail(email);
-        if (optionalAdmin.isPresent()) {
-            try {
+        try {
+            Optional<Admin> optionalAdmin = adminRepository.findByEmail(email);
+            if (optionalAdmin.isPresent()) {
                 adminRepository.deleteById(optionalAdmin.get().getId());
                 return modelMapper.map(optionalAdmin.get(), AdminDTO.class);
-            } catch (PersistenceException ex) {
-                throw new Exception(ex.getMessage());
+            } else {
+                throw new GlobalNotFoundException("ADMIN");
             }
-        } else {
-            throw new GlobalNotFoundException("ADMIN");
+        } catch (PersistenceException ex) {
+            throw new Exception(ex.getMessage());
         }
     }
 }

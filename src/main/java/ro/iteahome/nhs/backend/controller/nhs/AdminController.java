@@ -1,6 +1,7 @@
 package ro.iteahome.nhs.backend.controller.nhs;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,10 +51,15 @@ public class AdminController {
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<AdminDTO>> findAll() {
+    public ResponseEntity<CollectionModel<AdminDTO>> findAll() {
         try {
             List<AdminDTO> adminDTOList = new ArrayList<>(adminService.findAll());
-            return new ResponseEntity<>(adminDTOList, HttpStatus.OK);
+            adminDTOList.forEach(adminDTO ->
+                    adminDTO.add(linkTo(methodOn(AdminController.class).findByEmail(adminDTO.getEmail())).withSelfRel()));
+            CollectionModel<AdminDTO> adminDTOCollection = new CollectionModel<>(
+                    adminDTOList,
+                    linkTo(methodOn(AdminController.class).findAll()).withSelfRel());
+            return new ResponseEntity<>(adminDTOCollection, HttpStatus.OK);
         } catch (Exception ex) {
             throw new GlobalDatabaseException("ADMIN", ex.getCause().getCause().getMessage());
         }

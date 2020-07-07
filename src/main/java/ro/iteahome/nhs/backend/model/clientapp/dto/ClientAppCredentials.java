@@ -7,10 +7,10 @@ public class ClientAppCredentials {
 
     // NO ID.
 
-    @NotNull(message = "CLIENT APP NAME CANNOT BE EMPTY.")
+    @NotNull(message = "CLIENT APP NAME CANNOT BE EMPTY")
     private String name;
 
-    @NotNull(message = "PASSWORD CANNOT BE EMPTY.")
+    @NotNull(message = "PASSWORD CANNOT BE EMPTY")
     @Pattern(regexp = "((?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,32})", message = "INVALID PASSWORD")
     private String password;
 

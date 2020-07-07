@@ -15,16 +15,16 @@ public class Patient implements Serializable {
     @Column(name = "id", updatable = false)
     private int id;
 
-    @NotNull(message = "CNP CANNOT BE EMPTY.")
+    @NotNull(message = "CNP CANNOT BE EMPTY")
     @Pattern(regexp = "[1-8]\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])(0[1-9]|[1-4]\\d|5[0-2]|99)\\d{4}", message = "INVALID CNP")
     @Column(name = "cnp", nullable = false, unique = true, columnDefinition = "VARCHAR(13)")
     private String cnp;
 
-    @NotNull(message = "FIRST NAME CANNOT BE EMPTY.")
+    @NotNull(message = "FIRST NAME CANNOT BE EMPTY")
     @Column(name = "first_name", nullable = false, columnDefinition = "VARCHAR(100)")
     private String firstName;
 
-    @NotNull(message = "LAST NAME CANNOT BE EMPTY.")
+    @NotNull(message = "LAST NAME CANNOT BE EMPTY")
     @Column(name = "last_name", nullable = false, columnDefinition = "VARCHAR(100)")
     private String lastName;
 

@@ -1,54 +1,37 @@
-package ro.iteahome.nhs.backend.model.nhs.entity;
+package ro.iteahome.nhs.backend.model.nhs.dto;
 
-import ro.iteahome.nhs.backend.annotations.ValidOption;
-import ro.iteahome.nhs.backend.model.nhs.reference.InstitutionType;
+import org.springframework.hateoas.RepresentationModel;
 
-import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 
-@Entity
-@Table(name = "institutions")
-public class Institution implements Serializable {
+public class InstitutionDTO extends RepresentationModel<InstitutionDTO> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false)
+    @NotNull
     private int id;
 
-    @ValidOption(message = "THE SELECTED INSTITUTION TYPE  IS NOT AVAILABLE", enumOption = InstitutionType.class)
-    @NotNull(message = "MEDICAL INSTITUTION TYPE CANNOT BE EMPTY")
-    @Column(name = "type", nullable = false, columnDefinition = "VARCHAR(50)")
+    @NotNull(message = "MEDICAL INSTITUTION TYPE CANNOT BE NULL")
     private String type;
 
-    @NotNull(message = "CUI CANNOT BE EMPTY")
-    @Column(name = "cui", nullable = false, unique = true, columnDefinition = "VARCHAR(50)")
+    @NotNull(message = "CUI CANNOT BE NULL")
     private String cui;
 
-    @NotNull(message = "NAME CANNOT BE EMPTY")
-    @Column(name = "name", nullable = false, unique = true, columnDefinition = "VARCHAR(50)")
+    @NotNull(message = "NAME CANNOT BE NULL")
     private String name;
 
-    @NotNull(message = "ADDRESS CANNOT BE EMPTY")
-    @Column(name = "address", nullable = false, columnDefinition = "VARCHAR(500)")
+    @NotNull(message = "ADDRESS CANNOT BE NULL")
     private String address;
 
-    @NotNull(message = "PHONE NUMBER CANNOT BE EMPTY")
     @Pattern(regexp = "^0040\\d{9}$", message = "INVALID PHONE NUMBER")
-    @Column(name = "phone_ro", nullable = false, unique = true, columnDefinition = "VARCHAR(13)")
     private String phoneNoRo;
 
-    @NotNull(message = "EMAIL CANNOT BE EMPTY")
     @Email(regexp = ".+@.+\\..+", message = "INVALID EMAIL ADDRESS")
-    @Column(name = "email", nullable = false, unique = true, columnDefinition = "VARCHAR(100)")
     private String email;
 
-    @Column(name = "website", unique = true, columnDefinition = "VARCHAR(200)")
     private String website;
 
-    public Institution() {
+    public InstitutionDTO() {
     }
 
     public int getId() {
