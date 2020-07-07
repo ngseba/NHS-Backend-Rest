@@ -21,11 +21,11 @@ public class ClientApp implements UserDetails {
     @Column(name = "id", updatable = false)
     private int id;
 
-    @NotNull(message = "CLIENT APP NAME CANNOT BE EMPTY.")
+    @NotNull(message = "CLIENT APP NAME CANNOT BE EMPTY")
     @Column(name = "name", nullable = false, unique = true, columnDefinition = "VARCHAR(50)")
     private String name;
 
-    @NotNull(message = "PASSWORD CANNOT BE EMPTY.")
+    @NotNull(message = "PASSWORD CANNOT BE EMPTY")
     @Column(name = "password", nullable = false, columnDefinition = "VARCHAR(255)")
     private String password;
 

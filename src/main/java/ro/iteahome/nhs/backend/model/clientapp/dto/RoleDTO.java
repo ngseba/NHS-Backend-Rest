@@ -1,6 +1,10 @@
 package ro.iteahome.nhs.backend.model.clientapp.dto;
 
-public class RoleDTO {
+import org.springframework.hateoas.RepresentationModel;
+
+public class RoleDTO extends RepresentationModel<RoleDTO> {
+
+// FIELDS: -------------------------------------------------------------------------------------------------------------
 
     private int id;
 

@@ -12,18 +12,18 @@ public class Treatment {
     @Column(name = "id", updatable = false)
     private int id;
 
-    @NotNull(message = "DESCRIPTION CANNOT BE EMPTY.")
+    @NotNull(message = "DESCRIPTION CANNOT BE EMPTY")
     @Column(name = "description", nullable = false, columnDefinition = "VARCHAR(4000)")
     private String description;
 
     @Column(name = "schedule", columnDefinition = "VARCHAR(255)")
     private String schedule;
 
-    @NotNull(message = "MINIMUM NUMBER OF DAYS CANNOT BE EMPTY.")
+    @NotNull(message = "MINIMUM NUMBER OF DAYS CANNOT BE EMPTY")
     @Column(name = "min_days", nullable = false, columnDefinition = "INT")
     private int minDays;
 
-    @NotNull(message = "MAXIMUM NUMBER OF DAYS CANNOT BE EMPTY.")
+    @NotNull(message = "MAXIMUM NUMBER OF DAYS CANNOT BE EMPTY")
     @Column(name = "max_days", nullable = false, columnDefinition = "INT")
     private int maxDays;
 

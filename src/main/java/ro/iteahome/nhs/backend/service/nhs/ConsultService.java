@@ -2,26 +2,18 @@ package ro.iteahome.nhs.backend.service.nhs;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
-import ro.iteahome.nhs.backend.controller.nhs.PatientController;
 import ro.iteahome.nhs.backend.exception.business.GlobalNotFoundException;
 import ro.iteahome.nhs.backend.model.nhs.dto.ConsultDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.*;
 import ro.iteahome.nhs.backend.repository.nhs.*;
 import ro.iteahome.nhs.backend.utils.ConsultList;
 
-import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class ConsultService {
@@ -129,9 +121,9 @@ public class ConsultService {
 
         if (!consults.isEmpty()) {
             for (Consult consult : consults) {
-                    ConsultDTO consultDTO = getConsultDTOs(consult);
-                    consultDTOS.add(consultDTO);
-                    System.out.println(consultDTOS.toString());
+                ConsultDTO consultDTO = getConsultDTOs(consult);
+                consultDTOS.add(consultDTO);
+                System.out.println(consultDTOS.toString());
             }
         } else {
             throw new GlobalNotFoundException("Consult DTO");
@@ -143,24 +135,24 @@ public class ConsultService {
         return consultList;
     }
 
-    private ConsultDTO getConsultDTOs (Consult consult) {
+    private ConsultDTO getConsultDTOs(Consult consult) {
         Treatment treatment = new Treatment();
         Diagnostic diagnostic = new Diagnostic();
 
         ConsultDTO consultDTO = new ConsultDTO();
 
-            treatment = treatmentRepository.getByConsult(consult);
-            diagnostic = diagnosticRepository.getByConsult(consult);
+        treatment = treatmentRepository.getByConsult(consult);
+        diagnostic = diagnosticRepository.getByConsult(consult);
 
-            consultDTO.setDate(consult.getDate());
-            consultDTO.setDiagnostic_desc(diagnostic.getDescription());
-            consultDTO.setDoctor_cnp(consult.getDoctor().getCnp());
-            consultDTO.setInstitution_cui(consult.getInstitution().getCui());
-            consultDTO.setMax_days(treatment.getMaxDays());
-            consultDTO.setMin_days(treatment.getMinDays());
-            consultDTO.setPatient_cnp(consult.getPatient().getCnp());
-            consultDTO.setTreatment_desc(treatment.getDescription());
-            consultDTO.setTreatment_schedule(treatment.getSchedule());
+        consultDTO.setDate(consult.getDate());
+        consultDTO.setDiagnostic_desc(diagnostic.getDescription());
+        consultDTO.setDoctor_cnp(consult.getDoctor().getCnp());
+        consultDTO.setInstitution_cui(consult.getInstitution().getCui());
+        consultDTO.setMax_days(treatment.getMaxDays());
+        consultDTO.setMin_days(treatment.getMinDays());
+        consultDTO.setPatient_cnp(consult.getPatient().getCnp());
+        consultDTO.setTreatment_desc(treatment.getDescription());
+        consultDTO.setTreatment_schedule(treatment.getSchedule());
 
         return consultDTO;
     }

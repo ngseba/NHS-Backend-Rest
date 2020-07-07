@@ -12,7 +12,7 @@ public class Diagnostic {
     @Column(name = "id", updatable = false)
     private int id;
 
-    @NotNull(message = "DESCRIPTION CANNOT BE EMPTY.")
+    @NotNull(message = "DESCRIPTION CANNOT BE EMPTY")
     @Column(name = "description", nullable = false, columnDefinition = "VARCHAR(255)")
     private String description;
 

@@ -15,7 +15,7 @@ import java.util.Set;
 public class Doctor {
 
     @Id
-    @NotNull(message = "CNP CANNOT BE EMPTY.")
+    @NotNull(message = "CNP CANNOT BE EMPTY")
     @Pattern(regexp = "[1-8]\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])(0[1-9]|[1-4]\\d|5[0-2]|99)\\d{4}", message = "INVALID CNP")
     @Column(name = "cnp", nullable = false, unique = true, columnDefinition = "VARCHAR(13)")
     private String cnp;
@@ -24,25 +24,25 @@ public class Doctor {
     @Column(name = "title", nullable = false, columnDefinition = "VARCHAR(50)")
     private String title; // TODO: Create this by concatenating corresponding enum values chosen via a drop-down menu.
 
-    @NotNull(message = "FIRST NAME CANNOT BE EMPTY.")
+    @NotNull(message = "FIRST NAME CANNOT BE EMPTY")
     @Column(name = "first_name", nullable = false, columnDefinition = "VARCHAR(100)")
     private String firstName;
 
-    @NotNull(message = "LAST NAME CANNOT BE EMPTY.")
+    @NotNull(message = "LAST NAME CANNOT BE EMPTY")
     @Column(name = "last_name", nullable = false, columnDefinition = "VARCHAR(100)")
     private String lastName;
 
-    @NotNull(message = "EMAIL CANNOT BE EMPTY.")
+    @NotNull(message = "EMAIL CANNOT BE EMPTY")
     @Email(regexp = ".+@.+\\..+", message = "INVALID EMAIL ADDRESS")
     @Column(name = "email", nullable = false, unique = true, columnDefinition = "VARCHAR(100)")
     private String email;
 
-    @NotNull(message = "PHONE NUMBER CANNOT BE EMPTY.")
+    @NotNull(message = "PHONE NUMBER CANNOT BE EMPTY")
     @Pattern(regexp = "^0040\\d{9}$", message = "INVALID PHONE NUMBER")
     @Column(name = "phone_ro", nullable = false, unique = true, columnDefinition = "VARCHAR(13)")
     private String phoneNoRo;
 
-    @NotNull(message = "MEDICAL LICENSE NUMBER CANNOT BE EMPTY.")
+    @NotNull(message = "MEDICAL LICENSE NUMBER CANNOT BE EMPTY")
     @Column(name = "medical_license", nullable = false, unique = true, columnDefinition = "VARCHAR(50)")
     private String licenseNo;
 
