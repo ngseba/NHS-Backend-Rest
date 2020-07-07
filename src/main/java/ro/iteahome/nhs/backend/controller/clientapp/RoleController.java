@@ -1,7 +1,6 @@
 package ro.iteahome.nhs.backend.controller.clientapp;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,15 +50,9 @@ public class RoleController {
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    //public CollectionModel<Role> findAll() {
     public List<Role> findAll() {
         try {
-            List<Role> roles = roleService.findAll();
-//            CollectionModel<Role> rolesEntity = new CollectionModel<>(
-//                    roles,
-//                    linkTo(methodOn(RoleController.class).findAll()).withSelfRel());
-//            return rolesEntity;
-              return roles;
+            return roleService.findAll();
         } catch (Exception ex) {
             throw new GlobalDatabaseException("ROLE", ex.getCause().getCause().getMessage());
         }
