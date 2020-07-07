@@ -7,7 +7,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppCredentials;
 import ro.iteahome.nhs.backend.model.clientapp.dto.ClientAppDTO;
+import ro.iteahome.nhs.backend.model.clientapp.dto.RoleDTO;
 import ro.iteahome.nhs.backend.model.clientapp.entity.ClientApp;
+import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 import ro.iteahome.nhs.backend.service.clientapp.ClientAppService;
 import ro.iteahome.nhs.backend.service.clientapp.RoleService;
 
@@ -33,7 +35,8 @@ public class ClientAppController {
     @PostMapping("/with-role-name/{roleName}")
     @PreAuthorize("hasRole('ADMIN')")
     public EntityModel<ClientAppDTO> addWithRoleId(@RequestBody @Valid ClientAppCredentials clientAppCredentials, @PathVariable String roleName) throws Exception {
-        return clientAppService.findByName(roleName);
+        RoleDTO role = roleService.findByName(roleName);
+        return clientAppService.add(clientAppCredentials,role);
     }
 
     @GetMapping("/by-id/{id}")
@@ -48,16 +51,10 @@ public class ClientAppController {
         return clientAppService.findByName(name);
     }
 
-    @PutMapping
+    @PutMapping("/with-role-name/{roleName}")
     @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<ClientAppDTO> update(@RequestBody @Valid ClientApp clientApp) {
-        return clientAppService.update(clientApp);
-    }
-
-    @PutMapping("/role")
-    @PreAuthorize("hasRole('ADMIN')")
-    public EntityModel<ClientAppDTO> updateRole(@RequestParam int clientAppId, @RequestParam int roleId) {
-        return clientAppService.updateRole(clientAppId, roleId);
+    public EntityModel<ClientAppDTO> update(@RequestBody @Valid ClientApp clientApp, @PathVariable String roleName) {
+        return clientAppService.update(clientApp,roleName);
     }
 
     @DeleteMapping("/by-id/{id}")
