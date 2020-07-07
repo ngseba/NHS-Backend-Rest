@@ -80,8 +80,6 @@ public class DoctorService {
 
     public EntityModel<DoctorDTO> update(DoctorDTO doctorDTO) {
         if (doctorRepository.existsByCnp(doctorDTO.getCnp())) {
-            System.out.println(doctorDTO.getCnp());
-            System.out.println(doctorDTO.getInstitutionCUIs());
 
             Doctor doctorNew = new Doctor();
             doctorNew = doctorRepository.getByCnp(doctorDTO.getCnp());
