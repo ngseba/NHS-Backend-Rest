@@ -45,31 +45,32 @@ public class InstitutionController {
         }
     }
 
-    @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CollectionModel<InstitutionDTO>> findAll() {
-        try {
-            List<InstitutionDTO> institutionDTOList = new ArrayList<>(institutionService.findAll());
-            institutionDTOList.forEach(institutionDTO ->
-                    institutionDTO.add(linkTo(methodOn(InstitutionController.class).findByCui(institutionDTO.getCui())).withSelfRel()));
-            CollectionModel<InstitutionDTO> institutionDTOCollection = new CollectionModel<>(
-                    institutionDTOList,
-                    linkTo(methodOn(InstitutionController.class).findAll()).withSelfRel());
-            return new ResponseEntity<>(institutionDTOCollection, HttpStatus.OK);
-        } catch (Exception ex) {
-            throw new GlobalDatabaseException("INSTITUTION", ex.getCause().getCause().getMessage());
-        }
-    }
-
 //    @GetMapping("/all")
-//    public ResponseEntity<List<InstitutionDTO>> institutionArrayList() {
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<CollectionModel<InstitutionDTO>> findAll() {
 //        try {
-//            List<InstitutionDTO> institutionArrayList = institutionService.findAll();
-//            return new ResponseEntity<>(institutionArrayList, HttpStatus.OK);
+//            List<InstitutionDTO> institutionDTOList = new ArrayList<>(institutionService.findAll());
+//            institutionDTOList.forEach(institutionDTO ->
+//                    institutionDTO.add(linkTo(methodOn(InstitutionController.class).findByCui(institutionDTO.getCui())).withSelfRel()));
+//            CollectionModel<InstitutionDTO> institutionDTOCollection = new CollectionModel<>(
+//                    institutionDTOList,
+//                    linkTo(methodOn(InstitutionController.class).findAll()).withSelfRel());
+//            return new ResponseEntity<>(institutionDTOCollection, HttpStatus.OK);
 //        } catch (Exception ex) {
-//            throw new GlobalDatabaseException("Institution", ex.getCause().getCause().getMessage());
+//            throw new GlobalDatabaseException("INSTITUTION", ex.getCause().getCause().getMessage());
 //        }
 //    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<InstitutionDTO>> institutionArrayList() {
+        try {
+            List<InstitutionDTO> institutionArrayList = institutionService.findAll();
+            return new ResponseEntity<>(institutionArrayList, HttpStatus.OK);
+        } catch (Exception ex) {
+            throw new GlobalDatabaseException("Institution", ex.getCause().getCause().getMessage());
+        }
+    }
 
     @GetMapping("/by-cui/{cui}")
     @PreAuthorize("hasRole('ADMIN')")
