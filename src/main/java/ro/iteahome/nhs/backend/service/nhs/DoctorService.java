@@ -13,9 +13,7 @@ import ro.iteahome.nhs.backend.model.nhs.entity.Institution;
 import ro.iteahome.nhs.backend.repository.nhs.DoctorRepository;
 import ro.iteahome.nhs.backend.repository.nhs.InstitutionRepository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -88,12 +86,12 @@ public class DoctorService {
             Doctor doctorNew = new Doctor();
             doctorNew = doctorRepository.getByCnp(doctorDTO.getCnp());
 
-            Set<Institution> newSetInst = null;
+            Set<Institution> newSetInst = new HashSet<>();
 
             if (doctorDTO.getInstitutionCUIs().isEmpty()){
-                doctorNew.setInstitutions(null);
+                doctorNew.setInstitutions(newSetInst);
             }
-            if (!doctorDTO.getInstitutionCUIs().contains(",")){
+            else if (!doctorDTO.getInstitutionCUIs().contains(",")){
                 newSetInst.add(institutionRepository.getByCui(doctorDTO.getInstitutionCUIs()));
             }
             else {
