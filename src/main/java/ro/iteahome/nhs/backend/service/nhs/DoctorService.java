@@ -11,9 +11,11 @@ import ro.iteahome.nhs.backend.model.nhs.dto.DoctorDTO;
 import ro.iteahome.nhs.backend.model.nhs.entity.Doctor;
 import ro.iteahome.nhs.backend.model.nhs.entity.Institution;
 import ro.iteahome.nhs.backend.repository.nhs.DoctorRepository;
+import ro.iteahome.nhs.backend.repository.nhs.InstitutionRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -29,6 +31,9 @@ public class DoctorService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    InstitutionRepository institutionRepository;
 
 // C.R.U.D. METHODS: ---------------------------------------------------------------------------------------------------
 
@@ -75,9 +80,43 @@ public class DoctorService {
         return doctorRepository.existsByCnp(cnp);
     }
 
-    public EntityModel<DoctorDTO> update(Doctor doctor) {
-        if (doctorRepository.existsByCnp(doctor.getCnp())) {
-            Doctor updatedDoctor = doctorRepository.save(doctor);
+    public EntityModel<DoctorDTO> update(DoctorDTO doctorDTO) {
+        if (doctorRepository.existsByCnp(doctorDTO.getCnp())) {
+            System.out.println(doctorDTO.getCnp());
+            System.out.println(doctorDTO.getInstitutionCUIs());
+
+            Doctor doctorNew = new Doctor();
+            doctorNew = doctorRepository.getByCnp(doctorDTO.getCnp());
+
+            Set<Institution> newSetInst = null;
+
+            if (doctorDTO.getInstitutionCUIs().isEmpty()){
+                doctorNew.setInstitutions(null);
+            }
+            if (!doctorDTO.getInstitutionCUIs().contains(",")){
+                newSetInst.add(institutionRepository.getByCui(doctorDTO.getInstitutionCUIs()));
+            }
+            else {
+                String[] CUIs = doctorDTO.getInstitutionCUIs().split(",");
+
+                for (String cui : CUIs
+                ) {
+                    newSetInst.add(institutionRepository.getByCui(cui));
+                }
+            }
+
+            doctorNew.setInstitutions(newSetInst);
+
+            doctorNew.setCnp(doctorDTO.getCnp());
+            doctorNew.setEmail(doctorDTO.getEmail());
+            doctorNew.setFirstName(doctorDTO.getFirstName());
+            doctorNew.setLastName(doctorDTO.getLastName());
+            doctorNew.setLicenseNo(doctorDTO.getLicenseNo());
+            doctorNew.setPhoneNoRo(doctorDTO.getPhoneNoRo());
+            doctorNew.setSpecialties(doctorDTO.getSpecialties());
+            doctorNew.setTitle(doctorDTO.getTitle());
+
+            Doctor updatedDoctor = doctorRepository.save(doctorNew);
             DoctorDTO updatedDoctorDTO = modelMapper.map(updatedDoctor, DoctorDTO.class);
             return new EntityModel<>(
                     updatedDoctorDTO,

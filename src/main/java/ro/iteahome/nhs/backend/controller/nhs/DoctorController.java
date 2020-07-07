@@ -63,8 +63,8 @@ public class DoctorController {
         }
 
     @PutMapping
-    public EntityModel<DoctorDTO> update(@RequestBody @Valid Doctor doctor) {
-        return doctorService.update(doctor);
+    public EntityModel<DoctorDTO> update(@RequestBody @Valid DoctorDTO doctorDTO) {
+        return doctorService.update(doctorDTO);
     }
 
     @DeleteMapping("/by-cnp/{cnp}")
