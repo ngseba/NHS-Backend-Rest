@@ -19,9 +19,7 @@ import ro.iteahome.nhs.backend.model.clientapp.entity.Role;
 import ro.iteahome.nhs.backend.repository.clientapp.ClientAppRepository;
 import ro.iteahome.nhs.backend.repository.clientapp.RoleRepository;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -93,41 +91,28 @@ public class ClientAppService implements UserDetailsService {
         }
     }
 
-    public EntityModel<ClientAppDTO> update(ClientApp clientApp) {
+    public EntityModel<ClientAppDTO> update(ClientApp clientApp, String roleName) {
         if (clientAppRepository.existsById(clientApp.getId())) {
-            clientApp.setPassword(passwordEncoder.encode(clientApp.getPassword()));
-            ClientApp updatedClientApp = clientAppRepository.save(clientApp);
-            ClientAppDTO updatedClientAppDTO = modelMapper.map(updatedClientApp, ClientAppDTO.class);
-            return new EntityModel<>(
-                    updatedClientAppDTO,
-                    linkTo(methodOn(ClientAppController.class).findById(updatedClientApp.getId())).withSelfRel());
-        } else {
-            throw new GlobalNotFoundException("CLIENT APP");
-        }
-    }
-
-    public EntityModel<ClientAppDTO> updateRole(int clientAppId, int roleId) {
-        Optional<ClientApp> optionalClientApp = clientAppRepository.findById(clientAppId);
-        if (optionalClientApp.isPresent()) {
-            Optional<Role> optionalRole = roleRepository.findById(roleId);
+            Optional<Role> optionalRole = roleRepository.findByName(roleName);
             if (optionalRole.isPresent()) {
-                ClientApp clientApp = optionalClientApp.get();
                 Role role = optionalRole.get();
-                clientApp.getRoles().clear();
-                clientApp.getRoles().add(role); // TODO: This might not work as intended.
                 clientApp.setPassword(passwordEncoder.encode(clientApp.getPassword()));
+                clientApp.setRoles(new HashSet<>(Collections.singletonList(role)));
                 ClientApp updatedClientApp = clientAppRepository.save(clientApp);
                 ClientAppDTO updatedClientAppDTO = modelMapper.map(updatedClientApp, ClientAppDTO.class);
                 return new EntityModel<>(
                         updatedClientAppDTO,
-                        linkTo(methodOn(ClientAppController.class).findById(clientApp.getId())).withSelfRel());
-            } else {
+                        linkTo(methodOn(ClientAppController.class).findById(updatedClientApp.getId())).withSelfRel());
+            }
+            else {
                 throw new GlobalNotFoundException("ROLE");
             }
         } else {
             throw new GlobalNotFoundException("CLIENT APP");
         }
     }
+
+
 
     public EntityModel<ClientAppDTO> deleteById(int id) {
         Optional<ClientApp> optionalClientApp = clientAppRepository.findById(id);
