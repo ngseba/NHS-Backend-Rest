@@ -61,15 +61,15 @@ public class InstitutionController {
         }
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<InstitutionDTO>> institutionArrayList() {
-        try {
-            List<InstitutionDTO> institutionArrayList = institutionService.findAll();
-            return new ResponseEntity<>(institutionArrayList, HttpStatus.OK);
-        } catch (Exception ex) {
-            throw new GlobalDatabaseException("Institution", ex.getCause().getCause().getMessage());
-        }
-    }
+//    @GetMapping("/all")
+//    public ResponseEntity<List<InstitutionDTO>> institutionArrayList() {
+//        try {
+//            List<InstitutionDTO> institutionArrayList = institutionService.findAll();
+//            return new ResponseEntity<>(institutionArrayList, HttpStatus.OK);
+//        } catch (Exception ex) {
+//            throw new GlobalDatabaseException("Institution", ex.getCause().getCause().getMessage());
+//        }
+//    }
 
     @GetMapping("/by-cui/{cui}")
     @PreAuthorize("hasRole('ADMIN')")
