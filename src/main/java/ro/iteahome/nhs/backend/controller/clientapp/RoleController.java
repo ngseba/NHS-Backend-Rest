@@ -14,7 +14,6 @@ import ro.iteahome.nhs.backend.repository.clientapp.RoleRepository;
 import ro.iteahome.nhs.backend.service.clientapp.RoleService;
 
 import javax.validation.Valid;
-
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -51,13 +50,9 @@ public class RoleController {
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<EntityModel<List<Role>>> findAll() {
+    public List<Role> findAll() {
         try {
-            List<Role> roles = roleService.findAll();
-            EntityModel<List<Role>> rolesEntity = new EntityModel<>(
-                    roles,
-                    linkTo(methodOn(RoleController.class).findAll()).withSelfRel());
-            return new ResponseEntity<>(rolesEntity, HttpStatus.OK);
+            return roleService.findAll();
         } catch (Exception ex) {
             throw new GlobalDatabaseException("ROLE", ex.getCause().getCause().getMessage());
         }

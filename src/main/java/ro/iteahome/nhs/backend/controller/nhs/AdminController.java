@@ -1,6 +1,7 @@
 package ro.iteahome.nhs.backend.controller.nhs;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,8 @@ import ro.iteahome.nhs.backend.service.clientapp.RoleService;
 import ro.iteahome.nhs.backend.service.nhs.AdminService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -39,24 +42,24 @@ public class AdminController {
             AdminDTO savedAdminDTO = adminService.add(admin);
             EntityModel<AdminDTO> savedAdminDTOEntity = new EntityModel<>(
                     savedAdminDTO,
-                    linkTo(methodOn(AdminController.class).findById(savedAdminDTO.getId())).withSelfRel());
+                    linkTo(methodOn(AdminController.class).findByEmail(savedAdminDTO.getEmail())).withSelfRel());
             return new ResponseEntity<>(savedAdminDTOEntity, HttpStatus.CREATED);
         } catch (Exception ex) {
             throw new GlobalDatabaseException("ADMIN", ex.getCause().getCause().getMessage());
         }
     }
 
-    @GetMapping("/by-id/{id}")
+    @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<EntityModel<AdminDTO>> findById(@PathVariable int id) {
+    public ResponseEntity<CollectionModel<AdminDTO>> findAll() {
         try {
-            AdminDTO adminDTO = adminService.findById(id);
-            EntityModel<AdminDTO> adminDTOEntity = new EntityModel<>(
-                    adminDTO,
-                    linkTo(methodOn(AdminController.class).findById(id)).withSelfRel());
-            return new ResponseEntity<>(adminDTOEntity, HttpStatus.OK);
-        } catch (GlobalNotFoundException ex) {
-            throw new GlobalNotFoundException(ex.getEntityName());
+            List<AdminDTO> adminDTOList = new ArrayList<>(adminService.findAll());
+            adminDTOList.forEach(adminDTO ->
+                    adminDTO.add(linkTo(methodOn(AdminController.class).findByEmail(adminDTO.getEmail())).withSelfRel()));
+            CollectionModel<AdminDTO> adminDTOCollection = new CollectionModel<>(
+                    adminDTOList,
+                    linkTo(methodOn(AdminController.class).findAll()).withSelfRel());
+            return new ResponseEntity<>(adminDTOCollection, HttpStatus.OK);
         } catch (Exception ex) {
             throw new GlobalDatabaseException("ADMIN", ex.getCause().getCause().getMessage());
         }
@@ -71,22 +74,6 @@ public class AdminController {
                     adminDTO,
                     linkTo(methodOn(AdminController.class).findByEmail(email)).withSelfRel());
             return new ResponseEntity<>(adminDTOEntity, HttpStatus.OK);
-        } catch (GlobalNotFoundException ex) {
-            throw new GlobalNotFoundException(ex.getEntityName());
-        } catch (Exception ex) {
-            throw new GlobalDatabaseException("ADMIN", ex.getCause().getCause().getMessage());
-        }
-    }
-
-    @GetMapping("/sensitive/by-id/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<EntityModel<Admin>> findSensitiveById(@PathVariable int id) {
-        try {
-            Admin admin = adminService.findSensitiveById(id);
-            EntityModel<Admin> adminEntity = new EntityModel<>(
-                    admin,
-                    linkTo(methodOn(AdminController.class).findSensitiveById(id)).withSelfRel());
-            return new ResponseEntity<>(adminEntity, HttpStatus.OK);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
         } catch (Exception ex) {
@@ -117,22 +104,8 @@ public class AdminController {
             AdminDTO updatedAdminDTO = adminService.update(admin);
             EntityModel<AdminDTO> updatedAdminDTOEntity = new EntityModel<>(
                     updatedAdminDTO,
-                    linkTo(methodOn(AdminController.class).findById(admin.getId())).withSelfRel());
+                    linkTo(methodOn(AdminController.class).findByEmail(admin.getEmail())).withSelfRel());
             return new ResponseEntity<>(updatedAdminDTOEntity, HttpStatus.CREATED);
-        } catch (GlobalNotFoundException ex) {
-            throw new GlobalNotFoundException(ex.getEntityName());
-        } catch (Exception ex) {
-            throw new GlobalDatabaseException("ADMIN", ex.getCause().getCause().getMessage());
-        }
-    }
-
-    @DeleteMapping("/by-id/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<EntityModel<AdminDTO>> deleteById(@PathVariable int id) {
-        try {
-            AdminDTO deletedAdminDTO = adminService.deleteById(id);
-            EntityModel<AdminDTO> deletedAdminDTOEntity = new EntityModel<>(deletedAdminDTO);
-            return new ResponseEntity<>(deletedAdminDTOEntity, HttpStatus.OK);
         } catch (GlobalNotFoundException ex) {
             throw new GlobalNotFoundException(ex.getEntityName());
         } catch (Exception ex) {

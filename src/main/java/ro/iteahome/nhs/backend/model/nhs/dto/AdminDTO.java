@@ -1,6 +1,8 @@
 package ro.iteahome.nhs.backend.model.nhs.dto;
 
-public class AdminDTO {
+import org.springframework.hateoas.RepresentationModel;
+
+public class AdminDTO extends RepresentationModel<AdminDTO> {
 
 // FIELDS: -------------------------------------------------------------------------------------------------------------
 
