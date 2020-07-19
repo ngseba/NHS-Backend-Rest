@@ -2,6 +2,6 @@
 
 spring:
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:46.214.32.248}/nhs
+    url: jdbc:mysql://${MYSQL_HOST:xx.xxx.xx.xxx}/nhs
     username: "Nhs00"
     password: "@Nhs@3"
