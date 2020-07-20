@@ -1,0 +1,19 @@
+# SERVER CONFIGURATION - GENERAL:
+
+server:
+  port: 8081
+  use-forward-headers: true
+  servlet:
+    context-path: /
+    session:
+      timeout: 1d
+
+# PERSISTENCE - DATABASE PROPERTIES - GENERAL:
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+  datasource:
+    initialization-mode: always
